@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Carrusel IA · bweb</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* ============================================================
+   Carrusel "Tu cliente le preguntó a la IA" — bweb
+   Lienzo 1080 x 1350 (4:5). Todas las animaciones son loops de
+   8s (o divisores: 1s, 2s, 4s) con delays <= 0, para que el video
+   exportado quede en loop perfecto y el primer cuadro esté completo.
+   ============================================================ */
+:root{
+  --orange:#FF6B35; --orange-2:#FF8F65; --orange-d:#E0521F; --orange-dd:#A93A13;
+  --amber:#FFB547; --gold:#F5A524; --cream:#FFF8F0; --navy:#1A2B4A; --ink:#0A1120;
+  --violet:#7C5CF5; --violet-l:#B8A6FF; --green:#22C55E; --green-l:#4ADE80;
+  --muted:#5C6B82; --line:rgba(26,43,74,.10); --sk:#E6EAF0;
+  --T:8s;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#05080E;color:var(--cream);font-family:'Inter Tight',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+svg{display:block}
+.ic{width:1em;height:1em;flex:none}
+
+/* ---------- Visor ---------- */
+.viewer{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px 16px}
+.vtop{width:var(--vw);max-width:100%;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:rgba(255,248,240,.6);gap:12px}
+.vtop b{color:var(--cream);font-weight:600}
+.frame-wrap{position:relative;width:var(--vw);height:var(--vh);border-radius:14px;overflow:hidden;box-shadow:0 40px 100px -30px rgba(0,0,0,.8);touch-action:pan-y}
+.frame{position:absolute;top:0;left:0;width:1080px;height:1350px;transform:scale(var(--sc));transform-origin:0 0}
+.track{display:flex;height:1350px;transition:transform .6s cubic-bezier(.22,.8,.2,1)}
+.vnav{display:flex;align-items:center;gap:16px}
+.vnav button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,248,240,.18);background:rgba(255,248,240,.06);color:var(--cream);display:grid;place-items:center;cursor:pointer;font-size:20px}
+.vnav button:hover{background:rgba(255,107,53,.2);border-color:var(--orange)}
+.vnav button:disabled{opacity:.3;cursor:default}
+.dots{display:flex;gap:8px;align-items:center}
+.dots i{width:8px;height:8px;border-radius:4px;background:rgba(255,248,240,.25);transition:width .3s,background .3s;cursor:pointer}
+.dots i.on{background:var(--orange);width:24px}
+
+/* ---------- Modo export (?export=N) ---------- */
+html.export body{background:var(--ink);overflow:hidden;min-height:0}
+html.export .vtop,html.export .vnav{display:none}
+html.export .viewer{display:block;padding:0;min-height:0}
+html.export .frame-wrap{width:1080px;height:1350px;border-radius:0;box-shadow:none}
+html.export .frame{transform:none}
+html.export .track{transition:none}
+
+/* ---------- Slide base ---------- */
+.slide{position:relative;width:1080px;height:1350px;flex:none;overflow:hidden;isolation:isolate;
+  background:linear-gradient(165deg,#1C2F52 0%,#122039 42%,#0A1120 100%)}
+.bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.bg::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,248,240,.10) 1.6px,transparent 1.9px);background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 55% at 68% 74%,#000 0%,transparent 72%);
+          mask-image:radial-gradient(ellipse 75% 55% at 68% 74%,#000 0%,transparent 72%)}
+.glow{position:absolute;width:900px;height:900px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,107,53,.34),rgba(255,107,53,0));
+  animation:glowDrift var(--T) ease-in-out infinite}
+.glow.v{background:radial-gradient(closest-side,rgba(124,92,245,.28),rgba(124,92,245,0));animation-delay:-4s}
+
+.head{position:absolute;top:80px;left:88px;right:88px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.brand{display:flex;align-items:center;gap:18px}
+.brand svg{width:64px;height:64px;border-radius:16px;box-shadow:0 10px 30px rgba(255,107,53,.35)}
+.brand span{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:42px;letter-spacing:-.01em;line-height:1}
+.tag{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,248,240,.78);
+  border:1.5px solid rgba(255,248,240,.16);border-radius:999px;padding:12px 20px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.04)}
+.tag .ic{color:var(--orange-2);font-size:22px}
+
+.copy{position:absolute;left:88px;right:88px;top:226px;z-index:5}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:24px;letter-spacing:.2em;color:var(--orange-2);text-transform:uppercase;margin:0 0 22px}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:80px;line-height:1.02;letter-spacing:-.026em;margin:0;text-wrap:balance}
+h1.xl{font-size:88px}
+.hl{background:linear-gradient(100deg,#FF6B35 0%,#FF8F65 55%,#FFB547 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{font-size:34px;line-height:1.42;color:rgba(255,248,240,.70);margin:28px 0 0;max-width:880px;text-wrap:pretty}
+.body b{color:var(--cream);font-weight:600}
+
+.art{position:absolute;inset:0;z-index:3}
+.obj{position:absolute}
+
+.foot{position:absolute;left:88px;right:88px;bottom:72px;display:flex;justify-content:space-between;align-items:center;z-index:6;
+  font-size:28px;font-weight:600;color:rgba(255,248,240,.55)}
+.count{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500}
+.swipe{display:flex;align-items:center;gap:14px;color:var(--cream);background:rgba(255,248,240,.10);border:1.5px solid rgba(255,248,240,.16);padding:18px 30px;border-radius:999px;font-size:30px}
+.swipe .ic{font-size:32px;animation:nudge 1s ease-in-out infinite}
+
+/* ---------- Objetos 3D ---------- */
+.float{animation:float 4s ease-in-out infinite}
+.d1{animation-delay:-1s}.d2{animation-delay:-2s}.d3{animation-delay:-3s}
+
+.spark{position:absolute;width:var(--s,36px);height:var(--s,36px);color:var(--cream);animation:twinkle 2s ease-in-out infinite}
+.spark.o{color:var(--amber)}
+.spark.p{color:var(--violet-l)}
+
+.orb{--s:160px;width:var(--s);height:var(--s);border-radius:50%;position:relative;flex:none;
+  background:
+    radial-gradient(circle at 30% 24%,rgba(255,255,255,.92) 0,rgba(255,255,255,0) 21%),
+    radial-gradient(circle at 74% 82%,rgba(255,143,101,.95) 0,rgba(255,107,53,0) 50%),
+    radial-gradient(circle at 38% 36%,#CFC2FF 0,#8B6CFA 38%,#5B3BE0 72%,#34208F 100%);
+  box-shadow:inset calc(var(--s)*-.06) calc(var(--s)*-.1) calc(var(--s)*.2) rgba(25,10,80,.5),
+             inset calc(var(--s)*.04) calc(var(--s)*.05) calc(var(--s)*.12) rgba(255,255,255,.25),
+             0 calc(var(--s)*.18) calc(var(--s)*.38) calc(var(--s)*-.08) rgba(91,59,224,.65)}
+.orb svg{position:absolute;left:26%;top:26%;width:48%;height:48%;color:#fff;filter:drop-shadow(0 2px 5px rgba(40,20,120,.5));animation:spin var(--T) linear infinite}
+.orb.xs{--s:46px}
+.orb.xs svg{filter:none}
+
+.coin{--s:150px;--edge:var(--orange-dd);width:var(--s);height:var(--s);border-radius:50%;position:relative;display:grid;place-items:center;color:#fff;
+  background:radial-gradient(circle at 34% 28%,#FFD3BD 0,#FF9A6B 22%,#FF6B35 55%,#E0521F 100%);
+  box-shadow:0 calc(var(--s)*.07) 0 var(--edge),0 calc(var(--s)*.07 + 26px) 46px -8px rgba(0,0,0,.55),inset 0 -6px 14px rgba(150,40,0,.3)}
+.coin::before{content:"";position:absolute;inset:11%;border-radius:50%;border:3px solid rgba(255,255,255,.42);box-shadow:inset 0 2px 8px rgba(150,40,0,.25)}
+.coin::after{content:"";position:absolute;left:17%;top:11%;width:40%;height:22%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0));transform:rotate(-28deg)}
+.coin > svg{width:46%;height:46%;filter:drop-shadow(0 3px 0 rgba(150,40,0,.4))}
+.coin > .glyph{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:calc(var(--s)*.4);line-height:1;letter-spacing:-.04em;text-shadow:0 3px 0 rgba(150,40,0,.4)}
+.coin.green{--edge:#11803F;background:radial-gradient(circle at 34% 28%,#D4F9E0 0,#6EE7A0 22%,#22C55E 55%,#159A48 100%)}
+.coin.green > svg{filter:drop-shadow(0 3px 0 rgba(10,90,40,.45))}
+.coin.sm{--s:62px}
+.coin.sm::before{border-width:2px}
+
+.shadow{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0))}
+
+/* ---------- Tarjetas UI ---------- */
+.card-w{position:absolute;background:#fff;color:var(--navy);border-radius:34px;
+  box-shadow:0 60px 100px -30px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.6)}
+.sk{display:grid;gap:9px;flex:1;min-width:0}
+.sk i{display:block;height:14px;border-radius:7px;background:var(--sk)}
+.sk i.s{height:11px;opacity:.75}
+.num{width:42px;height:42px;border-radius:12px;background:#fff;display:grid;place-items:center;font-weight:700;font-size:21px;color:var(--navy);box-shadow:0 1px 0 var(--line),0 0 0 1px var(--line);flex:none}
+.rate{font-weight:600;font-size:22px;color:var(--navy);display:flex;align-items:center;gap:6px;flex:none}
+.rate svg{color:var(--gold);width:22px;height:22px}
+.lbl{position:absolute;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:20px;letter-spacing:.16em;text-transform:uppercase;padding:10px 18px;border-radius:999px;
+  background:rgba(255,248,240,.10);color:rgba(255,248,240,.7);border:1.5px solid rgba(255,248,240,.14);z-index:4}
+.lbl.hot{background:var(--orange);color:#fff;border-color:transparent;box-shadow:0 10px 30px -6px rgba(255,107,53,.7)}
+
+/* ============ SLIDE 1 ============ */
+.chat{left:258px;top:626px;width:700px;padding:28px 32px 32px;transform:rotate(-3deg)}
+.chat-top{display:flex;align-items:center;gap:14px;font-size:24px;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.chat-top b{font-weight:600}
+.chat-top .t{margin-left:auto;color:var(--muted);font-size:20px}
+.bubble-user{margin-left:auto;width:fit-content;max-width:600px;background:linear-gradient(135deg,#FF7D4A,#FF6B35);color:#fff;font-size:28px;font-weight:500;line-height:1.3;
+  padding:18px 26px;border-radius:26px 26px 8px 26px;box-shadow:0 14px 26px -12px rgba(255,107,53,.7)}
+.ai-line{font-size:26px;margin:24px 0 16px;color:var(--navy);font-weight:500}
+.rows{position:relative;display:grid;gap:12px}
+.row{display:flex;align-items:center;gap:18px;padding:15px 20px;border-radius:20px;background:#F4F6F9;animation:rowCycle var(--T) ease-in-out infinite}
+.row.r2{animation-delay:-7.6s}
+.row.you{background:#FFF1E9;outline:2.5px dashed var(--orange);outline-offset:-2.5px;animation:rowCycle var(--T) ease-in-out -7.2s infinite,ping 2s ease-out infinite}
+.row.you .num{background:var(--orange);color:#fff;box-shadow:none}
+.you-t{flex:1;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:30px;color:var(--orange-d);letter-spacing:-.01em}
+.you-q{font-weight:700;font-size:26px;color:var(--orange)}
+.typing{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:10px;padding:16px 22px;background:#F4F6F9;border-radius:999px;animation:typingShow var(--T) ease-in-out infinite}
+.typing i{width:14px;height:14px;border-radius:50%;background:var(--violet);animation:dot 1s ease-in-out infinite}
+.typing i:nth-child(2){animation-delay:-.84s}
+.typing i:nth-child(3){animation-delay:-.68s}
+
+/* ============ SLIDE 2 ============ */
+.old{left:96px;top:772px;width:400px;height:392px;padding:24px;transform:rotate(-5deg);opacity:.62;filter:saturate(.5);overflow:hidden}
+.sbar{display:flex;align-items:center;gap:12px;height:54px;border-radius:999px;border:1.5px solid var(--line);padding:0 20px;font-size:21px;color:var(--muted)}
+.sbar .ic{font-size:22px}
+.links{height:290px;overflow:hidden;margin-top:18px;-webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
+.ltrack{animation:listScroll var(--T) linear infinite}
+.li{height:58px;display:grid;gap:8px;align-content:start}
+.li i{display:block;border-radius:6px;height:12px;background:var(--sk)}
+.li i.t{background:#9DB4F0;height:14px}
+.flow{position:absolute;left:236px;top:630px;width:350px;height:120px;overflow:visible}
+.flow path{fill:none;stroke:var(--orange-2);stroke-width:5;stroke-linecap:round}
+.flow .dash{stroke-dasharray:10 12;animation:dash 1s linear infinite}
+.new{left:560px;top:738px;width:436px;padding:28px;transform:rotate(3deg)}
+.ans-top{display:flex;align-items:center;gap:14px;font-size:23px;font-weight:600;margin-bottom:16px}
+.ans-p{font-size:22px;line-height:1.4;color:var(--muted);margin:0 0 18px}
+.mrow{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:18px;background:#F4F6F9;margin-top:10px}
+.mrow .num{width:38px;height:38px;font-size:19px}
+.mrow.best{background:#ECFDF3;outline:2px solid rgba(34,197,94,.45);outline-offset:-2px;animation:bestGlow 2s ease-in-out infinite}
+.mrow.best .num{background:var(--green);color:#fff;box-shadow:none}
+.okb{width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;flex:none}
+.okb svg{width:20px;height:20px}
+
+/* Lupa */
+.lupa{width:190px;height:190px;filter:drop-shadow(0 30px 30px rgba(0,0,0,.5))}
+
+/* ============ SLIDE 3 ============ */
+.browser{left:88px;top:736px;width:680px;height:436px;overflow:hidden;border-radius:30px}
+.bbar{height:64px;background:#F1F3F7;display:flex;align-items:center;gap:10px;padding:0 22px;border-bottom:1px solid var(--line)}
+.bbar > i{width:14px;height:14px;border-radius:50%;background:#FF5F57}
+.bbar > i:nth-child(2){background:#FEBC2E}
+.bbar > i:nth-child(3){background:#28C840}
+.url{margin-left:18px;flex:1;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:0 16px;font-size:20px;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+.url .ic{color:var(--green);font-size:18px}
+.bbody{position:relative;padding:22px 28px}
+.bnav{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.bnav .blogo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#FF8F65,#FF6B35)}
+.bnav i{display:block;width:60px;height:10px;border-radius:5px;background:var(--sk)}
+.bnav .bbtn{margin-left:auto;background:var(--navy);color:#fff;font-size:17px;font-weight:600;padding:9px 16px;border-radius:10px}
+.bhero{display:flex;gap:22px}
+.btxt{flex:1;min-width:0}
+.bh{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;letter-spacing:-.03em;line-height:1;margin-bottom:14px}
+.btxt .sk{margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:19px;font-weight:600;padding:9px 14px;border-radius:12px;background:#F4F6F9;color:var(--navy);animation:chipPing 4s ease-in-out infinite}
+.chip .ic{color:var(--orange);font-size:20px}
+.bimg{width:170px;height:210px;border-radius:20px;flex:none;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 70% 30%,#FFD29A 0,rgba(255,210,154,0) 40%),linear-gradient(160deg,#FF9A6B,#FF6B35 55%,#C94A1B)}
+.bimg::after{content:"";position:absolute;left:-20%;right:-20%;bottom:-30%;height:60%;border-radius:50%;background:rgba(26,43,74,.25)}
+.beam{position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,rgba(124,92,245,0),#8B6CFA 25%,#B8A6FF 50%,#8B6CFA 75%,rgba(124,92,245,0));
+  box-shadow:0 0 24px 6px rgba(124,92,245,.45);animation:beam 4s linear infinite}
+.beam::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:90px;background:linear-gradient(0deg,rgba(139,108,250,.16),rgba(139,108,250,0))}
+.ai-tag{position:absolute;right:24px;bottom:22px;display:flex;align-items:center;gap:10px;background:var(--navy);color:#fff;font-size:18px;font-weight:600;padding:8px 16px 8px 8px;border-radius:999px}
+.ai-tag .orb{--s:30px}
+.ai-tag .orb svg{filter:none}
+
+@property --p{syntax:'<integer>';inherits:true;initial-value:98}
+.score{--p:98;width:250px;height:250px;border-radius:50%;position:relative;display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 26%,#FFFFFF 0,#FFF8F0 45%,#EADCCB 100%);
+  box-shadow:0 16px 0 #C8B39C,0 44px 60px -10px rgba(0,0,0,.6),inset 0 -8px 18px rgba(120,90,60,.18);animation:scoreFill var(--T) infinite}
+.score .ring{position:absolute;inset:12%;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p) * 1%),rgba(26,43,74,.10) 0);
+  -webkit-mask:radial-gradient(closest-side,transparent 80%,#000 81%);mask:radial-gradient(closest-side,transparent 80%,#000 81%)}
+.score .val{position:relative;text-align:center;color:var(--navy)}
+.score .n{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:76px;line-height:.9;letter-spacing:-.04em;color:#15803D}
+.score .n::after{counter-reset:p var(--p);content:counter(p)}
+.score small{display:block;font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* ============ SLIDE 4 ============ */
+.mapc{left:88px;top:730px;width:600px;height:440px;overflow:hidden;border-radius:34px;padding:0}
+.mapc > svg{width:100%;height:100%}
+.pin{width:150px;height:190px;filter:drop-shadow(0 26px 22px rgba(10,17,32,.45))}
+.pinbounce{animation:bounce 2s cubic-bezier(.45,0,.55,1) infinite}
+.pshadow{animation:pshadow 2s cubic-bezier(.45,0,.55,1) infinite}
+.biz{left:452px;top:888px;width:540px;padding:28px 30px;transform:rotate(2deg)}
+.biz-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.biz-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.03em;line-height:1}
+.biz-cat{font-size:20px;color:var(--muted);margin-top:8px}
+.open{font-size:18px;font-weight:700;color:#15803D;background:#DCFCE7;padding:8px 14px;border-radius:999px;display:flex;align-items:center;gap:8px}
+.open::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--green)}
+.stars{display:flex;align-items:center;gap:4px;margin:18px 0 18px;font-size:22px;color:var(--muted)}
+.stars b{color:var(--navy);font-size:24px;margin:0 8px 0 10px}
+.st{width:30px;height:30px;color:var(--gold);animation:starFill var(--T) ease-in-out infinite}
+.st:nth-child(2){animation-delay:-7.8s}.st:nth-child(3){animation-delay:-7.6s}.st:nth-child(4){animation-delay:-7.4s}.st:nth-child(5){animation-delay:-7.2s}
+.photos{display:flex;gap:10px}
+.photos i{flex:1;height:76px;border-radius:14px;background:linear-gradient(150deg,#FFB08A,#FF6B35)}
+.photos i:nth-child(2){background:linear-gradient(150deg,#FFE0A8,#F5A524)}
+.photos i:nth-child(3){background:linear-gradient(150deg,#B8C7E6,#1A2B4A)}
+.acts{display:flex;gap:10px;margin-top:16px}
+.acts span{font-size:18px;font-weight:600;padding:9px 14px;border-radius:999px;background:#EEF3FF;color:#2F55C6}
+.review{left:668px;top:716px;width:330px;padding:18px 20px;border-radius:24px;display:flex;gap:14px;align-items:center;transform-origin:20% 100%;animation:revCycle var(--T) ease-in-out infinite}
+.review.b{animation-delay:-4s}
+.av{width:52px;height:52px;border-radius:50%;flex:none;background:linear-gradient(135deg,#8B6CFA,#5B3BE0);color:#fff;display:grid;place-items:center;font-weight:700;font-size:22px}
+.review .av.o{background:linear-gradient(135deg,#FF9A6B,#FF6B35)}
+.rv-s{display:flex;gap:2px;color:var(--gold)}
+.rv-s svg{width:18px;height:18px}
+.rv-t{font-size:20px;font-weight:600;margin-top:4px}
+
+/* ============ SLIDE 5 ============ */
+.faq{left:88px;top:730px;width:560px;padding:26px 26px 16px}
+.faq-h{font-family:'JetBrains Mono',monospace;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:2px 4px 14px}
+.qa{height:86px;overflow:hidden;border-radius:18px;background:#F4F6F9;margin-bottom:10px;padding:0 22px;animation:faqOpen var(--T) ease-in-out infinite}
+.qa.q2{animation-delay:-5.3333s}.qa.q3{animation-delay:-2.6667s}
+.qa-q{height:86px;display:flex;align-items:center;gap:14px;font-size:25px;font-weight:600}
+.qa-q span{flex:1}
+.qa-q svg{width:30px;height:30px;color:var(--orange);animation:faqIcon var(--T) ease-in-out infinite}
+.q2 .qa-q svg{animation-delay:-5.3333s}.q3 .qa-q svg{animation-delay:-2.6667s}
+.qa-a{font-size:22px;line-height:1.4;color:var(--muted);padding:0 0 20px}
+.cite{position:absolute;left:612px;top:902px;width:392px;padding:22px 24px;border-radius:28px;background:linear-gradient(160deg,#2A2160,#18163A);color:#fff;box-shadow:0 50px 90px -30px rgba(0,0,0,.8),inset 0 0 0 1.5px rgba(184,166,255,.3);transform:rotate(-2deg)}
+.cite-top{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:600;color:var(--violet-l);margin-bottom:10px}
+.cite p{margin:0;font-size:23px;line-height:1.4;color:rgba(255,255,255,.92)}
+.src{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-size:18px;font-weight:600;color:#fff;background:rgba(255,107,53,.9);padding:6px 12px;border-radius:999px;animation:srcPulse 2s ease-in-out infinite}
+.qb{filter:drop-shadow(0 26px 24px rgba(0,0,0,.5))}
+
+/* ============ SLIDE 6 ============ */
+.code{position:absolute;left:88px;top:736px;width:600px;border-radius:30px;background:linear-gradient(180deg,#111B2E,#0A1120);border:1.5px solid rgba(255,248,240,.12);
+  box-shadow:0 60px 100px -30px rgba(0,0,0,.8);overflow:hidden}
+.cbar{height:60px;display:flex;align-items:center;gap:10px;padding:0 22px;border-bottom:1px solid rgba(255,248,240,.08);background:rgba(255,248,240,.03)}
+.cbar > i{width:13px;height:13px;border-radius:50%;background:rgba(255,248,240,.2)}
+.cbar span{margin-left:14px;font-family:'JetBrains Mono',monospace;font-size:18px;color:rgba(255,248,240,.6)}
+.cbody{position:relative;padding:20px 0 24px;font-family:'JetBrains Mono',monospace;font-size:22px;--lh:42px}
+.cl{display:flex;height:var(--lh);align-items:center;white-space:pre;position:relative;z-index:1}
+.cl em{font-style:normal;width:56px;text-align:right;padding-right:20px;color:rgba(255,248,240,.25);flex:none}
+.k{color:var(--orange-2)}.s{color:#9AE6B4}.p{color:rgba(255,248,240,.55)}.nm{color:var(--violet-l)}
+.scan{position:absolute;left:0;right:0;top:calc(20px + var(--lh));height:var(--lh);background:linear-gradient(90deg,rgba(255,107,53,.28),rgba(255,107,53,.06));
+  box-shadow:inset 4px 0 0 var(--orange);animation:scanLines var(--T) steps(5,end) infinite}
+.caret{display:inline-block;width:12px;height:26px;background:var(--orange-2);margin-left:6px;animation:blink 1s steps(1) infinite}
+.rich{left:648px;top:920px;width:356px;padding:24px 26px;transform:rotate(3deg)}
+.rich-h{font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.f{border-radius:12px;padding:6px 10px;margin:0 -10px;animation:fieldOn var(--T) ease-in-out infinite}
+.f.f1{animation-delay:-6.4s}.f.f2{animation-delay:-4.8s}.f.f3{animation-delay:-3.2s}.f.f4{animation-delay:-1.6s}
+.f-type{display:inline-block;font-size:16px;font-weight:700;color:#2F55C6;background:#EEF3FF;padding:5px 10px;border-radius:8px}
+.f-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1.05}
+.f-row{display:flex;align-items:center;gap:8px;font-size:20px;color:var(--muted)}
+.f-row .ic{color:var(--orange);font-size:20px}
+.f-row b{color:#15803D}
+.f-row .rv-s svg{width:20px;height:20px}
+.shield{width:112px;height:120px;filter:drop-shadow(0 26px 24px rgba(0,0,0,.5))}
+
+/* ============ SLIDE 7 ============ */
+.cta{display:inline-flex;align-items:center;gap:18px;margin-top:40px;background:var(--cream);color:var(--ink);font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:40px;letter-spacing:-.02em;
+  padding:26px 42px;border-radius:999px;box-shadow:0 24px 50px -16px rgba(255,107,53,.6)}
+.cta .ic{font-size:38px;animation:nudge 1s ease-in-out infinite}
+.alt{margin:22px 0 0 8px;font-size:26px;color:rgba(255,248,240,.6)}
+.alt b{color:var(--cream);font-weight:600}
+.checks{position:absolute;left:88px;top:862px;display:grid;gap:18px;z-index:4}
+.chk{display:flex;align-items:center;gap:18px;font-size:30px;font-weight:600;color:var(--cream);background:rgba(255,248,240,.06);border:1.5px solid rgba(255,248,240,.12);padding:14px 26px 14px 14px;border-radius:22px;width:fit-content}
+.chk .coin{animation:checkPop var(--T) ease-in-out infinite}
+.chk:nth-child(2) .coin{animation-delay:-7.75s}.chk:nth-child(3) .coin{animation-delay:-7.5s}
+.chk .coin > svg{width:52%;height:52%}
+.tile{width:240px;height:240px;border-radius:60px;position:relative;
+  background:linear-gradient(145deg,#FF9A6B 0%,#FF6B35 48%,#E0521F 100%);
+  box-shadow:0 18px 0 var(--orange-dd),0 60px 80px -10px rgba(0,0,0,.65),inset 0 3px 0 rgba(255,255,255,.35),0 0 120px 10px rgba(255,107,53,.25)}
+.tile::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.35) 0%,rgba(255,255,255,0) 40%)}
+.tile svg{position:absolute;inset:0;width:100%;height:100%}
+.orbit{position:absolute;left:560px;top:880px;width:480px;height:200px;z-index:3}
+.orbit .ring{position:absolute;inset:0;border:2px dashed rgba(255,248,240,.18);border-radius:50%}
+.orbit .tile-wrap{position:absolute;left:120px;top:-120px;z-index:2}
+.sat{position:absolute;left:0;top:0;offset-path:path('M 240 190 A 240 90 0 1 1 240 10 A 240 90 0 1 1 240 190');offset-rotate:0deg;
+  animation:orbit var(--T) linear infinite,orbitZ var(--T) linear infinite}
+.sat.s2{animation-delay:-2.6667s,-2.6667s}.sat.s3{animation-delay:-5.3333s,-5.3333s}
+
+/* ---------- Keyframes ---------- */
+@keyframes glowDrift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,30px) scale(1.08)}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-18px) rotate(calc(var(--r,0deg) + 4deg))}}
+@keyframes twinkle{0%,100%{transform:scale(.55) rotate(0deg);opacity:.35}50%{transform:scale(1) rotate(45deg);opacity:1}}
+@keyframes spin{to{transform:rotate(90deg)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,107,53,.5)}70%,100%{box-shadow:0 0 0 16px rgba(255,107,53,0)}}
+@keyframes rowCycle{0%,44%{opacity:1;transform:none}49%,64%{opacity:0;transform:translateY(14px) scale(.98)}70%,100%{opacity:1;transform:none}}
+@keyframes typingShow{0%,46%{opacity:0}51%,63%{opacity:1}67%,100%{opacity:0}}
+@keyframes dot{0%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-8px);opacity:1}60%{transform:translateY(0);opacity:.45}}
+@keyframes listScroll{to{transform:translateY(-580px)}}
+@keyframes dash{to{stroke-dashoffset:-22}}
+@keyframes bestGlow{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}50%{box-shadow:0 0 0 8px rgba(34,197,94,.15)}}
+@keyframes beam{0%{transform:translateY(0);opacity:0}8%{opacity:1}88%{opacity:1}100%{transform:translateY(360px);opacity:0}}
+@keyframes chipPing{0%,40%,80%,100%{box-shadow:0 0 0 0 rgba(124,92,245,0);background:#F4F6F9}58%{box-shadow:0 0 0 3px rgba(124,92,245,.55);background:#F1EDFF}}
+@keyframes scoreFill{0%,56%{--p:98}60%,64%{--p:0}88%,100%{--p:98}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-34px)}}
+@keyframes pshadow{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.7);opacity:.45}}
+@keyframes starFill{0%,50%{color:var(--gold);transform:scale(1)}54%,62%{color:#D5DBE5;transform:scale(.85)}67%{color:var(--gold);transform:scale(1.25)}72%,100%{color:var(--gold);transform:scale(1)}}
+@keyframes revCycle{0%,40%{opacity:1;transform:translateY(0) scale(1)}46%,94%{opacity:0;transform:translateY(16px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes faqOpen{0%,30%{height:146px;background:#FFF1E9}33.34%,96.66%{height:86px;background:#F4F6F9}100%{height:146px;background:#FFF1E9}}
+@keyframes faqIcon{0%,30%{transform:rotate(45deg)}33.34%,96.66%{transform:rotate(0deg)}100%{transform:rotate(45deg)}}
+@keyframes srcPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.5)}50%{box-shadow:0 0 0 8px rgba(255,107,53,0)}}
+@keyframes scanLines{from{transform:translateY(0)}to{transform:translateY(calc(var(--lh) * 5))}}
+@keyframes blink{50%{opacity:0}}
+@keyframes fieldOn{0%,18%{background:rgba(255,107,53,.14);box-shadow:inset 0 0 0 2px rgba(255,107,53,.55)}21%,97%{background:rgba(255,107,53,0);box-shadow:inset 0 0 0 2px rgba(255,107,53,0)}100%{background:rgba(255,107,53,.14);box-shadow:inset 0 0 0 2px rgba(255,107,53,.55)}}
+@keyframes checkPop{0%,70%{transform:scale(1)}74%,77%{transform:scale(0)}82%{transform:scale(1.18)}86%,100%{transform:scale(1)}}
+@keyframes orbit{from{offset-distance:0%}to{offset-distance:100%}}
+@keyframes orbitZ{0%{z-index:3;transform:scale(1)}25%{z-index:3;transform:scale(.82)}25.01%{z-index:1}50%{transform:scale(.66)}74.99%{z-index:1}75%{z-index:3;transform:scale(.82)}100%{z-index:3;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<!-- ===== Símbolos y gradientes compartidos ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gLupaRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#DCE2EC"/><stop offset="1" stop-color="#8793A8"/></linearGradient>
+    <radialGradient id="gLupaGlass" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#E9F2FF" stop-opacity=".95"/><stop offset=".55" stop-color="#9DB4F0" stop-opacity=".7"/><stop offset="1" stop-color="#5B7BD5" stop-opacity=".75"/></radialGradient>
+    <linearGradient id="gHandle" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3A4E73"/><stop offset=".5" stop-color="#22355A"/><stop offset="1" stop-color="#101B30"/></linearGradient>
+    <linearGradient id="gPin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFA274"/><stop offset=".55" stop-color="#FF6B35"/><stop offset="1" stop-color="#D24A18"/></linearGradient>
+    <linearGradient id="gShield" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DEBAA"/><stop offset=".5" stop-color="#22C55E"/><stop offset="1" stop-color="#128A42"/></linearGradient>
+    <linearGradient id="gBubble" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFA274"/><stop offset=".6" stop-color="#FF6B35"/><stop offset="1" stop-color="#D24A18"/></linearGradient>
+    <linearGradient id="gBubbleC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E6D8C6"/></linearGradient>
+
+    <symbol id="logo" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="110" fill="#FF6B35"/>
+      <path fill="#1A1A1A" stroke="#1A1A1A" stroke-width="34" stroke-linejoin="round" stroke-linecap="round" d="M168 158 L356 232 L286 262 L356 292 L168 366 Z"/>
+      <path fill="#FF6B35" d="M216 195 L262 218 L216 241 Z"/>
+      <path fill="#FF6B35" d="M216 285 L262 308 L216 331 Z"/>
+    </symbol>
+    <symbol id="logo-mark" viewBox="0 0 512 512">
+      <path fill="#1A1A1A" stroke="#1A1A1A" stroke-width="34" stroke-linejoin="round" stroke-linecap="round" d="M168 158 L356 232 L286 262 L356 292 L168 366 Z"/>
+      <path fill="#FF6B35" d="M216 195 L262 218 L216 241 Z"/>
+      <path fill="#FF6B35" d="M216 285 L262 308 L216 331 Z"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C12.8 6.4 17.6 11.2 24 12 17.6 12.8 12.8 17.6 12 24 11.2 17.6 6.4 12.8 0 12 6.4 11.2 11.2 6.4 12 0Z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.3l2.95 6.1 6.7.8-4.95 4.6 1.3 6.6L12 17.2 6 20.4l1.3-6.6-4.95-4.6 6.7-.8z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22s7-6.3 7-12.2A7 7 0 0 0 5 9.8C5 15.7 12 22 12 22z"/><circle cx="12" cy="9.8" r="2.6" fill="#fff"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"/><circle cx="8.2" cy="8.2" r="1.6" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 1.5L4 13.6h6.6L9.4 22.5 20 9.6h-6.7z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></symbol>
+  </defs>
+</svg>
+
+<div class="viewer">
+  <div class="vtop"><span><b>bweb</b> · Carrusel «Tu cliente le preguntó a la IA»</span><span id="vcount">1 / 7</span></div>
+  <div class="frame-wrap" id="frameWrap">
+    <div class="frame">
+      <div class="track" id="track">
+
+<!-- ================= 1 · HOOK ================= -->
+<section class="slide s1" aria-label="Slide 1">
+  <div class="bg">
+    <div class="glow" style="left:360px;top:600px"></div>
+    <div class="glow v" style="left:-340px;top:420px;width:820px;height:820px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Para dueños de negocio</p>
+    <h1 class="xl">Tu cliente le preguntó a&nbsp;la&nbsp;IA.<br><span class="hl">¿Te recomendó a&nbsp;vos?</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-w chat">
+      <div class="chat-top"><span class="orb xs"><svg><use href="#i-spark"/></svg></span><b>Asistente IA</b><span class="t">ahora</span></div>
+      <div class="bubble-user">¿Dónde como un buen chivito en Minas?</div>
+      <div class="ai-line">Te recomiendo estos 3 lugares:</div>
+      <div class="rows">
+        <div class="row r1"><span class="num">1</span><div class="sk"><i style="width:78%"></i><i class="s" style="width:50%"></i></div><span class="rate"><svg><use href="#i-star"/></svg>4,8</span></div>
+        <div class="row r2"><span class="num">2</span><div class="sk"><i style="width:64%"></i><i class="s" style="width:42%"></i></div><span class="rate"><svg><use href="#i-star"/></svg>4,6</span></div>
+        <div class="row you"><span class="num">3</span><div class="you-t">¿Y tu negocio?</div><span class="you-q">?</span></div>
+        <div class="typing"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="obj" style="left:96px;top:596px;z-index:4"><div class="float"><div class="orb" style="--s:176px"><svg><use href="#i-spark"/></svg></div></div></div>
+    <div class="obj" style="left:104px;top:900px"><div class="float d2" style="--r:-8deg">
+      <svg class="pin" viewBox="0 0 160 200" style="width:124px;height:156px"><path d="M80 8C41 8 12 37 12 76c0 48 68 114 68 114s68-66 68-114C148 37 119 8 80 8z" fill="url(#gPin)" stroke="#FFF8F0" stroke-width="10"/><circle cx="80" cy="76" r="34" fill="#FFF8F0"/><circle cx="80" cy="76" r="15" fill="#FF6B35"/><path d="M42 58c6-16 20-28 38-31" stroke="#fff" stroke-opacity=".55" stroke-width="8" stroke-linecap="round" fill="none"/></svg>
+    </div></div>
+    <svg class="spark" style="left:968px;top:580px;--s:44px"><use href="#i-spark"/></svg>
+    <svg class="spark o" style="left:760px;top:1150px;--s:30px;animation-delay:-1s"><use href="#i-spark"/></svg>
+    <svg class="spark p" style="left:64px;top:1170px;--s:26px;animation-delay:-.5s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="swipe">Deslizá <svg class="ic"><use href="#i-arrow"/></svg></span></footer>
+</section>
+
+<!-- ================= 2 · CONTEXTO ================= -->
+<section class="slide s2" aria-label="Slide 2">
+  <div class="bg">
+    <div class="glow" style="left:420px;top:560px;width:820px;height:820px"></div>
+    <div class="glow v" style="left:-420px;top:660px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Lo que cambió</p>
+    <h1>Antes: 10 links.<br>Ahora: <span class="hl">1 respuesta.</span></h1>
+    <p class="body">La IA resume y recomienda 2 o 3 opciones. <b>Si no estás ahí, para ese cliente no existís.</b></p>
+  </div>
+  <div class="art">
+    <span class="lbl" style="left:108px;top:720px">Antes</span>
+    <div class="card-w old">
+      <div class="sbar"><svg class="ic"><use href="#i-search"/></svg><span>chivito en minas</span></div>
+      <div class="links"><div class="ltrack">
+        <div class="li"><i class="t" style="width:74%"></i><i style="width:92%"></i></div>
+        <div class="li"><i class="t" style="width:58%"></i><i style="width:84%"></i></div>
+        <div class="li"><i class="t" style="width:80%"></i><i style="width:70%"></i></div>
+        <div class="li"><i class="t" style="width:64%"></i><i style="width:88%"></i></div>
+        <div class="li"><i class="t" style="width:70%"></i><i style="width:76%"></i></div>
+        <div class="li"><i class="t" style="width:52%"></i><i style="width:90%"></i></div>
+        <div class="li"><i class="t" style="width:76%"></i><i style="width:66%"></i></div>
+        <div class="li"><i class="t" style="width:60%"></i><i style="width:82%"></i></div>
+        <div class="li"><i class="t" style="width:68%"></i><i style="width:74%"></i></div>
+        <div class="li"><i class="t" style="width:56%"></i><i style="width:86%"></i></div>
+        <div class="li"><i class="t" style="width:74%"></i><i style="width:92%"></i></div>
+        <div class="li"><i class="t" style="width:58%"></i><i style="width:84%"></i></div>
+        <div class="li"><i class="t" style="width:80%"></i><i style="width:70%"></i></div>
+        <div class="li"><i class="t" style="width:64%"></i><i style="width:88%"></i></div>
+        <div class="li"><i class="t" style="width:70%"></i><i style="width:76%"></i></div>
+      </div></div>
+    </div>
+    <svg class="flow" viewBox="0 0 350 120"><path class="dash" d="M8 108 C 90 20, 250 10, 346 78"/><path d="M322 70 L348 82 L336 56"/></svg>
+    <span class="lbl hot" style="left:600px;top:690px">Ahora</span>
+    <div class="card-w new">
+      <div class="ans-top"><span class="orb xs"><svg><use href="#i-spark"/></svg></span>Respuesta de la IA</div>
+      <p class="ans-p">Estas son 3 opciones bien valoradas en Minas:</p>
+      <div class="mrow best"><span class="num">1</span><div class="sk"><i style="width:80%"></i></div><span class="okb"><svg><use href="#i-check"/></svg></span></div>
+      <div class="mrow"><span class="num">2</span><div class="sk"><i style="width:62%"></i></div></div>
+      <div class="mrow"><span class="num">3</span><div class="sk"><i style="width:70%"></i></div></div>
+    </div>
+    <div class="obj" style="left:40px;top:1030px;z-index:4"><div class="float d1" style="--r:-6deg">
+      <svg class="lupa" viewBox="0 0 200 200"><rect x="116" y="112" width="36" height="86" rx="18" transform="rotate(-45 134 155)" fill="url(#gHandle)"/><circle cx="84" cy="84" r="68" fill="url(#gLupaRim)"/><circle cx="84" cy="84" r="52" fill="#1A2B4A"/><circle cx="84" cy="84" r="47" fill="url(#gLupaGlass)"/><path d="M52 72a34 34 0 0 1 28-30" stroke="#fff" stroke-width="9" stroke-linecap="round" fill="none" opacity=".85"/></svg>
+    </div></div>
+    <div class="obj" style="left:900px;top:680px;z-index:5"><div class="float d3"><div class="orb" style="--s:128px"><svg><use href="#i-spark"/></svg></div></div></div>
+    <svg class="spark o" style="left:520px;top:1150px;--s:34px"><use href="#i-spark"/></svg>
+    <svg class="spark" style="left:980px;top:1150px;--s:26px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">2/7</span></footer>
+</section>
+
+<!-- ================= 3 · PASO 01 ================= -->
+<section class="slide s3" aria-label="Slide 3">
+  <div class="bg">
+    <div class="glow" style="left:-360px;top:640px;width:820px;height:820px"></div>
+    <div class="glow v" style="left:520px;top:460px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Paso 01</p>
+    <h1>Una web que la IA <span class="hl">entienda.</span></h1>
+    <p class="body">Rápida, clara y con lo esencial a la vista: <b>qué hacés, dónde estás, horarios y precios.</b></p>
+  </div>
+  <div class="art">
+    <div class="card-w browser">
+      <div class="bbar"><i></i><i></i><i></i><div class="url"><svg class="ic"><use href="#i-lock"/></svg>tunegocio.uy</div></div>
+      <div class="bbody">
+        <div class="bnav"><span class="blogo"></span><i></i><i></i><i></i><span class="bbtn">Reservar</span></div>
+        <div class="bhero">
+          <div class="btxt">
+            <div class="bh">Tu Negocio</div>
+            <div class="sk"><i style="width:94%"></i><i class="s" style="width:72%"></i></div>
+            <div class="chips">
+              <span class="chip"><svg class="ic"><use href="#i-pin"/></svg>Minas, Lavalleja</span>
+              <span class="chip" style="animation-delay:-3.8s"><svg class="ic"><use href="#i-clock"/></svg>Lun a Sáb · 9 a 20 h</span>
+              <span class="chip" style="animation-delay:-3.6s"><svg class="ic"><use href="#i-tag"/></svg>Precios</span>
+            </div>
+          </div>
+          <div class="bimg"></div>
+        </div>
+        <div class="beam"></div>
+      </div>
+      <div class="ai-tag"><span class="orb"><svg><use href="#i-spark"/></svg></span>Leyendo tu web…</div>
+    </div>
+    <div class="obj" style="left:760px;top:630px;z-index:5"><div class="float d2" style="--r:6deg">
+      <div class="score"><div class="ring"></div><div class="val"><div class="n"></div><small>Velocidad</small></div></div>
+    </div></div>
+    <div class="obj" style="left:846px;top:1000px;z-index:5"><div class="float" style="--r:-10deg"><div class="coin" style="--s:140px"><svg><use href="#i-bolt"/></svg></div></div></div>
+    <svg class="spark" style="left:700px;top:640px;--s:36px"><use href="#i-spark"/></svg>
+    <svg class="spark o" style="left:60px;top:1190px;--s:28px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">3/7</span></footer>
+</section>
+
+<!-- ================= 4 · PASO 02 ================= -->
+<section class="slide s4" aria-label="Slide 4">
+  <div class="bg">
+    <div class="glow" style="left:260px;top:520px"></div>
+    <div class="glow v" style="left:560px;top:760px;width:760px;height:760px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Paso 02</p>
+    <h1>Tu ficha de Google,<br><span class="hl">al&nbsp;día.</span></h1>
+    <p class="body">Reseñas, fotos, horario y teléfono correctos. <b>La IA usa esos datos para recomendar negocios de tu zona.</b></p>
+  </div>
+  <div class="art">
+    <div class="card-w mapc">
+      <svg viewBox="0 0 600 440" preserveAspectRatio="xMidYMid slice">
+        <rect width="600" height="440" fill="#EDF1F6"/>
+        <rect x="372" y="28" width="170" height="120" rx="24" fill="#D5EFDB"/>
+        <rect x="30" y="300" width="150" height="120" rx="24" fill="#D5EFDB"/>
+        <path d="M-20 262C110 230 210 300 350 250S560 160 640 190" stroke="#C4E4F6" stroke-width="40" fill="none"/>
+        <g stroke="#FFFFFF" stroke-width="20" stroke-linecap="round" fill="none">
+          <path d="M0 104H600"/><path d="M0 196H600"/><path d="M160 0V440"/><path d="M332 0V440"/><path d="M470 196V440"/><path d="M0 350H600"/>
+        </g>
+        <path d="M-10 420L620 120" stroke="#FFD9A8" stroke-width="26" stroke-linecap="round"/>
+        <g fill="#DCE3EC"><rect x="190" y="126" width="110" height="46" rx="10"/><rect x="30" y="126" width="100" height="46" rx="10"/><rect x="362" y="222" width="80" height="100" rx="10"/><rect x="200" y="20" width="100" height="60" rx="10"/></g>
+      </svg>
+    </div>
+    <div class="shadow pshadow" style="left:250px;top:1022px;width:130px;height:34px"></div>
+    <div class="obj" style="left:240px;top:840px;z-index:4"><div class="pinbounce">
+      <svg class="pin" viewBox="0 0 160 200"><path d="M80 8C41 8 12 37 12 76c0 48 68 114 68 114s68-66 68-114C148 37 119 8 80 8z" fill="url(#gPin)" stroke="#FFF8F0" stroke-width="10"/><circle cx="80" cy="76" r="38" fill="#FFF8F0"/><path fill="#F5A524" d="M80 50l8.6 17.5 19.3 2.3-14.2 13.2 3.8 19L80 92.6 62.5 102l3.8-19-14.2-13.2 19.3-2.3z"/><path d="M42 58c6-16 20-28 38-31" stroke="#fff" stroke-opacity=".55" stroke-width="8" stroke-linecap="round" fill="none"/></svg>
+    </div></div>
+    <div class="card-w biz">
+      <div class="biz-top"><div><div class="biz-name">Tu Negocio</div><div class="biz-cat">Restaurante · Minas</div></div><span class="open">Abierto</span></div>
+      <div class="stars"><svg class="st"><use href="#i-star"/></svg><svg class="st"><use href="#i-star"/></svg><svg class="st"><use href="#i-star"/></svg><svg class="st"><use href="#i-star"/></svg><svg class="st"><use href="#i-star"/></svg><b>4,9</b>(128 reseñas)</div>
+      <div class="photos"><i></i><i></i><i></i></div>
+      <div class="acts"><span>Cómo llegar</span><span>Llamar</span><span>Sitio web</span></div>
+    </div>
+    <div class="card-w review"><span class="av">M</span><div><div class="rv-s"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><div class="rv-t">¡Excelente atención!</div></div></div>
+    <div class="card-w review b"><span class="av o">L</span><div><div class="rv-s"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><div class="rv-t">Súper recomendable</div></div></div>
+    <svg class="spark o" style="left:980px;top:660px;--s:34px"><use href="#i-spark"/></svg>
+    <svg class="spark" style="left:60px;top:1196px;--s:26px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">4/7</span></footer>
+</section>
+
+<!-- ================= 5 · PASO 03 ================= -->
+<section class="slide s5" aria-label="Slide 5">
+  <div class="bg">
+    <div class="glow" style="left:-300px;top:600px"></div>
+    <div class="glow v" style="left:520px;top:700px;width:760px;height:760px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Paso 03</p>
+    <h1>Respondé lo que tus clientes <span class="hl">preguntan.</span></h1>
+    <p class="body">Una sección de preguntas frecuentes <b>le da a la IA respuestas listas para citar.</b></p>
+  </div>
+  <div class="art">
+    <div class="card-w faq">
+      <div class="faq-h">Preguntas frecuentes</div>
+      <div class="qa q1"><div class="qa-q"><span>¿Hacen envíos a todo el país?</span><svg><use href="#i-plus"/></svg></div><div class="qa-a">Sí, a todo Uruguay en 24 a 48 horas.</div></div>
+      <div class="qa q2"><div class="qa-q"><span>¿Aceptan tarjetas?</span><svg><use href="#i-plus"/></svg></div><div class="qa-a">Sí: débito, crédito y transferencia.</div></div>
+      <div class="qa q3"><div class="qa-q"><span>¿Tienen estacionamiento?</span><svg><use href="#i-plus"/></svg></div><div class="qa-a">Sí, gratis para clientes.</div></div>
+    </div>
+    <div class="cite">
+      <div class="cite-top"><span class="orb xs" style="--s:36px"><svg><use href="#i-spark"/></svg></span>Respuesta de la IA</div>
+      <p>“Sí, hacen envíos a todo Uruguay en 24 a 48 horas.”</p>
+      <span class="src"><svg class="ic"><use href="#i-link"/></svg>tunegocio.uy</span>
+    </div>
+    <div class="obj" style="left:812px;top:664px;z-index:5"><div class="float" style="--r:8deg">
+      <svg class="qb" viewBox="0 0 160 150" style="width:170px;height:160px"><path d="M26 8h108a18 18 0 0 1 18 18v70a18 18 0 0 1-18 18H70l-34 30v-30H26A18 18 0 0 1 8 96V26A18 18 0 0 1 26 8z" fill="url(#gBubble)" stroke="#FFF8F0" stroke-width="6" stroke-linejoin="round"/><text x="80" y="88" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="80" fill="#fff">?</text><path d="M28 36c2-10 8-16 18-18" stroke="#fff" stroke-opacity=".6" stroke-width="7" stroke-linecap="round" fill="none"/></svg>
+    </div></div>
+    <div class="obj" style="left:700px;top:1142px;z-index:5"><div class="float d2" style="--r:-10deg">
+      <svg class="qb" viewBox="0 0 160 150" style="width:104px;height:98px"><path d="M26 8h108a18 18 0 0 1 18 18v70a18 18 0 0 1-18 18h-10v30l-34-30H26A18 18 0 0 1 8 96V26A18 18 0 0 1 26 8z" fill="url(#gBubbleC)" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><text x="80" y="88" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="80" fill="#FF6B35">?</text></svg>
+    </div></div>
+    <svg class="spark p" style="left:720px;top:700px;--s:32px"><use href="#i-spark"/></svg>
+    <svg class="spark" style="left:60px;top:1196px;--s:26px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">5/7</span></footer>
+</section>
+
+<!-- ================= 6 · PASO 04 ================= -->
+<section class="slide s6" aria-label="Slide 6">
+  <div class="bg">
+    <div class="glow" style="left:400px;top:640px"></div>
+    <div class="glow v" style="left:-400px;top:480px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Paso 04</p>
+    <h1>Código invisible, <span class="hl">resultados visibles.</span></h1>
+    <p class="body">Los datos estructurados (schema) le dicen a Google y a la IA <b>qué sos, dónde estás y cuándo abrís.</b></p>
+  </div>
+  <div class="art">
+    <div class="code">
+      <div class="cbar"><i></i><i></i><i></i><span>schema.json</span></div>
+      <div class="cbody">
+        <div class="scan"></div>
+        <div class="cl"><em>1</em><span class="p">{</span></div>
+        <div class="cl"><em>2</em>  <span class="k">"@type"</span><span class="p">: </span><span class="s">"LocalBusiness"</span><span class="p">,</span></div>
+        <div class="cl"><em>3</em>  <span class="k">"name"</span><span class="p">: </span><span class="s">"Tu Negocio"</span><span class="p">,</span></div>
+        <div class="cl"><em>4</em>  <span class="k">"address"</span><span class="p">: </span><span class="s">"Minas, Lavalleja"</span><span class="p">,</span></div>
+        <div class="cl"><em>5</em>  <span class="k">"openingHours"</span><span class="p">: </span><span class="s">"Mo-Sa 09:00-20:00"</span><span class="p">,</span></div>
+        <div class="cl"><em>6</em>  <span class="k">"ratingValue"</span><span class="p">: </span><span class="nm">4.9</span></div>
+        <div class="cl"><em>7</em><span class="p">}</span><span class="caret"></span></div>
+      </div>
+    </div>
+    <div class="card-w rich">
+      <div class="rich-h">Así te muestran</div>
+      <div class="f f0"><span class="f-type">Negocio local</span></div>
+      <div class="f f1"><div class="f-name">Tu Negocio</div></div>
+      <div class="f f2"><div class="f-row"><svg class="ic"><use href="#i-pin"/></svg>Minas, Lavalleja</div></div>
+      <div class="f f3"><div class="f-row"><svg class="ic"><use href="#i-clock"/></svg><b>Abierto</b> · Cierra 20:00</div></div>
+      <div class="f f4"><div class="f-row"><span class="rv-s"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>4,9</div></div>
+    </div>
+    <div class="obj" style="left:846px;top:676px;z-index:5"><div class="float d1" style="--r:-8deg"><div class="coin" style="--s:140px"><span class="glyph">{ }</span></div></div></div>
+    <div class="obj" style="left:26px;top:1052px;z-index:5"><div class="float d3" style="--r:-6deg">
+      <svg class="shield" viewBox="0 0 200 214"><path d="M100 10l78 28v62c0 52-36 86-78 104-42-18-78-52-78-104V38z" fill="url(#gShield)" stroke="#FFF8F0" stroke-width="10" stroke-linejoin="round"/><path d="M64 108l26 26 48-52" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M44 52l40-14" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"/></svg>
+    </div></div>
+    <svg class="spark o" style="left:740px;top:720px;--s:30px"><use href="#i-spark"/></svg>
+    <svg class="spark" style="left:990px;top:1196px;--s:26px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">6/7</span></footer>
+</section>
+
+<!-- ================= 7 · CTA ================= -->
+<section class="slide s7" aria-label="Slide 7">
+  <div class="bg">
+    <div class="glow" style="left:380px;top:560px;width:1000px;height:1000px"></div>
+    <div class="glow v" style="left:-380px;top:760px"></div>
+  </div>
+  <header class="head">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+  <div class="copy">
+    <p class="eyebrow">Diagnóstico gratis</p>
+    <h1>¿La IA te recomienda? <span class="hl">Averigualo gratis.</span></h1>
+    <span class="cta">Escribinos «IA» por DM <svg class="ic"><use href="#i-arrow"/></svg></span>
+    <p class="alt">o al WhatsApp <b>099 788 934</b> · bweb.lat</p>
+  </div>
+  <div class="checks">
+    <div class="chk"><span class="coin green" style="--s:56px;--edge:#11803F"><svg><use href="#i-check"/></svg></span>Tu web</div>
+    <div class="chk"><span class="coin green" style="--s:56px;--edge:#11803F"><svg><use href="#i-check"/></svg></span>Tu ficha de Google</div>
+    <div class="chk"><span class="coin green" style="--s:56px;--edge:#11803F"><svg><use href="#i-check"/></svg></span>Cómo te ve la IA</div>
+  </div>
+  <div class="orbit">
+    <div class="ring"></div>
+    <div class="tile-wrap"><div class="float" style="--r:-8deg"><div class="tile"><svg><use href="#logo-mark"/></svg></div></div></div>
+    <div class="sat"><div style="transform:translate(-50%,-50%)"><div class="orb" style="--s:76px"><svg><use href="#i-spark"/></svg></div></div></div>
+    <div class="sat s2"><div style="transform:translate(-50%,-50%)"><div class="coin" style="--s:70px"><svg><use href="#i-star"/></svg></div></div></div>
+    <div class="sat s3"><div style="transform:translate(-50%,-50%)"><svg class="pin" viewBox="0 0 160 200" style="width:62px;height:78px;filter:drop-shadow(0 12px 10px rgba(0,0,0,.4))"><path d="M80 8C41 8 12 37 12 76c0 48 68 114 68 114s68-66 68-114C148 37 119 8 80 8z" fill="url(#gShield)" stroke="#FFF8F0" stroke-width="12"/><circle cx="80" cy="76" r="30" fill="#FFF8F0"/></svg></div></div>
+  </div>
+  <div class="art" style="pointer-events:none">
+    <svg class="spark o" style="left:1000px;top:760px;--s:34px"><use href="#i-spark"/></svg>
+    <svg class="spark" style="left:560px;top:820px;--s:28px;animation-delay:-1s"><use href="#i-spark"/></svg>
+    <svg class="spark p" style="left:990px;top:1170px;--s:24px;animation-delay:-.5s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">7/7</span></footer>
+</section>
+
+      </div>
+    </div>
+  </div>
+  <div class="vnav">
+    <button id="prev" aria-label="Anterior">&#8592;</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" aria-label="Siguiente">&#8594;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var W = 1080, H = 1350;
+  var track = document.getElementById('track');
+  var slides = Array.prototype.slice.call(track.children);
+  var params = new URLSearchParams(location.search);
+  var exp = parseInt(params.get('export'), 10);
+
+  // Modo export: un solo slide a tamaño real (lo usa export.js)
+  if (exp >= 1 && exp <= slides.length) {
+    document.documentElement.classList.add('export');
+    slides.forEach(function(s, i){ if (i !== exp - 1) s.style.display = 'none'; });
+    return;
+  }
+
+  var i = 0;
+  var dots = document.getElementById('dots');
+  slides.forEach(function(_, k){
+    var d = document.createElement('i');
+    d.addEventListener('click', function(){ go(k); });
+    dots.appendChild(d);
+  });
+
+  function fit(){
+    var sc = Math.min((window.innerWidth - 32) / W, (window.innerHeight - 150) / H, 1);
+    sc = Math.max(sc, .2);
+    var root = document.documentElement.style;
+    root.setProperty('--sc', sc);
+    root.setProperty('--vw', (W * sc) + 'px');
+    root.setProperty('--vh', (H * sc) + 'px');
+  }
+  function go(k){
+    i = Math.max(0, Math.min(slides.length - 1, k));
+    track.style.transform = 'translateX(' + (-i * W) + 'px)';
+    Array.prototype.forEach.call(dots.children, function(d, n){ d.classList.toggle('on', n === i); });
+    document.getElementById('vcount').textContent = (i + 1) + ' / ' + slides.length;
+    document.getElementById('prev').disabled = i === 0;
+    document.getElementById('next').disabled = i === slides.length - 1;
+  }
+  document.getElementById('prev').onclick = function(){ go(i - 1); };
+  document.getElementById('next').onclick = function(){ go(i + 1); };
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') go(i + 1);
+    if (e.key === 'ArrowLeft') go(i - 1);
+  });
+  var x0 = null;
+  var fw = document.getElementById('frameWrap');
+  fw.addEventListener('pointerdown', function(e){ x0 = e.clientX; });
+  fw.addEventListener('pointerup', function(e){
+    if (x0 === null) return;
+    var dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+  });
+  window.addEventListener('resize', fit);
+  fit(); go(0);
+})();
+</script>
+</body>
+</html>
