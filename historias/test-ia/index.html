@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Historia test IA · bweb</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* ============================================================
+   Historia "Test de 10 segundos" — bweb
+   Lienzo 1080 x 1920 (9:16). Dura 10s: entra todo en ~7.5s y
+   queda quieto (con objetos flotando) para poner la encuesta.
+   Zonas seguras de Instagram: 250px arriba y ~250px abajo libres.
+   ============================================================ */
+:root{
+  --orange:#FF6B35; --orange-2:#FF8F65; --orange-d:#E0521F; --orange-dd:#A93A13;
+  --amber:#FFB547; --gold:#F5A524; --cream:#FFF8F0; --navy:#1A2B4A; --ink:#0A1120;
+  --violet:#7C5CF5; --violet-l:#B8A6FF; --green:#22C55E;
+  --muted:#5C6B82; --line:rgba(26,43,74,.10); --sk:#E6EAF0;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#05080E;color:var(--cream);font-family:'Inter Tight',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+svg{display:block}
+.ic{width:1em;height:1em;flex:none}
+
+/* ---------- Visor ---------- */
+.viewer{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px 16px}
+.frame-wrap{position:relative;width:var(--vw);height:var(--vh);border-radius:18px;overflow:hidden;box-shadow:0 40px 100px -30px rgba(0,0,0,.8)}
+.frame{position:absolute;top:0;left:0;width:1080px;height:1920px;transform:scale(var(--sc));transform-origin:0 0}
+.vbar{display:flex;gap:12px}
+.vbar button{font:600 14px 'Inter Tight',sans-serif;color:var(--cream);background:rgba(255,248,240,.06);border:1px solid rgba(255,248,240,.18);padding:10px 16px;border-radius:999px;cursor:pointer}
+.vbar button:hover{border-color:var(--orange);background:rgba(255,107,53,.18)}
+.safe{position:absolute;left:0;right:0;z-index:50;background:repeating-linear-gradient(45deg,rgba(255,0,80,.18) 0 14px,rgba(255,0,80,.06) 14px 28px);display:none;
+  font:600 26px 'JetBrains Mono',monospace;color:#fff;align-items:center;justify-content:center;letter-spacing:.08em}
+.show-safe .safe{display:flex}
+
+html.export body{background:var(--ink);overflow:hidden;min-height:0}
+html.export .vbar{display:none}
+html.export .viewer{display:block;padding:0;min-height:0}
+html.export .frame-wrap{width:1080px;height:1920px;border-radius:0;box-shadow:none}
+html.export .frame{transform:none}
+
+/* ---------- Lienzo ---------- */
+.story{position:relative;width:1080px;height:1920px;overflow:hidden;isolation:isolate;
+  background:linear-gradient(170deg,#1C2F52 0%,#122039 40%,#0A1120 100%)}
+.bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.bg::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,248,240,.10) 1.6px,transparent 1.9px);background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 45% at 60% 62%,#000 0%,transparent 72%);
+          mask-image:radial-gradient(ellipse 80% 45% at 60% 62%,#000 0%,transparent 72%)}
+.glow{position:absolute;width:1000px;height:1000px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,107,53,.32),rgba(255,107,53,0));animation:glowDrift 8s ease-in-out infinite}
+.glow.v{background:radial-gradient(closest-side,rgba(124,92,245,.28),rgba(124,92,245,0));animation-delay:-4s}
+
+.head{position:absolute;top:252px;left:88px;right:88px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.brand{display:flex;align-items:center;gap:18px}
+.brand svg{width:64px;height:64px;border-radius:16px;box-shadow:0 10px 30px rgba(255,107,53,.35)}
+.brand span{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:42px;letter-spacing:-.01em;line-height:1}
+.tag{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,248,240,.78);
+  border:1.5px solid rgba(255,248,240,.16);border-radius:999px;padding:12px 20px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.04)}
+.tag .ic{color:var(--orange-2);font-size:22px}
+
+.copy{position:absolute;left:88px;right:88px;top:380px;z-index:5}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:26px;letter-spacing:.2em;color:var(--orange-2);text-transform:uppercase;margin:0 0 22px;display:flex;align-items:center;gap:14px}
+.eyebrow .ic{font-size:30px;animation:tick 1s steps(1) infinite}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:96px;line-height:1.0;letter-spacing:-.026em;margin:0}
+h1 .ln{display:block;overflow:hidden;padding-bottom:6px;margin-bottom:-6px}
+h1 .ln > span{display:inline-block}
+.hl{background:linear-gradient(100deg,#FF6B35 0%,#FF8F65 55%,#FFB547 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- Objetos ---------- */
+.obj{position:absolute}
+.float{animation:float 4s ease-in-out infinite}
+.d2{animation-delay:-2s}
+.spark{position:absolute;width:var(--s,36px);height:var(--s,36px);color:var(--cream);animation:twinkle 2s ease-in-out infinite}
+.spark.o{color:var(--amber)}
+.spark.p{color:var(--violet-l)}
+.orb{--s:160px;width:var(--s);height:var(--s);border-radius:50%;position:relative;flex:none;
+  background:
+    radial-gradient(circle at 30% 24%,rgba(255,255,255,.92) 0,rgba(255,255,255,0) 21%),
+    radial-gradient(circle at 74% 82%,rgba(255,143,101,.95) 0,rgba(255,107,53,0) 50%),
+    radial-gradient(circle at 38% 36%,#CFC2FF 0,#8B6CFA 38%,#5B3BE0 72%,#34208F 100%);
+  box-shadow:inset calc(var(--s)*-.06) calc(var(--s)*-.1) calc(var(--s)*.2) rgba(25,10,80,.5),
+             inset calc(var(--s)*.04) calc(var(--s)*.05) calc(var(--s)*.12) rgba(255,255,255,.25),
+             0 calc(var(--s)*.18) calc(var(--s)*.38) calc(var(--s)*-.08) rgba(91,59,224,.65)}
+.orb svg{position:absolute;left:26%;top:26%;width:48%;height:48%;color:#fff;filter:drop-shadow(0 2px 5px rgba(40,20,120,.5));animation:spin 8s linear infinite}
+.orb.xs{--s:48px}
+.orb.xs svg{filter:none}
+.coin{--s:150px;--edge:var(--orange-dd);width:var(--s);height:var(--s);border-radius:50%;position:relative;display:grid;place-items:center;color:#fff;
+  background:radial-gradient(circle at 34% 28%,#FFD3BD 0,#FF9A6B 22%,#FF6B35 55%,#E0521F 100%);
+  box-shadow:0 calc(var(--s)*.07) 0 var(--edge),0 calc(var(--s)*.07 + 26px) 46px -8px rgba(0,0,0,.55),inset 0 -6px 14px rgba(150,40,0,.3)}
+.coin::before{content:"";position:absolute;inset:11%;border-radius:50%;border:3px solid rgba(255,255,255,.42)}
+.coin::after{content:"";position:absolute;left:17%;top:11%;width:40%;height:22%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0));transform:rotate(-28deg)}
+.coin > .glyph{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:calc(var(--s)*.5);line-height:1;text-shadow:0 3px 0 rgba(150,40,0,.4);margin-top:-4%}
+.timer{width:150px;height:150px;border-radius:50%;position:relative;display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 26%,#FFFFFF 0,#FFF8F0 45%,#EADCCB 100%);
+  box-shadow:0 12px 0 #C8B39C,0 40px 50px -10px rgba(0,0,0,.6)}
+.timer .ring{position:absolute;inset:12%;border-radius:50%;background:conic-gradient(var(--orange) calc(var(--t) * 10%),rgba(26,43,74,.10) 0);
+  -webkit-mask:radial-gradient(closest-side,transparent 76%,#000 77%);mask:radial-gradient(closest-side,transparent 76%,#000 77%);animation:timer 10s linear both}
+.timer .n{position:relative;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:54px;color:var(--navy);letter-spacing:-.04em}
+.timer .n::after{counter-reset:t var(--t);content:counter(t) "s";animation:inherit}
+@property --t{syntax:'<integer>';inherits:true;initial-value:0}
+.timer{animation:timer 10s linear both}
+
+/* ---------- Chat ---------- */
+.card-w{position:absolute;background:#fff;color:var(--navy);border-radius:36px;
+  box-shadow:0 60px 110px -30px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.6)}
+.chat{left:100px;top:660px;width:880px;padding:30px 34px 34px;transform:rotate(-2deg)}
+.chat-top{display:flex;align-items:center;gap:14px;font-size:26px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.chat-top b{font-weight:600}
+.chat-top .t{margin-left:auto;color:var(--muted);font-size:22px}
+.bubble-user{margin-left:auto;width:fit-content;background:linear-gradient(135deg,#FF7D4A,#FF6B35);color:#fff;font-size:33px;font-weight:500;line-height:1.3;
+  padding:20px 28px;border-radius:28px 28px 8px 28px;box-shadow:0 14px 26px -12px rgba(255,107,53,.7);transform-origin:100% 100%}
+.bubble-user .txt{display:inline-block;white-space:nowrap;clip-path:inset(0 100% 0 0)}
+.blank{display:inline-block;padding:0 10px;margin:0 2px;border-radius:10px;background:rgba(255,255,255,.22);border-bottom:3px dashed rgba(255,255,255,.85);font-weight:700}
+.answer{position:relative;margin-top:22px}
+.ai-line{font-size:28px;font-weight:500;margin:0 0 16px;display:flex;align-items:center;gap:12px}
+.rows{display:grid;gap:12px}
+.row{display:flex;align-items:center;gap:18px;padding:14px 22px;border-radius:22px;background:#F4F6F9}
+.num{width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-weight:700;font-size:22px;color:var(--navy);box-shadow:0 0 0 1px var(--line);flex:none}
+.sk{display:grid;gap:9px;flex:1;min-width:0}
+.sk i{display:block;height:15px;border-radius:8px;background:var(--sk)}
+.sk i.s{height:12px;opacity:.75}
+.rate{font-weight:600;font-size:24px;display:flex;align-items:center;gap:6px;flex:none}
+.rate svg{color:var(--gold);width:24px;height:24px}
+.row.you{background:#FFF1E9;outline:3px dashed var(--orange);outline-offset:-3px}
+.row.you .num{background:var(--orange);color:#fff;box-shadow:none}
+.you-t{flex:1;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:32px;color:var(--orange-d)}
+.you-q{font-weight:800;font-size:30px;color:var(--orange)}
+.typing{position:absolute;left:0;top:10px;display:flex;gap:10px;padding:18px 24px;background:#F4F6F9;border-radius:999px}
+.typing i{width:15px;height:15px;border-radius:50%;background:var(--violet);animation:dot 1s ease-in-out infinite}
+.typing i:nth-child(2){animation-delay:-.84s}
+.typing i:nth-child(3){animation-delay:-.68s}
+
+/* ---------- Pregunta + zona de encuesta ---------- */
+.ask{position:absolute;left:88px;right:88px;top:1296px;z-index:5;text-align:center}
+.ask h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:116px;line-height:1;letter-spacing:-.03em;margin:0;display:inline-block}
+.arrow{position:absolute;left:800px;top:1330px;width:200px;height:220px;overflow:visible;z-index:5}
+.arrow path{fill:none;stroke:var(--cream);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.arrow .draw{stroke-dasharray:420;stroke-dashoffset:420}
+.arrow .head{stroke-dasharray:80;stroke-dashoffset:80}
+.cta{position:absolute;left:50%;top:1636px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:14px;white-space:nowrap;
+  background:rgba(255,248,240,.10);border:1.5px solid rgba(255,248,240,.18);color:rgba(255,248,240,.8);font-size:30px;font-weight:500;padding:18px 30px;border-radius:999px}
+.cta b{color:var(--cream);font-weight:700}
+.cta .ic{font-size:30px;color:var(--orange-2)}
+
+/* ---------- Coreografía (entra una vez) ---------- */
+.in{animation:fadeUp .7s cubic-bezier(.2,.8,.2,1) both}
+h1 .ln > span{animation:lineUp .8s cubic-bezier(.2,.8,.2,1) both}
+.chat{animation:cardIn .9s cubic-bezier(.2,.8,.2,1) .9s both}
+.bubble-user{animation:pop .45s cubic-bezier(.3,1.4,.5,1) 1.5s both}
+.bubble-user .txt{animation:typeIn 1.5s steps(28,end) 1.75s both}
+.typing{animation:showHide 1.3s linear 3.5s both}
+.ai-line{animation:fadeUp .5s ease-out 4.8s both}
+.row.r1{animation:fadeUp .5s ease-out 5.05s both}
+.row.r2{animation:fadeUp .5s ease-out 5.3s both}
+.row.you{animation:fadeUp .5s ease-out 5.55s both,ping 2s ease-out 6.1s infinite}
+.ask h2{animation:popBig .7s cubic-bezier(.3,1.5,.5,1) 6.3s both}
+.arrow .draw{animation:draw .6s ease-out 6.9s forwards}
+.arrow .head{animation:draw .25s ease-out 7.45s forwards}
+.cta{animation:fadeUpC .6s ease-out 7.6s both}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes fadeUpC{from{opacity:0;transform:translate(-50%,30px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lineUp{from{transform:translateY(110%)}to{transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(80px) rotate(3deg) scale(.94)}to{opacity:1;transform:rotate(-2deg)}}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes popBig{0%{opacity:0;transform:scale(.5) rotate(-4deg)}70%{opacity:1;transform:scale(1.06) rotate(1deg)}100%{opacity:1;transform:none}}
+@keyframes typeIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes showHide{0%{opacity:0}12%,88%{opacity:1}100%{opacity:0}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,107,53,.55)}70%,100%{box-shadow:0 0 0 18px rgba(255,107,53,0)}}
+@keyframes dot{0%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-9px);opacity:1}60%{transform:translateY(0);opacity:.45}}
+@keyframes glowDrift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,30px) scale(1.08)}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-18px) rotate(calc(var(--r,0deg) + 4deg))}}
+@keyframes twinkle{0%,100%{transform:scale(.55) rotate(0deg);opacity:.35}50%{transform:scale(1) rotate(45deg);opacity:1}}
+@keyframes spin{to{transform:rotate(90deg)}}
+@keyframes tick{50%{opacity:.35}}
+@keyframes timer{from{--t:0}to{--t:10}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="110" fill="#FF6B35"/>
+      <path fill="#1A1A1A" stroke="#1A1A1A" stroke-width="34" stroke-linejoin="round" stroke-linecap="round" d="M168 158 L356 232 L286 262 L356 292 L168 366 Z"/>
+      <path fill="#FF6B35" d="M216 195 L262 218 L216 241 Z"/>
+      <path fill="#FF6B35" d="M216 285 L262 308 L216 331 Z"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C12.8 6.4 17.6 11.2 24 12 17.6 12.8 12.8 17.6 12 24 11.2 17.6 6.4 12.8 0 12 6.4 11.2 11.2 6.4 12 0Z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.3l2.95 6.1 6.7.8-4.95 4.6 1.3 6.6L12 17.2 6 20.4l1.3-6.6-4.95-4.6 6.7-.8z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5.5h16v10H9.5L5 19.5v-4H4z"/></symbol>
+  </defs>
+</svg>
+
+<div class="viewer">
+  <div class="frame-wrap" id="frameWrap">
+    <div class="frame">
+<section class="story" id="story">
+  <div class="bg">
+    <div class="glow" style="left:300px;top:640px"></div>
+    <div class="glow v" style="left:-420px;top:1100px"></div>
+    <div class="glow" style="left:-300px;top:-420px;width:800px;height:800px;opacity:.6"></div>
+  </div>
+
+  <header class="head in" style="animation-delay:.05s">
+    <div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div>
+    <div class="tag"><svg class="ic"><use href="#i-spark"/></svg>SEO + IA</div>
+  </header>
+
+  <div class="copy">
+    <p class="eyebrow in" style="animation-delay:.2s"><svg class="ic"><use href="#i-clock"/></svg>Test de 10 segundos</p>
+    <h1>
+      <span class="ln"><span style="animation-delay:.3s">Preguntale a la IA</span></span>
+      <span class="ln"><span class="hl" style="animation-delay:.45s">por tu negocio.</span></span>
+    </h1>
+  </div>
+
+  <div class="obj" style="left:846px;top:470px;z-index:6"><div class="in" style="animation-delay:.7s"><div class="float d2" style="--r:8deg">
+    <div class="timer"><div class="ring"></div><div class="n"></div></div>
+  </div></div></div>
+
+  <div class="card-w chat">
+    <div class="chat-top"><span class="orb xs"><svg><use href="#i-spark"/></svg></span><b>Asistente IA</b><span class="t">ahora</span></div>
+    <div class="bubble-user"><span class="txt">Recomendame <span class="blank">tu rubro</span> en <span class="blank">tu ciudad</span></span></div>
+    <div class="answer">
+      <div class="typing"><i></i><i></i><i></i></div>
+      <div class="ai-line">Te recomiendo estos 3:</div>
+      <div class="rows">
+        <div class="row r1"><span class="num">1</span><div class="sk"><i style="width:76%"></i><i class="s" style="width:48%"></i></div><span class="rate"><svg><use href="#i-star"/></svg>4,8</span></div>
+        <div class="row r2"><span class="num">2</span><div class="sk"><i style="width:62%"></i><i class="s" style="width:40%"></i></div><span class="rate"><svg><use href="#i-star"/></svg>4,7</span></div>
+        <div class="row you"><span class="num">3</span><div class="you-t">¿Tu negocio?</div><span class="you-q">?</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="obj" style="left:22px;top:1030px;z-index:6"><div class="in" style="animation-delay:1.1s"><div class="float"><div class="orb" style="--s:124px"><svg><use href="#i-spark"/></svg></div></div></div></div>
+
+  <div class="ask"><h2 class="hl">¿Apareciste?</h2></div>
+  <svg class="arrow" viewBox="0 0 200 220"><path class="draw" d="M150 20 C 200 70, 190 150, 110 190"/><path class="head" d="M136 196 L106 192 L120 166"/></svg>
+
+  <div class="cta"><svg class="ic"><use href="#i-chat"/></svg>¿No? Escribinos <b>«IA»</b> por DM</div>
+
+  <svg class="spark" style="left:60px;top:620px;--s:36px"><use href="#i-spark"/></svg>
+  <svg class="spark o" style="left:90px;top:1340px;--s:34px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  <svg class="spark p" style="left:120px;top:1540px;--s:28px;animation-delay:-.5s"><use href="#i-spark"/></svg>
+  <svg class="spark o" style="left:930px;top:1560px;--s:28px;animation-delay:-1.5s"><use href="#i-spark"/></svg>
+
+  <div class="safe" style="top:0;height:250px">ZONA DE INSTAGRAM</div>
+  <div class="safe" style="bottom:0;height:250px">ZONA DE INSTAGRAM</div>
+</section>
+    </div>
+  </div>
+  <div class="vbar">
+    <button id="replay">Repetir animación</button>
+    <button id="safe">Ver zonas seguras</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var W = 1080, H = 1920;
+  var params = new URLSearchParams(location.search);
+  if (params.has('export')) {
+    document.documentElement.classList.add('export');
+    return;
+  }
+  function fit(){
+    var sc = Math.min((window.innerWidth - 32) / W, (window.innerHeight - 100) / H, 1);
+    sc = Math.max(sc, .15);
+    var r = document.documentElement.style;
+    r.setProperty('--sc', sc);
+    r.setProperty('--vw', (W * sc) + 'px');
+    r.setProperty('--vh', (H * sc) + 'px');
+  }
+  document.getElementById('replay').onclick = function(){
+    document.getAnimations().forEach(function(a){ a.cancel(); a.play(); });
+  };
+  document.getElementById('safe').onclick = function(){
+    document.getElementById('story').classList.toggle('show-safe');
+  };
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+</body>
+</html>
