@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Carrusel precios · bweb</title>
+<link rel="stylesheet" href="../../recursos/bweb.css">
+<style>
+/* Carrusel 1080x1350 · loops de 8s (duraciones 1/2/4/8s, delays <= 0) */
+
+/* ---- 1 · Hook ---- */
+.mock{left:88px;top:716px;width:560px;height:420px;overflow:hidden;border-radius:30px;transform:rotate(-4deg)}
+.mock .mbody{padding:22px 26px}
+.mnav{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.mnav .blogo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#FF8F65,#FF6B35)}
+.mnav i{display:block;width:54px;height:10px;border-radius:5px;background:var(--sk)}
+.mnav .bbtn{margin-left:auto;background:var(--navy);color:#fff;font-size:16px;font-weight:600;padding:8px 14px;border-radius:10px}
+.mhero{height:150px;border-radius:20px;background:radial-gradient(circle at 75% 30%,#FFD29A 0,rgba(255,210,154,0) 40%),linear-gradient(150deg,#FF9A6B,#FF6B35 55%,#C94A1B);margin-bottom:18px;position:relative;overflow:hidden}
+.mhero::after{content:"";position:absolute;left:24px;top:30px;width:55%;height:22px;border-radius:8px;background:rgba(255,255,255,.85);box-shadow:0 36px 0 -4px rgba(255,255,255,.6)}
+.mcols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mcols i{display:block;height:90px;border-radius:14px;background:#F4F6F9}
+.ptag{position:absolute;left:640px;top:600px;width:340px;height:520px;transform-origin:170px 0;animation:swing 2s ease-in-out infinite;--a:6deg;z-index:5}
+.ptag svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 36px 30px rgba(0,0,0,.5))}
+.ptag .pt-in{position:absolute;left:30px;right:30px;top:250px;text-align:center;color:#fff}
+.ptag .usd{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:28px;letter-spacing:.2em;opacity:.9}
+.roll{height:110px;overflow:hidden;margin-top:6px}
+.roll-in{animation:roll var(--T) ease-in-out infinite}
+.roll-in div{height:110px;line-height:110px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:92px;letter-spacing:-.04em;text-shadow:0 4px 0 rgba(150,40,0,.35)}
+@keyframes roll{0%,40%{transform:translateY(0)}46%{transform:translateY(-110px)}52%{transform:translateY(-220px)}58%{transform:translateY(-330px)}64%{transform:translateY(-440px)}70%,100%{transform:translateY(-550px)}}
+
+/* ---- 2 · 3 factores ---- */
+.fac{left:88px;width:904px;min-height:170px;display:flex;align-items:center;gap:30px;padding:26px 34px 26px 28px;animation:facOn var(--T) ease-in-out infinite}
+.fac.f2{animation-delay:-5.3333s}.fac.f3{animation-delay:-2.6667s}
+.fac .coin{--s:112px}
+.fac .n{font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.16em;color:var(--orange-2)}
+.fac h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:42px;letter-spacing:-.02em;line-height:1.05;margin:6px 0 8px}
+.fac p{margin:0;font-size:26px;line-height:1.35;color:rgba(255,248,240,.65)}
+@keyframes facOn{0%,30%{border-color:rgba(255,107,53,.8);background:linear-gradient(180deg,rgba(255,107,53,.16),rgba(255,107,53,.05));transform:translateX(0)}
+  33.34%,96.66%{border-color:rgba(255,248,240,.14);background:linear-gradient(180deg,rgba(255,248,240,.07),rgba(255,248,240,.03));transform:translateX(0)}
+  100%{border-color:rgba(255,107,53,.8);background:linear-gradient(180deg,rgba(255,107,53,.16),rgba(255,107,53,.05))}}
+
+/* ---- 3 y 4 · Precios ---- */
+.price{left:88px;top:432px;width:904px;padding:44px 50px 46px}
+.price.dark{background:linear-gradient(165deg,#1E3358,#101A2E);color:var(--cream);box-shadow:0 60px 100px -30px rgba(0,0,0,.8),inset 0 0 0 2px rgba(255,107,53,.55)}
+.pchip{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:20px;letter-spacing:.14em;text-transform:uppercase;
+  padding:10px 18px;border-radius:999px;background:#FFF1E9;color:var(--orange-d)}
+.price.dark .pchip{background:rgba(255,107,53,.18);color:var(--orange-2)}
+.badge{position:absolute;right:44px;top:44px;font-size:20px;font-weight:700;background:var(--orange);color:#fff;padding:10px 18px;border-radius:999px;box-shadow:0 10px 24px -8px rgba(255,107,53,.8)}
+.amount{display:flex;align-items:flex-start;gap:14px;margin:26px 0 6px;position:relative;overflow:hidden}
+.amount .cur{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:34px;letter-spacing:.1em;margin-top:26px;color:var(--muted)}
+.price.dark .amount .cur{color:rgba(255,248,240,.6)}
+.amount .big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:156px;line-height:1;letter-spacing:-.05em}
+.price:not(.dark) .amount .big{color:var(--navy)}
+.price.dark .amount .big{background:linear-gradient(100deg,#FF6B35,#FF8F65 55%,#FFB547);-webkit-background-clip:text;background-clip:text;color:transparent}
+.amount::after{content:"";position:absolute;top:0;bottom:0;width:120px;left:-160px;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0));transform:skewX(-18deg);animation:shine 4s ease-in-out infinite}
+.price.dark .amount::after{background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.18),rgba(255,255,255,0))}
+@keyframes shine{0%,55%{left:-160px}85%,100%{left:110%}}
+.psub{font-size:26px;color:var(--muted);margin-bottom:30px}
+.price.dark .psub{color:rgba(255,248,240,.6)}
+.plist{border-top:1.5px dashed var(--line);padding-top:26px;display:grid;gap:18px}
+.price.dark .plist{border-color:rgba(255,248,240,.14)}
+.plist div{display:flex;align-items:center;gap:18px;font-size:31px;font-weight:600;line-height:1.2}
+.plist .coin{--s:50px;animation:checkPop var(--T) ease-in-out infinite}
+.plist div:nth-child(2) .coin{animation-delay:-7.75s}.plist div:nth-child(3) .coin{animation-delay:-7.5s}.plist div:nth-child(4) .coin{animation-delay:-7.25s}
+.plist .coin > svg{width:54%;height:54%}
+.pnote{margin-top:28px;font-size:22px;color:rgba(255,248,240,.55);display:flex;align-items:center;gap:10px}
+@keyframes checkPop{0%,62%{transform:scale(1)}66%,69%{transform:scale(0)}74%{transform:scale(1.18)}78%,100%{transform:scale(1)}}
+
+/* ---- 5 · Checklist ---- */
+.chk{left:88px;width:904px;height:104px;display:flex;align-items:center;gap:24px;padding:0 28px 0 22px;border-radius:26px;animation:chkRow var(--T) ease-in-out infinite}
+.chk .coin{--s:64px;animation:checkPop var(--T) ease-in-out infinite}
+.chk .coin > svg{width:52%;height:52%}
+.chk b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;letter-spacing:-.015em;line-height:1.1}
+.chk span{display:block;font-size:23px;color:rgba(255,248,240,.6);margin-top:4px}
+.chk.c2,.chk.c2 .coin{animation-delay:-7.6s}.chk.c3,.chk.c3 .coin{animation-delay:-7.2s}.chk.c4,.chk.c4 .coin{animation-delay:-6.8s}.chk.c5,.chk.c5 .coin{animation-delay:-6.4s}
+@keyframes chkRow{0%,62%,90%,100%{border-color:rgba(255,248,240,.14)}74%,80%{border-color:rgba(34,197,94,.7)}}
+
+/* ---- 6 · Ojo con lo barato ---- */
+.flag{left:88px;width:904px;min-height:176px;display:flex;align-items:center;gap:28px;padding:26px 34px 26px 28px;
+  background:linear-gradient(180deg,rgba(239,68,68,.10),rgba(239,68,68,.03));border-color:rgba(239,68,68,.28);animation:flagShake var(--T) ease-in-out infinite}
+.flag.g2{animation-delay:-5.3333s}.flag.g3{animation-delay:-2.6667s}
+.flag .coin{--s:96px}
+.flag .coin > svg{width:50%;height:50%}
+.flag h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.02em;line-height:1.05;margin:0 0 8px}
+.flag p{margin:0;font-size:26px;line-height:1.35;color:rgba(255,248,240,.65)}
+@keyframes flagShake{0%,2%,8%,100%{transform:translateX(0);border-color:rgba(239,68,68,.28)}3%{transform:translateX(-8px);border-color:rgba(239,68,68,.8)}5%{transform:translateX(8px);border-color:rgba(239,68,68,.8)}7%{transform:translateX(-4px)}30%{border-color:rgba(239,68,68,.6)}}
+.warn{width:170px;height:156px;transform-origin:50% 0;animation:swing 2s ease-in-out infinite;--a:5deg;filter:drop-shadow(0 26px 24px rgba(0,0,0,.5))}
+
+/* ---- 7 · CTA ---- */
+.alt{margin:22px 0 0 8px;font-size:26px;color:rgba(255,248,240,.6)}
+.alt b{color:var(--cream);font-weight:600}
+.perks{position:absolute;left:88px;top:880px;display:grid;gap:16px;z-index:4}
+.perk{display:flex;align-items:center;gap:16px;font-size:28px;font-weight:600;background:rgba(255,248,240,.06);border:1.5px solid rgba(255,248,240,.12);padding:12px 24px 12px 12px;border-radius:20px;width:fit-content}
+.perk .coin{--s:50px}
+.perk .coin > svg{width:52%;height:52%}
+.bubble{position:absolute;left:640px;top:850px;width:330px;height:300px;z-index:4}
+.bubble svg{width:100%;height:100%;filter:drop-shadow(0 30px 30px rgba(0,0,0,.5))}
+.bubble .w{position:absolute;left:0;right:0;top:78px;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:104px;letter-spacing:-.03em;color:var(--orange)}
+.bubble .w i{display:inline-block;width:8px;height:84px;background:var(--orange);margin-left:6px;vertical-align:-6px;animation:recBlink 1s steps(1) infinite}
+.plane{position:absolute;left:0;top:0;z-index:5;offset-path:path('M 470 1170 C 560 1180, 600 1090, 610 1010');offset-rotate:0deg;animation:fly 4s ease-in-out infinite}
+@keyframes fly{0%{offset-distance:0%;opacity:0;transform:scale(.6)}15%{opacity:1}70%{offset-distance:100%;opacity:1;transform:scale(1)}85%,100%{offset-distance:100%;opacity:0;transform:scale(.4)}}
+</style>
+</head>
+<body data-name="slide" data-seconds="8" data-still="start" data-replay="no">
+<div class="viewer">
+  <div class="vtop"><span><b>bweb</b> · Carrusel «¿Cuánto cuesta una web en 2026?»</span><span id="vlabel"></span></div>
+  <div class="frame-wrap" id="frameWrap"><div class="frame"><div class="track" id="track">
+
+<!-- ============ 1 · HOOK ============ -->
+<section class="page" data-label="Portada">
+  <div class="bg"><div class="glow" style="left:420px;top:520px"></div><div class="glow v" style="left:-360px;top:520px;width:800px;height:800px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Precios sin vueltas</p>
+    <h1 class="xl">¿Cuánto cuesta<br>una página web<br><span class="hl">en 2026?</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-w mock">
+      <div class="bbar"><i></i><i></i><i></i><div class="url"><svg class="ic"><use href="#i-lock"/></svg>tunegocio.com.uy</div></div>
+      <div class="mbody">
+        <div class="mnav"><span class="blogo"></span><i></i><i></i><i></i><span class="bbtn">Contacto</span></div>
+        <div class="mhero"></div>
+        <div class="mcols"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="ptag">
+      <svg viewBox="0 0 340 520"><path d="M170 0 C 150 40, 190 70, 170 118" stroke="#FFF8F0" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M170 70 L300 170 Q318 184 318 206 V480 Q318 508 290 508 H50 Q22 508 22 480 V206 Q22 184 40 170 Z" fill="url(#gPin)" stroke="#FFF8F0" stroke-width="9" stroke-linejoin="round"/>
+        <circle cx="170" cy="130" r="17" fill="#0F1A2E" stroke="#FFF8F0" stroke-width="5"/>
+        <path d="M58 214 C 64 196, 80 184, 100 178" stroke="#fff" stroke-opacity=".5" stroke-width="9" stroke-linecap="round" fill="none"/></svg>
+      <div class="pt-in"><div class="usd">USD</div><div class="roll"><div class="roll-in"><div>¿?</div><div>900</div><div>60</div><div>1.500</div><div>350</div><div>¿?</div></div></div></div>
+    </div>
+    <div class="obj" style="left:44px;top:1060px;z-index:5"><div class="float d2" style="--r:-10deg"><div class="coin" style="--s:120px"><span class="glyph">$</span></div></div></div>
+    <div class="obj" style="left:560px;top:1110px;z-index:6"><div class="float" style="--r:8deg"><div class="coin" style="--s:82px"><span class="glyph">$</span></div></div></div>
+    <svg class="spark" style="left:980px;top:560px;--s:40px"><use href="#i-spark"/></svg>
+    <svg class="spark o" style="left:60px;top:660px;--s:30px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="swipe">Deslizá <svg class="ic"><use href="#i-arrow"/></svg></span></footer>
+</section>
+
+<!-- ============ 2 · 3 FACTORES ============ -->
+<section class="page" data-label="Depende de 3 cosas">
+  <div class="bg"><div class="glow" style="left:-380px;top:560px"></div><div class="glow v" style="left:560px;top:640px;width:800px;height:800px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Primero lo primero</p>
+    <h1>El precio depende<br>de <span class="hl">3 cosas.</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-d fac f1" style="top:520px"><div class="coin"><svg><use href="#i-layers"/></svg></div><div><div class="n">01</div><h3>Cuántas secciones tiene</h3><p>No es lo mismo una landing que un sitio de 10 páginas.</p></div></div>
+    <div class="card-d fac f2" style="top:726px"><div class="coin violet" style="--s:112px"><svg><use href="#i-cog"/></svg></div><div><div class="n">02</div><h3>Qué tiene que hacer</h3><p>Reservas, catálogo, tienda online, formularios…</p></div></div>
+    <div class="card-d fac f3" style="top:932px"><div class="coin green" style="--s:112px"><svg><use href="#i-image"/></svg></div><div><div class="n">03</div><h3>Quién pone el contenido</h3><p>Textos, fotos y logo: ¿los tenés o los hacemos nosotros?</p></div></div>
+    <svg class="spark o" style="left:960px;top:470px;--s:34px"><use href="#i-spark"/></svg>
+    <svg class="spark" style="left:980px;top:1170px;--s:26px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">2/7</span></footer>
+</section>
+
+<!-- ============ 3 · PYMES ============ -->
+<section class="page" data-label="Pymes USD 200–300">
+  <div class="bg"><div class="glow" style="left:300px;top:420px;width:1000px;height:1000px"></div><div class="glow v" style="left:-420px;top:780px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Opción 1</p>
+    <h1>Web para <span class="hl">pymes</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-w price" style="top:400px">
+      <span class="pchip"><svg class="ic"><use href="#i-user"/></svg>Emprendimientos y pymes</span>
+      <div class="amount"><span class="cur">USD</span><span class="big">200–300</span></div>
+      <div class="psub">por el proyecto · propuesta en menos de 24 h</div>
+      <div class="plist">
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Diseño a medida, adaptado al celular</div>
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Textos pensados para vender</div>
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Optimizada para cargar rápido</div>
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Formulario y botón de WhatsApp</div>
+      </div>
+    </div>
+    <div class="obj" style="left:850px;top:318px;z-index:6"><div class="float d1" style="--r:10deg"><div class="coin" style="--s:140px"><span class="glyph">$</span></div></div></div>
+    <svg class="spark" style="left:60px;top:1200px;--s:30px"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">3/7</span></footer>
+</section>
+
+<!-- ============ 4 · EMPRESAS ============ -->
+<section class="page" data-label="Empresas USD 350–500">
+  <div class="bg"><div class="glow" style="left:-300px;top:460px;width:1000px;height:1000px"></div><div class="glow v" style="left:560px;top:760px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Opción 2</p>
+    <h1>Web para <span class="hl">empresas</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-w price dark" style="top:400px">
+      <span class="pchip"><svg class="ic"><use href="#i-layers"/></svg>Empresas</span>
+      <span class="badge">Más completa</span>
+      <div class="amount"><span class="cur">USD</span><span class="big">350–500</span></div>
+      <div class="psub">por el proyecto · propuesta en menos de 24 h</div>
+      <div class="plist">
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Todo lo de la opción pymes</div>
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Más secciones y funciones a medida</div>
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>SEO inicial para que te encuentren</div>
+        <div><span class="coin green"><svg><use href="#i-check"/></svg></span>Conexión con Analytics y WhatsApp Business</div>
+      </div>
+      <div class="pnote"><svg class="ic"><use href="#i-plus"/></svg>Mantenimiento y SEO mensual se cotizan aparte.</div>
+    </div>
+    <div class="obj" style="left:890px;top:1060px;z-index:6"><div class="float d2" style="--r:-10deg"><div class="orb" style="--s:110px"><svg><use href="#i-spark"/></svg></div></div></div>
+    <svg class="spark o" style="left:980px;top:330px;--s:34px"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">4/7</span></footer>
+</section>
+
+<!-- ============ 5 · CHECKLIST ============ -->
+<section class="page" data-label="Checklist">
+  <div class="bg"><div class="glow g" style="left:420px;top:520px"></div><div class="glow v" style="left:-420px;top:700px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Checklist</p>
+    <h1>Lo que tu web tiene que traer <span class="hl">sí o sí.</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-d chk c1" style="top:500px"><span class="coin green"><svg><use href="#i-check"/></svg></span><div><b>Dominio propio</b><span>tunegocio.com.uy, a tu nombre</span></div></div>
+    <div class="card-d chk c2" style="top:620px"><span class="coin green"><svg><use href="#i-check"/></svg></span><div><b>Candado de seguridad (SSL)</b><span>Que el navegador no la marque como insegura</span></div></div>
+    <div class="card-d chk c3" style="top:740px"><span class="coin green"><svg><use href="#i-check"/></svg></span><div><b>Que ande perfecto en el celular</b><span>Es donde más te van a mirar</span></div></div>
+    <div class="card-d chk c4" style="top:860px"><span class="coin green"><svg><use href="#i-check"/></svg></span><div><b>Conectada a tu ficha de Google</b><span>Mapa, horarios y reseñas</span></div></div>
+    <div class="card-d chk c5" style="top:980px"><span class="coin green"><svg><use href="#i-check"/></svg></span><div><b>SEO básico</b><span>Para que Google y la IA sepan de qué se trata</span></div></div>
+    <div class="obj" style="left:858px;top:1060px;z-index:6"><div class="float d1" style="--r:-6deg">
+      <svg class="drop" viewBox="0 0 200 214" style="width:130px;height:140px"><path d="M100 10l78 28v62c0 52-36 86-78 104-42-18-78-52-78-104V38z" fill="url(#gShield)" stroke="#FFF8F0" stroke-width="10" stroke-linejoin="round"/><path d="M64 108l26 26 48-52" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M44 52l40-14" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"/></svg>
+    </div></div>
+    <svg class="spark o" style="left:980px;top:440px;--s:32px"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">5/7</span></footer>
+</section>
+
+<!-- ============ 6 · OJO CON LO BARATO ============ -->
+<section class="page" data-label="Ojo con lo barato">
+  <div class="bg"><div class="glow r" style="left:380px;top:520px"></div><div class="glow v" style="left:-420px;top:700px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Ojo con lo barato</p>
+    <h1>Si es muy barato, <span class="hl">preguntá por qué.</span></h1>
+  </div>
+  <div class="art">
+    <div class="card-d flag g1" style="top:512px"><div class="coin red"><svg><use href="#i-x"/></svg></div><div><h3>Sin mantenimiento</h3><p>A los meses algo se rompe y nadie responde.</p></div></div>
+    <div class="card-d flag g2" style="top:712px"><div class="coin red" style="--s:96px"><svg><use href="#i-x"/></svg></div><div><h3>No te dan los accesos</h3><p>El dominio y la web quedan a nombre de otro.</p></div></div>
+    <div class="card-d flag g3" style="top:912px"><div class="coin red" style="--s:96px"><svg><use href="#i-x"/></svg></div><div><h3>No aparece en Google</h3><p>Queda linda, pero nadie la encuentra.</p></div></div>
+    <div class="obj" style="left:830px;top:196px;z-index:6">
+      <svg class="warn" viewBox="0 0 170 156"><path d="M85 12 C92 12 97 16 101 23 L160 126 C167 139 159 148 145 148 H25 C11 148 3 139 10 126 L69 23 C73 16 78 12 85 12Z" fill="url(#gWarn)" stroke="#FFF8F0" stroke-width="8" stroke-linejoin="round"/><path d="M85 58v44" stroke="#1A2B4A" stroke-width="16" stroke-linecap="round"/><circle cx="85" cy="124" r="9" fill="#1A2B4A"/><path d="M52 90l18-32" stroke="#fff" stroke-opacity=".55" stroke-width="7" stroke-linecap="round"/></svg>
+    </div>
+    <svg class="spark" style="left:980px;top:1150px;--s:26px"><use href="#i-spark"/></svg>
+  </div>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">6/7</span></footer>
+</section>
+
+<!-- ============ 7 · CTA ============ -->
+<section class="page" data-label="Pedí tu presupuesto">
+  <div class="bg"><div class="glow" style="left:380px;top:560px;width:1000px;height:1000px"></div><div class="glow v" style="left:-380px;top:760px"></div></div>
+  <header class="head"><div class="brand"><svg><use href="#logo"/></svg><span>bweb</span></div><div class="tag"><svg class="ic"><use href="#i-tag"/></svg>Precios</div></header>
+  <div class="copy">
+    <p class="eyebrow">Presupuesto sin compromiso</p>
+    <h1 class="xl">¿Cuánto costaría <span class="hl">la tuya?</span></h1>
+    <p class="body" style="margin-top:22px">Contanos de tu negocio y te pasamos una propuesta <b>en menos de 24 h.</b></p>
+    <span class="cta" style="margin-top:34px">Escribinos «WEB» por DM <svg class="ic"><use href="#i-arrow"/></svg></span>
+    <p class="alt">o al WhatsApp <b>099 788 934</b> · bweb.lat</p>
+  </div>
+  <div class="perks">
+    <div class="perk"><span class="coin green"><svg><use href="#i-check"/></svg></span>Diagnóstico gratis</div>
+    <div class="perk"><span class="coin green"><svg><use href="#i-check"/></svg></span>Propuesta en 24 h</div>
+    <div class="perk"><span class="coin green"><svg><use href="#i-check"/></svg></span>Sin contratos largos</div>
+  </div>
+  <div class="bubble"><div class="float"><svg viewBox="0 0 160 150"><path d="M26 8h108a18 18 0 0 1 18 18v70a18 18 0 0 1-18 18h-10v30l-34-30H26A18 18 0 0 1 8 96V26A18 18 0 0 1 26 8z" fill="url(#gBubbleC)" stroke="#fff" stroke-width="5" stroke-linejoin="round"/></svg><div class="w">WEB<i></i></div></div></div>
+  <div class="plane"><div style="transform:translate(-50%,-50%)"><div class="coin" style="--s:92px"><svg><use href="#i-send"/></svg></div></div></div>
+  <svg class="spark o" style="left:990px;top:800px;--s:34px"><use href="#i-spark"/></svg>
+  <svg class="spark" style="left:560px;top:860px;--s:26px;animation-delay:-1s"><use href="#i-spark"/></svg>
+  <footer class="foot"><span>@bweb_uy</span><span class="count">7/7</span></footer>
+</section>
+
+  </div></div></div>
+  <div class="vnav"><button id="prev" aria-label="Anterior">&#8592;</button><div class="dots" id="dots"></div><button id="next" aria-label="Siguiente">&#8594;</button></div>
+</div>
+<script src="../../recursos/bweb.js"></script>
+</body>
+</html>
