@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Carrusel noticia Modo IA · bweb</title>
+<link rel="stylesheet" href="../../recursos/bweb.css">
+<style>
+/* Carrusel 1080x1350 en formato noticia, imágenes fijas (PNG). Pensado para enganchar (comentarios,
+   guardados, compartidos), no para vender.
+   Datos: Google, blog de I/O 2026 (19/5/2026): "AI Mode has surpassed one billion monthly users, with queries
+   more than doubling every quarter since launch". Modo IA en Uruguay desde agosto de 2025 y en español desde 2025. */
+.page{background:#05080E}
+.photo{position:absolute;inset:0;z-index:0;background-repeat:no-repeat;background-size:cover}
+.shade{position:absolute;inset:0;z-index:1;pointer-events:none}
+.sh-bottom{background:linear-gradient(180deg,rgba(5,8,14,.5) 0%,rgba(5,8,14,0) 12%,rgba(5,8,14,0) 36%,rgba(5,8,14,.8) 54%,rgba(5,8,14,.95) 68%,#05080E 100%)}
+.sh-top{background:linear-gradient(180deg,#05080E 0%,rgba(5,8,14,.93) 26%,rgba(5,8,14,.55) 44%,rgba(5,8,14,0) 60%,rgba(5,8,14,0) 84%,rgba(5,8,14,.7) 100%)}
+.sh-full{background:linear-gradient(180deg,rgba(5,8,14,.86),rgba(5,8,14,.93) 50%,#05080E)}
+.blur{filter:blur(6px) saturate(1.1);transform:scale(1.06)}
+
+.badge{position:absolute;right:52px;top:52px;z-index:6;width:108px;height:108px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#FFA274,#FF6B35 55%,#D24A18);border:5px solid rgba(255,248,240,.92);
+  box-shadow:0 16px 34px -10px rgba(0,0,0,.7),0 0 0 9px rgba(255,107,53,.18)}
+.badge svg{width:72px;height:72px}
+
+.block{position:absolute;left:64px;right:64px;z-index:5}
+.label{display:inline-flex;align-items:center;gap:16px;background:var(--orange);color:#fff;padding:14px 32px 14px 26px;
+  font:700 34px/1 'Inter Tight',sans-serif;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 14px 30px -12px rgba(255,107,53,.8)}
+.label i{width:15px;height:15px;border-radius:50%;background:#fff}
+.label.dark{background:#FFF8F0;color:var(--navy);box-shadow:0 14px 30px -12px rgba(0,0,0,.6)}
+.label.dark i{background:var(--orange)}
+.hl{margin:28px 0 0;font:800 72px/1.02 'Bricolage Grotesque',sans-serif;letter-spacing:-.018em;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.55)}
+.hl em{font-style:normal;color:var(--orange)}
+.hl .big{display:block;font-size:112px;letter-spacing:-.03em;line-height:1;margin:6px 0 4px;background:linear-gradient(90deg,#FF6B35,#FFB547 60%,#FF8F65);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+.hl.md{font-size:64px}
+.body{margin:26px 0 0;font:500 38px/1.32 'Inter Tight',sans-serif;color:rgba(255,248,240,.88)}
+.body b{color:#fff;font-weight:700}
+.body q{quotes:"«" "»";color:#fff;font-weight:600}
+.src{margin-top:22px;display:flex;align-items:center;gap:12px;font:500 20px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,248,240,.5)}
+.src svg{width:22px;height:22px;color:var(--orange-2)}
+
+.foot{position:absolute;left:64px;right:64px;bottom:52px;z-index:6;display:flex;justify-content:space-between;align-items:center;
+  font:600 26px 'Inter Tight',sans-serif;color:rgba(255,248,240,.75)}
+.foot .n{font:500 22px 'JetBrains Mono',monospace;letter-spacing:.12em;color:rgba(255,248,240,.5)}
+.swipe{display:flex;align-items:center;gap:12px;padding:14px 26px;border-radius:999px;background:rgba(255,248,240,.1);border:1.5px solid rgba(255,248,240,.22);color:#fff}
+.swipe svg{width:28px;height:28px;color:var(--orange)}
+
+/* Slide 2: buscador */
+.search{position:absolute;left:64px;right:64px;top:250px;z-index:5;display:flex;align-items:center;gap:22px;height:118px;padding:0 20px 0 34px;border-radius:60px;
+  background:#fff;box-shadow:0 30px 70px -20px rgba(0,0,0,.8),0 0 0 8px rgba(255,107,53,.22);color:var(--navy)}
+.search > svg{width:42px;height:42px;color:var(--muted)}
+.search .q{flex:1;font:500 36px 'Inter Tight',sans-serif}
+.search .q::after{content:"";display:inline-block;width:3px;height:40px;background:var(--navy);margin-left:4px;vertical-align:-8px}
+.aimode{display:flex;align-items:center;gap:12px;padding:16px 26px;border-radius:40px;background:linear-gradient(135deg,#FF6B35,#FF8F65);color:#fff;font:700 28px 'Inter Tight',sans-serif}
+.aimode svg{width:28px;height:28px}
+.answer{position:absolute;left:120px;right:64px;top:410px;z-index:5;padding:30px 34px;border-radius:32px;background:rgba(255,248,240,.08);border:1.5px solid rgba(255,248,240,.18);
+  display:flex;gap:22px;align-items:flex-start}
+.answer .orb{--s:64px;flex:none}
+.answer p{margin:4px 0 0;font:500 30px/1.35 'Inter Tight',sans-serif;color:rgba(255,248,240,.9)}
+.answer p span{display:block;height:18px;border-radius:9px;background:rgba(255,248,240,.16);margin-top:16px}
+.answer p span + span{width:70%}
+
+/* Slide 3: dato */
+.stat{position:absolute;left:64px;right:64px;top:300px;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:26px}
+.stat .cell{padding:34px 30px;border-radius:32px;background:rgba(255,248,240,.07);border:1.5px solid rgba(255,248,240,.16);text-align:center}
+.stat .cell b{display:block;font:800 92px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em;color:#fff}
+.stat .cell.hot b{background:linear-gradient(90deg,#FF6B35,#FFB547);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .cell span{display:block;margin-top:12px;font:600 26px 'Inter Tight',sans-serif;color:rgba(255,248,240,.7);text-transform:uppercase;letter-spacing:.06em}
+.stat > svg{width:60px;height:60px;color:var(--orange)}
+.x2{position:absolute;left:64px;right:64px;top:600px;z-index:5;display:flex;align-items:flex-end;justify-content:center;gap:26px;height:250px}
+.x2 i{width:130px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#FF8F65,#FF6B35 60%,#A93A13);box-shadow:0 20px 40px -18px rgba(255,107,53,.8)}
+.x2 i:nth-child(1){height:30px;opacity:.55}.x2 i:nth-child(2){height:60px;opacity:.7}.x2 i:nth-child(3){height:120px;opacity:.85}.x2 i:nth-child(4){height:240px}
+.x2lbl{position:absolute;left:64px;right:64px;top:868px;z-index:5;display:flex;justify-content:center;gap:26px;font:600 24px 'JetBrains Mono',monospace;color:rgba(255,248,240,.55)}
+.x2lbl span{width:130px;text-align:center}
+
+/* Slide 6: antes / ahora */
+.vs{position:absolute;left:64px;right:64px;top:400px;z-index:5;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.vs .col{padding:34px 32px 38px;border-radius:32px;background:rgba(255,248,240,.06);border:1.5px solid rgba(255,248,240,.14)}
+.vs .col.now{background:linear-gradient(180deg,rgba(255,107,53,.2),rgba(255,107,53,.06));border-color:rgba(255,107,53,.55)}
+.vs h3{margin:0 0 22px;font:700 26px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,248,240,.6)}
+.vs .now h3{color:var(--orange-2)}
+.vs ol{margin:0;padding:0;list-style:none;display:grid;gap:26px;counter-reset:s}
+.vs li{display:flex;gap:16px;align-items:flex-start;font:500 36px/1.25 'Inter Tight',sans-serif;color:rgba(255,248,240,.9);counter-increment:s}
+.vs li::before{content:counter(s);flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:700 22px 'Inter Tight',sans-serif;background:rgba(255,248,240,.14);color:#fff;margin-top:-2px}
+.vs .now li::before{background:var(--orange)}
+
+/* Slide 7: cierre */
+.acts{position:absolute;left:64px;right:64px;top:820px;z-index:5;display:grid;gap:16px}
+.act{display:flex;align-items:center;gap:22px;padding:22px 28px;border-radius:26px;background:rgba(255,248,240,.08);border:1.5px solid rgba(255,248,240,.16);
+  font:600 32px 'Inter Tight',sans-serif;color:#fff}
+.act svg{width:40px;height:40px;color:var(--orange);flex:none}
+.act small{margin-left:auto;font:500 24px 'Inter Tight',sans-serif;color:rgba(255,248,240,.55)}
+</style>
+</head>
+<body data-name="slide" data-seconds="1" data-still="start">
+<div class="viewer">
+  <div class="vtop"><span><b>bweb</b> · Carrusel noticia Modo IA</span><span id="vlabel"></span></div>
+  <div class="frame-wrap" id="frameWrap"><div class="frame"><div class="track" id="track">
+
+<!-- 1 · Portada -->
+<section class="page" data-file="slide-01" data-label="Portada">
+  <div class="photo" style="background-image:url(fondo-calle.jpg);background-size:1080px auto;background-position:center -40px"></div>
+  <div class="shade sh-bottom"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:700px">
+    <div class="label"><i></i>Google confirmó</div>
+    <h1 class="hl">El Modo IA de Google ya superó los<span class="big">1.000 millones</span><em>de usuarios por mes</em></h1>
+  </div>
+  <div class="foot"><span>@bweb_uy</span><span class="swipe">Deslizá <svg><use href="#i-arrow"/></svg></span></div>
+</section>
+
+<!-- 2 · Qué es -->
+<section class="page" data-file="slide-02" data-label="Qué es">
+  <div class="photo blur" style="background-image:url(fondo-calle.jpg);background-size:1080px auto;background-position:center -60px"></div>
+  <div class="shade sh-full"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:92px"><div class="label dark"><i></i>Para entenderlo</div></div>
+  <div class="search"><svg><use href="#i-search"/></svg><span class="q">¿Dónde como un buen chivito?</span><span class="aimode"><svg><use href="#i-spark"/></svg>Modo IA</span></div>
+  <div class="answer"><div class="orb"><svg><use href="#i-spark"/></svg></div><p>Te recomiendo estos lugares:<span></span><span></span></p></div>
+  <div class="block" style="top:740px">
+    <h2 class="hl md">¿Qué es el <em>Modo IA</em>?</h2>
+    <p class="body">Una forma nueva de buscar en Google. En vez de una lista de links, le preguntás como en un chat y <b>la IA te arma la respuesta.</b></p>
+    <p class="body">Ya funciona en Uruguay y en español.</p>
+  </div>
+  <div class="foot"><span>@bweb_uy</span><span class="n">2/7</span></div>
+</section>
+
+<!-- 3 · El dato -->
+<section class="page" data-file="slide-03" data-label="El dato">
+  <div class="photo blur" style="background-image:url(fondo-calle.jpg);background-size:1080px auto;background-position:center 0"></div>
+  <div class="shade sh-full"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:92px">
+    <div class="label"><i></i>El dato</div>
+  </div>
+  <div class="stat">
+    <div class="cell"><b>1 año</b><span>desde que salió</span></div>
+    <svg><use href="#i-arrow"/></svg>
+    <div class="cell hot"><b>+1.000 M</b><span>usuarios por mes</span></div>
+  </div>
+  <div class="x2"><i></i><i></i><i></i><i></i></div>
+  <div class="x2lbl"><span>T1</span><span>T2</span><span>T3</span><span>T4</span></div>
+  <div class="block" style="top:940px">
+    <p class="body" style="margin:0">Y no frena: las búsquedas en el Modo IA <b>más que se duplican cada trimestre.</b></p>
+    <div class="src"><svg><use href="#i-globe"/></svg>Fuente: Google · I/O 2026</div>
+  </div>
+  <div class="foot"><span>@bweb_uy</span><span class="n">3/7</span></div>
+</section>
+
+<!-- 4 · La historia (1) -->
+<section class="page" data-file="slide-04" data-label="La historia 1">
+  <div class="photo" style="background-image:url(fondo-pareja.jpg);background-position:center bottom"></div>
+  <div class="shade sh-top"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:92px;right:190px">
+    <div class="label dark"><i></i>Viernes, 21 h</div>
+  </div>
+  <div class="block" style="top:196px">
+    <h2 class="hl md">Una pareja llega a Minas. <em>Tienen hambre y no conocen nada.</em></h2>
+    <p class="body">Ella no busca «restaurantes». Le pregunta a la IA: <q>¿Dónde como un buen chivito cerca?</q></p>
+  </div>
+  <div class="foot"><span>@bweb_uy</span><span class="n">4/7</span></div>
+</section>
+
+<!-- 5 · La historia (2) -->
+<section class="page" data-file="slide-05" data-label="La historia 2">
+  <div class="photo" style="background-image:url(fondo-celular.jpg);background-size:1180px auto;background-position:center 160px;background-color:#05080E"></div>
+  <div class="shade sh-top"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:92px;right:190px">
+    <div class="label dark"><i></i>5 segundos después</div>
+  </div>
+  <div class="block" style="top:196px">
+    <h2 class="hl md">Tiene 3 lugares, <em>con reseñas y cómo llegar.</em></h2>
+    <p class="body">Van al primero. No abrieron ni un link.</p>
+  </div>
+  <div class="foot"><span>@bweb_uy</span><span class="n">5/7</span></div>
+</section>
+
+<!-- 6 · Qué cambia -->
+<section class="page" data-file="slide-06" data-label="Qué cambia">
+  <div class="photo blur" style="background-image:url(fondo-celular.jpg);background-size:1180px auto;background-position:center 30%"></div>
+  <div class="shade sh-full"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:92px">
+    <div class="label"><i></i>Qué cambia</div>
+    <h2 class="hl md" style="margin-top:30px">Cambió <em>quién elige.</em></h2>
+  </div>
+  <div class="vs">
+    <div class="col"><h3>Antes</h3><ol><li>Buscabas en Google</li><li>Mirabas 10 links</li><li>Elegías vos</li></ol></div>
+    <div class="col now"><h3>Ahora</h3><ol><li>Le preguntás a la IA</li><li>Te da unas pocas opciones</li><li>Elegís entre esas</li></ol></div>
+  </div>
+  <div class="block" style="top:1010px"><p class="body" style="margin:0">Salir en Google ya no alcanza: <b>ahora importa que la IA te conozca.</b></p></div>
+  <div class="foot"><span>@bweb_uy</span><span class="n">6/7</span></div>
+</section>
+
+<!-- 7 · Cierre (enganche) -->
+<section class="page" data-file="slide-07" data-label="Cierre">
+  <div class="photo" style="background-image:url(fondo-calle.jpg);background-size:1180px auto;background-position:center 78%"></div>
+  <div class="shade sh-top"></div>
+  <div class="badge"><svg viewBox="0 0 512 512"><use href="#logo-mark"/></svg></div>
+  <div class="block" style="top:92px;right:190px"><div class="label"><i></i>Tu turno</div></div>
+  <div class="block" style="top:196px">
+    <h2 class="hl" style="font-size:120px;line-height:.95">¿Y vos?</h2>
+    <p class="body">¿Ya le preguntaste algo a la IA en vez de googlear? <b>Contanos qué le preguntaste.</b></p>
+  </div>
+  <div class="acts">
+    <div class="act"><svg><use href="#i-chat"/></svg>Comentá tu experiencia</div>
+    <div class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4.2-6 4.2z"/></svg>Guardalo para después</div>
+    <div class="act"><svg><use href="#i-send"/></svg>Mandáselo a alguien con un negocio</div>
+  </div>
+  <div class="foot"><span>@bweb_uy</span><span class="n">7/7</span></div>
+</section>
+
+  </div></div></div>
+  <div class="vnav"><button id="prev" aria-label="Anterior">&#8592;</button><div class="dots" id="dots"></div><button id="next" aria-label="Siguiente">&#8594;</button></div>
+</div>
+<script src="../../recursos/bweb.js"></script>
+</body>
+</html>
