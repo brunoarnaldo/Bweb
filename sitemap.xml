@@ -9,10 +9,33 @@
     </image:image>
   </url>
   <url>
-    <loc>https://bweb.uy/preguntas-frecuentes.html</loc>
+    <loc>https://bweb.uy/cartel-nfc-resenas-google</loc>
     <lastmod>2026-09-29</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/cartel-nfc-resenas-google.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://bweb.uy/img/cartel-nfc-detalle-toque.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://bweb.uy/img/cartel-nfc-detalle-estrellas.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://bweb.uy/proyectos</loc>
+    <lastmod>2026-09-29</lastmod>
+    <image:image>
+      <image:loc>https://bweb.uy/img/proyectos/acacripto.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://bweb.uy/img/proyectos/la-barraquita.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://bweb.uy/img/proyectos/gradin.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://bweb.uy/preguntas-frecuentes</loc>
+    <lastmod>2026-09-29</lastmod>
   </url>
 </urlset>
