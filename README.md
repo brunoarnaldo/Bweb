@@ -2,61 +2,61 @@
 
 Sitio estático de [bweb.uy](https://bweb.uy): diseño web, mantenimiento y SEO para pymes de Uruguay y LATAM, más el cartel NFC de reseñas de Google.
 
-No necesita compilar nada: se sube la carpeta tal cual a cualquier hosting.
+Se publica en **Cloudflare Pages**. No necesita compilar nada: se publica la carpeta tal cual.
 
 ## Estructura
 
 | Archivo | Qué es |
 | --- | --- |
 | `index.html` | Página de inicio |
-| `preguntas-frecuentes.html` | Cartel NFC + preguntas frecuentes (con datos estructurados FAQPage y Product) |
+| `preguntas-frecuentes.html` | Cartel NFC + preguntas frecuentes (con datos estructurados FAQPage y Product). En Cloudflare se ve como `bweb.uy/preguntas-frecuentes` |
 | `404.html` | Página de error |
 | `css/styles.css`, `js/main.js` | Estilos y comportamiento compartidos |
 | `img/cartel-nfc-resenas-google.jpg` | Foto del cartel |
 | `og-image.jpg`, `og-cartel-nfc.jpg` | Imágenes que aparecen al compartir el link (WhatsApp, redes) |
 | `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-*.png`, `logo.png`, `site.webmanifest` | Íconos y logo |
 | `robots.txt`, `sitemap.xml` | Para buscadores |
-| `CNAME` | Dominio para GitHub Pages |
-| `.htaccess` | HTTPS, redirecciones y caché para hostings Apache/LiteSpeed (Hostinger, cPanel) |
+| `_headers` | Encabezados de seguridad y caché para Cloudflare Pages |
+
+Las URLs públicas no llevan `.html` (Cloudflare Pages las redirige solo). Por eso los links internos, el canonical y el sitemap usan `/preguntas-frecuentes`.
 
 ## Ver el sitio en tu compu
 
 ```bash
-python3 -m http.server 8080
+npx serve .
 ```
 
-Y abrí http://localhost:8080
+Y abrí la URL que te muestra (por ejemplo http://localhost:3000). `serve` maneja las URLs sin `.html` igual que Cloudflare.
 
-## Publicar en bweb.uy
+## Publicar en Cloudflare Pages
 
-### Opción A — GitHub Pages (gratis)
+### 1. Conectar el repositorio (una sola vez)
 
-1. En GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**, rama `main`, carpeta `/ (root)`.
-2. En **Custom domain** poné `bweb.uy` (el archivo `CNAME` ya lo tiene).
-3. En el panel donde compraste el dominio, cargá estos registros DNS:
+1. En Cloudflare: **Workers & Pages → Create → Pages → Connect to Git** y elegí `brunoarnaldo/Bweb`.
+2. Configuración de build:
 
-   | Tipo | Nombre | Valor |
-   | --- | --- | --- |
-   | A | @ | 185.199.108.153 |
-   | A | @ | 185.199.109.153 |
-   | A | @ | 185.199.110.153 |
-   | A | @ | 185.199.111.153 |
-   | CNAME | www | brunoarnaldo.github.io |
+   | Campo | Valor |
+   | --- | --- |
+   | Production branch | `main` |
+   | Framework preset | `None` |
+   | Build command | *(vacío)* |
+   | Build output directory | `/` |
 
-4. Cuando GitHub verifique el dominio, marcá **Enforce HTTPS**.
+3. **Save and Deploy**. Cada vez que se mergea algo a `main`, Cloudflare publica solo. Las otras ramas generan una URL de vista previa (`*.pages.dev`) para revisar antes de mergear.
 
-### Opción B — Hosting con cPanel / Hostinger
+### 2. Dominio bweb.uy
 
-1. Subí **todo el contenido** de esta carpeta (incluido `.htaccess`) a `public_html`.
-2. Apuntá el dominio al hosting (los DNS que te da el hosting) y activá el SSL gratis (Let's Encrypt).
-3. El `.htaccess` ya fuerza HTTPS y redirige `www.bweb.uy` → `bweb.uy`.
+1. El dominio tiene que estar en Cloudflare: **Add a site → bweb.uy** (plan Free). Después cambiá los nameservers en el registrador donde compraste el `.uy` por los dos que te da Cloudflare.
+2. En el proyecto de Pages: **Custom domains → Set up a custom domain** y agregá `bweb.uy`. Repetí con `www.bweb.uy`.
+3. Para tener una sola versión del sitio: **Rules → Redirect Rules → Create rule → plantilla "Redirect from WWW to root"** (301, conservando la ruta).
+4. En **SSL/TLS → Edge Certificates** activá **Always Use HTTPS**.
 
 ## Indexar en Google
 
 1. Entrá a [Google Search Console](https://search.google.com/search-console) y agregá una propiedad de tipo **Dominio** con `bweb.uy`.
-2. Verificala con el registro **TXT** que te da Google, cargándolo en los DNS del dominio.
+2. Verificala con el registro **TXT** que te da Google. Como el DNS está en Cloudflare, Search Console puede cargarlo solo (elegí Cloudflare como proveedor). Si no, agregalo a mano en **DNS → Records** de Cloudflare.
 3. En **Sitemaps**, enviá `https://bweb.uy/sitemap.xml`.
-4. En **Inspección de URLs**, pegá `https://bweb.uy/` y tocá **Solicitar indexación**. Repetí con `https://bweb.uy/preguntas-frecuentes.html`.
+4. En **Inspección de URLs**, pegá `https://bweb.uy/` y tocá **Solicitar indexación**. Repetí con `https://bweb.uy/preguntas-frecuentes`.
 5. Opcional: en [Bing Webmaster Tools](https://www.bing.com/webmasters) importá el sitio desde Search Console.
 6. Recomendado para negocio local: creá o actualizá el **Perfil de Empresa de Google** con el link a bweb.uy.
 
