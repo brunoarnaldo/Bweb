@@ -119,4 +119,41 @@
     qtyInput.addEventListener('input', function () { if (qtyInput.value !== '') update(); });
     update();
   }
+
+  /* ── Formulario de contacto: se envía con Web3Forms y llega por email ── */
+  var leadForm = document.getElementById('lead-form');
+  if (leadForm && window.fetch && window.FormData) {
+    var leadBtn = leadForm.querySelector('button[type="submit"]');
+    var leadBtnHtml = leadBtn.innerHTML;
+    var leadStatus = leadForm.querySelector('.lead-status');
+    var setStatus = function (tipo, texto) {
+      leadStatus.className = 'lead-status' + (tipo ? ' is-' + tipo : '');
+      leadStatus.textContent = texto;
+    };
+
+    leadForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var datos = new FormData(leadForm);
+      // El asunto del email dice qué necesita y de qué negocio es, para ordenar los presupuestos
+      datos.set('subject', 'Consulta web: ' + datos.get('Necesita') + ' · ' + datos.get('Negocio'));
+      leadBtn.disabled = true;
+      leadBtn.textContent = 'Enviando…';
+      setStatus('', '');
+
+      fetch(leadForm.action, { method: 'POST', body: datos, headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res.success) throw new Error(res.message);
+          leadForm.reset();
+          setStatus('ok', '¡Listo! Recibimos tu consulta. Te escribimos por WhatsApp en menos de 24 horas.');
+        })
+        .catch(function () {
+          setStatus('error', 'No se pudo enviar. Probá de nuevo o escribinos por WhatsApp.');
+        })
+        .then(function () {
+          leadBtn.disabled = false;
+          leadBtn.innerHTML = leadBtnHtml;
+        });
+    });
+  }
 })();
