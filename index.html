@@ -304,7 +304,7 @@
     </section>
 
     <!-- ===== DISEÑO WEB ===== -->
-    <section class="section section-soft" aria-labelledby="web-titulo">
+    <section class="section section-soft" id="contacto" aria-labelledby="web-titulo">
       <div class="container">
         <div class="cta-band reveal">
           <span class="eyebrow on-dark">Diseño web</span>
@@ -314,6 +314,44 @@
             <a class="btn btn-wa btn-lg" href="https://wa.me/59899788934?text=Hola%20Bweb%2C%20quiero%20consultar%20sobre%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i> Hablemos por WhatsApp</a>
             <a class="btn btn-ghost-light btn-lg" href="/proyectos">Ver proyectos</a>
           </div>
+
+          <div class="lead-divider">o dejanos tus datos y te escribimos</div>
+          <form class="lead-form" id="lead-form" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="39a8489c-1f5a-483d-9960-0e2448cd078f">
+            <input type="hidden" name="subject" value="Nueva consulta desde bweb.uy">
+            <input type="hidden" name="from_name" value="Formulario bweb.uy">
+            <input type="checkbox" name="botcheck" class="lead-botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="lead-grid">
+              <div class="lead-field">
+                <label for="lead-nombre">Nombre</label>
+                <input id="lead-nombre" name="Nombre" type="text" autocomplete="name" maxlength="80" required>
+              </div>
+              <div class="lead-field">
+                <label for="lead-whatsapp">WhatsApp</label>
+                <input id="lead-whatsapp" name="WhatsApp" type="tel" autocomplete="tel" placeholder="099 123 456" maxlength="30" required>
+              </div>
+              <div class="lead-field">
+                <label for="lead-negocio">Tu negocio</label>
+                <input id="lead-negocio" name="Negocio" type="text" placeholder="Ej.: peluquería en Minas" maxlength="120" required>
+              </div>
+              <div class="lead-field">
+                <label for="lead-necesita">¿Qué necesitás?</label>
+                <select id="lead-necesita" name="Necesita" required>
+                  <option value="" selected disabled>Elegí una opción</option>
+                  <option>Una página simple</option>
+                  <option>Un sitio con varias secciones</option>
+                  <option>Una tienda o catálogo online</option>
+                  <option>Todavía no sé</option>
+                </select>
+              </div>
+              <div class="lead-field lead-field-full">
+                <label for="lead-mensaje">Contanos un poco más <span>(opcional)</span></label>
+                <textarea id="lead-mensaje" name="Mensaje" rows="3" maxlength="1000"></textarea>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Enviar consulta <i class="bi bi-send"></i></button>
+            <div class="lead-status" role="status" aria-live="polite"></div>
+          </form>
         </div>
       </div>
     </section>

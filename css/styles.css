@@ -549,6 +549,29 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .cta-band p { font-size: 17.5px; max-width: 580px; margin: 0 auto 30px; }
 .cta-band-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
 
+/* ── Formulario de contacto (dentro de la banda) ──────────────────────── */
+.lead-divider { display: flex; align-items: center; gap: 16px; max-width: 720px; margin: 44px auto 28px; font-size: 14.5px; color: rgba(255, 255, 255, .55); }
+.lead-divider::before, .lead-divider::after { content: ""; flex: 1; height: 1px; background: rgba(255, 255, 255, .14); }
+.lead-form { max-width: 720px; margin: 0 auto; text-align: left; }
+.lead-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 16px; margin-bottom: 24px; }
+.lead-field-full { grid-column: 1 / -1; }
+.lead-field label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: rgba(255, 255, 255, .88); }
+.lead-field label span { font-weight: 400; color: rgba(255, 255, 255, .5); }
+.lead-field input, .lead-field select, .lead-field textarea { width: 100%; padding: 14px 16px; border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px; background-color: rgba(255, 255, 255, .06); color: #FFFFFF; font-size: 16px; transition: border-color 200ms ease, background-color 200ms ease; }
+.lead-field input::placeholder, .lead-field textarea::placeholder { color: rgba(255, 255, 255, .38); }
+.lead-field input:hover, .lead-field select:hover, .lead-field textarea:hover { border-color: rgba(255, 255, 255, .3); }
+.lead-field input:focus, .lead-field select:focus, .lead-field textarea:focus { outline: none; border-color: var(--brand); background-color: rgba(255, 255, 255, .09); }
+.lead-field select { appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23FFFFFF' stroke-opacity='.7' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+.lead-field select:invalid { color: rgba(255, 255, 255, .38); }
+.lead-field select option { color: var(--ink); background: #FFFFFF; }
+.lead-field textarea { min-height: 96px; resize: vertical; }
+.lead-botcheck { display: none; }
+.lead-form .btn:disabled { opacity: .7; cursor: wait; }
+.lead-status:empty { display: none; }
+.lead-status { margin-top: 16px; padding: 14px 16px; border-radius: 12px; font-size: 15px; line-height: 1.5; text-align: center; }
+.lead-status.is-ok { color: #BBF7D0; background: rgba(22, 163, 74, .16); border: 1px solid rgba(74, 222, 128, .3); }
+.lead-status.is-error { color: #FECACA; background: rgba(220, 38, 38, .14); border: 1px solid rgba(248, 113, 113, .3); }
+
 /* ── Footer ───────────────────────────────────────────────────────────── */
 .site-footer { position: relative; overflow: hidden; background: var(--ink-3); color: rgba(255, 255, 255, .62); padding-top: 88px; }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 48px; padding-bottom: 64px; }
@@ -689,6 +712,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .page-hero-actions .btn { width: 100%; }
   .cta-band { padding: 48px 24px; border-radius: 24px; }
   .cta-band-actions .btn { width: 100%; }
+  .lead-divider { justify-content: center; margin: 36px 0 24px; }
+  .lead-divider::before, .lead-divider::after { display: none; }
+  .lead-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
