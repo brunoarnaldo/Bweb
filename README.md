@@ -48,7 +48,7 @@ Cada vez que se mergea algo a `main`, Cloudflare publica solo. Los pull requests
 
 `.assetsignore` evita que se suban `.git` y los archivos del repo: sin él el build falla con "Asset too large".
 
-### 2. Dominio bweb.uy
+### Dominio bweb.uy
 
 1. El dominio tiene que estar en Cloudflare: **Add a site → bweb.uy** (plan Free). Después cambiá los nameservers en el registrador donde compraste el `.uy` por los dos que te da Cloudflare.
 2. En el Worker **bweb**: **Settings → Domains & Routes → Add → Custom domain** y agregá `bweb.uy`. Repetí con `www.bweb.uy`.
