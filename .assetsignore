@@ -1,0 +1,9 @@
+# Archivos del repositorio que no se publican en el sitio
+.git
+.github
+node_modules
+.wrangler
+.assetsignore
+wrangler.jsonc
+vercel.json
+README.md
