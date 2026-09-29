@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /404.html
 
-Sitemap: https://bweb.lat/sitemap.xml
+Sitemap: https://bweb.uy/sitemap.xml
