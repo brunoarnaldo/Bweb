@@ -19,7 +19,6 @@ Se publica en **Cloudflare** (Worker `bweb` con archivos estáticos). No necesit
 | `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-*.png`, `logo.png`, `site.webmanifest` | | Íconos y logo |
 | `robots.txt`, `sitemap.xml` | | Para buscadores |
 | `_headers` | | Encabezados de seguridad y caché |
-| `wrangler.jsonc`, `.assetsignore` | | Configuración del deploy en Cloudflare y archivos que no se publican |
 | `vercel.json` | | URLs sin `.html` en las vistas previas de Vercel |
 
 El header, el menú y el footer se repiten en las cuatro páginas: si cambiás un link ahí, cambialo en todas.
@@ -36,17 +35,9 @@ Y abrí la URL que te muestra (por ejemplo http://localhost:3000). `serve` manej
 
 ## Publicar en Cloudflare
 
-El repositorio ya está conectado al Worker **bweb** (Workers Builds). La configuración vive en `wrangler.jsonc`:
+El repositorio está conectado al Worker **bweb** (Workers Builds) y la configuración del build está en el panel de Cloudflare. Cada vez que se mergea algo a `main`, Cloudflare publica solo.
 
-| Campo en Cloudflare (Settings → Build) | Valor |
-| --- | --- |
-| Production branch | `main` |
-| Build command | *(vacío)* |
-| Deploy command | `npx wrangler deploy` |
-
-Cada vez que se mergea algo a `main`, Cloudflare publica solo. Los pull requests generan una vista previa y el link aparece como comentario en el PR.
-
-`.assetsignore` evita que se suban `.git` y los archivos del repo: sin él el build falla con "Asset too large".
+Cloudflare sirve las páginas sin `.html` (`/proyectos` muestra `proyectos.html`), igual que los links del sitio.
 
 ### Dominio bweb.uy
 
