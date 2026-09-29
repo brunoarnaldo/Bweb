@@ -419,6 +419,48 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .pack-feature strong { display: block; color: #FFFFFF; font-size: 15.5px; margin-bottom: 4px; }
 .pack-feature span { font-size: 13.5px; color: rgba(255, 255, 255, .58); line-height: 1.5; display: block; }
 
+/* ── Proyectos ────────────────────────────────────────────────────────── */
+.projects-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.project-card {
+  display: flex; flex-direction: column;
+  background: #FFFFFF; border: 1px solid var(--line); border-radius: var(--r-xl);
+  padding: 8px; box-shadow: var(--shadow-sm);
+  transition: transform 250ms var(--ease-out), box-shadow 250ms ease, border-color 250ms ease;
+}
+.project-shot { display: block; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-soft); text-decoration: none; }
+.project-bar { display: flex; align-items: center; gap: 5px; padding: 9px 12px; background: #F3F4F6; border-bottom: 1px solid var(--line); }
+.project-bar > i { width: 8px; height: 8px; border-radius: 50%; background: #D5D9E0; flex-shrink: 0; }
+.project-url {
+  flex: 1; min-width: 0; margin-left: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: #FFFFFF; border: 1px solid var(--line); border-radius: 7px; padding: 4px 10px;
+}
+.project-url i { font-size: 10px; color: var(--ok); }
+.project-frame { display: block; aspect-ratio: 16 / 11; overflow: hidden; }
+.project-frame img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%;
+  transition: object-position 1.2s var(--ease-out);
+}
+.project-body { display: flex; flex-direction: column; flex: 1; padding: 22px 18px 16px; }
+.project-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tag { font-size: 12px; font-weight: 700; color: var(--brand-ink); background: var(--brand-50); border: 1px solid var(--brand-100); padding: 4px 10px; border-radius: 100px; }
+.project-body h3 { font-size: 21px; margin-bottom: 4px; }
+.project-body p { font-size: 15px; line-height: 1.6; color: var(--muted); margin-bottom: 18px; }
+.project-body p.project-place { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--subtle); margin-bottom: 12px; }
+.project-link { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; width: fit-content; font-size: 15px; font-weight: 700; color: var(--ink); text-decoration: none; }
+.project-link i { transition: transform 220ms var(--ease-out); }
+.projects-cta { margin-top: 48px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px 24px; text-align: center; }
+.projects-cta p { font-size: 17px; color: var(--muted); }
+.projects-cta strong { color: var(--ink); }
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--line-strong); }
+  /* Al pasar el mouse, la captura "scrollea" el sitio; al salir vuelve rápido */
+  .project-card:hover .project-frame img { object-position: 50% 100%; transition: object-position 6s cubic-bezier(.45, .05, .55, .95); }
+  .project-card:hover .project-link i { transform: translate(2px, -2px); }
+}
+
 /* ── Proceso ──────────────────────────────────────────────────────────── */
 .steps { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
 .steps::before {
@@ -643,6 +685,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .pack-card { grid-template-columns: 1fr; padding: 40px 32px; gap: 32px; }
 
   .steps { grid-template-columns: 1fr; gap: 40px; max-width: 460px; margin: 0 auto; }
+  .projects-grid { grid-template-columns: minmax(0, 1fr); max-width: 620px; margin: 0 auto; }
   .steps::before { display: none; }
 
   .contact-card { grid-template-columns: 1fr; }
@@ -722,4 +765,5 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .product-stage img, .product-chip, .marquee-track, .pill-dot::before { animation: none !important; }
   .accent-line { animation: none; }
   .mobile-nav a.mob-link { transform: none; }
+  .project-frame img, .project-card:hover .project-frame img { transition: none; object-position: 50% 0%; }
 }

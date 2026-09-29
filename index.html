@@ -96,8 +96,8 @@
         <span>bweb</span>
       </a>
       <nav class="main-nav" aria-label="Principal">
-        <a class="nav-link" href="#para-vos">¿Es para vos?</a>
         <a class="nav-link" href="#servicios">Servicios</a>
+        <a class="nav-link" href="#proyectos">Proyectos</a>
         <a class="nav-link" href="#proceso">Cómo funciona</a>
         <a class="nav-link" href="/preguntas-frecuentes">Preguntas</a>
         <a class="nav-link" href="#contacto">Contacto</a>
@@ -113,9 +113,10 @@
   <nav class="mobile-nav" id="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
     <a class="mob-link" href="#para-vos" style="--i:0">¿Es para vos? <i class="bi bi-arrow-right"></i></a>
     <a class="mob-link" href="#servicios" style="--i:1">Servicios <i class="bi bi-arrow-right"></i></a>
-    <a class="mob-link" href="#proceso" style="--i:2">Cómo funciona <i class="bi bi-arrow-right"></i></a>
-    <a class="mob-link" href="/preguntas-frecuentes" style="--i:3">Preguntas frecuentes <i class="bi bi-arrow-right"></i></a>
-    <a class="mob-link" href="#contacto" style="--i:4">Contacto <i class="bi bi-arrow-right"></i></a>
+    <a class="mob-link" href="#proyectos" style="--i:2">Proyectos <i class="bi bi-arrow-right"></i></a>
+    <a class="mob-link" href="#proceso" style="--i:3">Cómo funciona <i class="bi bi-arrow-right"></i></a>
+    <a class="mob-link" href="/preguntas-frecuentes" style="--i:4">Preguntas frecuentes <i class="bi bi-arrow-right"></i></a>
+    <a class="mob-link" href="#contacto" style="--i:5">Contacto <i class="bi bi-arrow-right"></i></a>
     <div class="mob-actions">
       <a class="btn btn-wa btn-lg" href="https://wa.me/59899788934?text=Hola%20Bweb%2C%20quiero%20consultar%20sobre%20mi%20web" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i> Hablemos por WhatsApp</a>
       <a class="btn btn-ghost-light btn-lg" href="https://wa.me/59899788934?text=Hola%20Bweb!%20Quiero%20el%20cartel%20NFC%20de%20rese%C3%B1as%20de%20Google%20(%241.200)%20programado%20con%20el%20link%20de%20mi%20negocio.%20Mi%20negocio%20es%3A%20" target="_blank" rel="noopener noreferrer">Pedir cartel NFC · $1.200</a>
@@ -336,8 +337,73 @@
       </div>
     </section>
 
+    <!-- ===== PROYECTOS ===== -->
+    <section class="section" id="proyectos">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Proyectos</span>
+          <h2 class="section-title">Sitios que ya están trabajando para sus negocios</h2>
+          <p class="section-lead">Algunos de los proyectos que diseñamos y pusimos en línea. Entrá y probalos.</p>
+        </div>
+
+        <!--
+          Para sumar un proyecto:
+          1. Subí una captura vertical a img/proyectos/ (960 px de ancho, idealmente en .webp).
+          2. Copiá un <article class="project-card"> completo y cambiá link, dominio, imagen, etiquetas, lugar y textos.
+        -->
+        <div class="projects-grid">
+          <article class="project-card reveal" style="--d:1">
+            <a class="project-shot" href="https://acacripto.uy" target="_blank" rel="noopener" aria-label="Visitar acacripto.uy">
+              <span class="project-bar" aria-hidden="true"><i></i><i></i><i></i><span class="project-url"><i class="bi bi-lock-fill"></i> acacripto.uy</span></span>
+              <span class="project-frame"><img src="img/proyectos/acacripto.webp" alt="Inicio de Acá Cripto: mapa de comercios que aceptan cripto en Uruguay" width="960" height="1800" loading="lazy" decoding="async"></span>
+            </a>
+            <div class="project-body">
+              <div class="project-meta"><span class="tag">Mapa interactivo</span><span class="tag">Directorio</span></div>
+              <h3>Acá Cripto</h3>
+              <p class="project-place"><i class="bi bi-geo-alt"></i> Uruguay</p>
+              <p>El mapa de los comercios de Uruguay que aceptan pagos en cripto, con búsqueda por ciudad, rubro o moneda.</p>
+              <a class="project-link" href="https://acacripto.uy" target="_blank" rel="noopener">Ver sitio <i class="bi bi-arrow-up-right"></i></a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:2">
+            <a class="project-shot" href="https://labarraquita.com.uy" target="_blank" rel="noopener" aria-label="Visitar labarraquita.com.uy">
+              <span class="project-bar" aria-hidden="true"><i></i><i></i><i></i><span class="project-url"><i class="bi bi-lock-fill"></i> labarraquita.com.uy</span></span>
+              <span class="project-frame"><img src="img/proyectos/la-barraquita.webp" alt="Inicio de La Barraquita: tienda online de raciones con ofertas del mes" width="960" height="1800" loading="lazy" decoding="async"></span>
+            </a>
+            <div class="project-body">
+              <div class="project-meta"><span class="tag">Tienda online</span><span class="tag">Pedidos por WhatsApp</span></div>
+              <h3>La Barraquita</h3>
+              <p class="project-place"><i class="bi bi-geo-alt"></i> Minas, Lavalleja</p>
+              <p>Tienda de raciones para perros, gatos y granja, con catálogo por categorías, ofertas del mes y venta por mayor.</p>
+              <a class="project-link" href="https://labarraquita.com.uy" target="_blank" rel="noopener">Ver sitio <i class="bi bi-arrow-up-right"></i></a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" style="--d:3">
+            <a class="project-shot" href="https://gradinuruguay.com.uy" target="_blank" rel="noopener" aria-label="Visitar gradinuruguay.com.uy">
+              <span class="project-bar" aria-hidden="true"><i></i><i></i><i></i><span class="project-url"><i class="bi bi-lock-fill"></i> gradinuruguay.com.uy</span></span>
+              <span class="project-frame"><img src="img/proyectos/gradin.webp" alt="Inicio de GRADIN: tienda de maquinaria con plataformas elevadoras y financiación" width="960" height="1800" loading="lazy" decoding="async"></span>
+            </a>
+            <div class="project-body">
+              <div class="project-meta"><span class="tag">Catálogo de productos</span><span class="tag">Cotizaciones</span></div>
+              <h3>GRADIN</h3>
+              <p class="project-place"><i class="bi bi-geo-alt"></i> Toledo, Canelones</p>
+              <p>Tienda de maquinaria: plataformas elevadoras, tijeras, brazos articulados y montacargas, con precios, financiación y cotización por WhatsApp.</p>
+              <a class="project-link" href="https://gradinuruguay.com.uy" target="_blank" rel="noopener">Ver sitio <i class="bi bi-arrow-up-right"></i></a>
+            </div>
+          </article>
+        </div>
+
+        <div class="projects-cta reveal">
+          <p><strong>¿Tu negocio es el próximo?</strong> Contanos qué necesitás y te enviamos una propuesta en menos de 24 horas.</p>
+          <a class="btn btn-primary" href="#contacto">Quiero mi web <i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== PROCESO ===== -->
-    <section class="section" id="proceso">
+    <section class="section section-soft" id="proceso">
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">El proceso</span>
@@ -542,6 +608,7 @@
         <div class="footer-col">
           <h4>Empresa</h4>
           <a href="#para-vos">¿Es para vos?</a>
+          <a href="#proyectos">Proyectos</a>
           <a href="#proceso">Cómo funciona</a>
           <a href="/preguntas-frecuentes">Preguntas frecuentes</a>
           <a href="#contacto">Contacto</a>

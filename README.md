@@ -13,6 +13,7 @@ Se publica en **Cloudflare Pages**. No necesita compilar nada: se publica la car
 | `404.html` | Página de error |
 | `css/styles.css`, `js/main.js` | Estilos y comportamiento compartidos |
 | `img/cartel-nfc-resenas-google.jpg` | Foto del cartel |
+| `img/proyectos/` | Capturas de los proyectos del portfolio |
 | `og-image.jpg`, `og-cartel-nfc.jpg` | Imágenes que aparecen al compartir el link (WhatsApp, redes) |
 | `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-*.png`, `logo.png`, `site.webmanifest` | Íconos y logo |
 | `robots.txt`, `sitemap.xml` | Para buscadores |
@@ -74,4 +75,8 @@ Para recibirlo por email: creá una clave gratis en [web3forms.com](https://web3
 - **Precio del cartel:** buscá `1.200` / `1200` en `index.html` y `preguntas-frecuentes.html` (incluye los datos estructurados y los mensajes de WhatsApp).
 - **Número de WhatsApp:** buscá `59899788934`.
 - **Foto del cartel:** reemplazá `img/cartel-nfc-resenas-google.jpg` (fondo blanco, vertical).
+- **Sumar un proyecto al portfolio** (sección Proyectos del inicio):
+  1. Sacá una captura larga del sitio (de arriba hacia abajo) y guardala en `img/proyectos/` con 960 px de ancho, idealmente en `.webp`.
+  2. En `index.html`, dentro de `<div class="projects-grid">`, copiá un `<article class="project-card">` completo y cambiá el link, el dominio, la imagen, las etiquetas, el lugar y la descripción.
+  3. Con 3, 6 o 9 proyectos la grilla queda pareja en escritorio.
 - Después de cambios importantes, actualizá `lastmod` en `sitemap.xml`.
