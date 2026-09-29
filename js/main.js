@@ -2,44 +2,16 @@
   'use strict';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var WHATSAPP = '59899788934';
+  var PRECIO = 1200;
 
   /* ── Header: fondo al hacer scroll ── */
   var header = document.getElementById('site-header');
   function updateHeader() {
-    if (!header) return;
-    header.classList.toggle('is-scrolled', window.scrollY > 12);
+    if (header) header.classList.toggle('is-scrolled', window.scrollY > 12);
   }
-
-  /* ── Link activo del menú según la sección visible ── */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.main-nav .nav-link[href^="#"]'));
-  var navSections = navLinks
-    .map(function (link) { return document.querySelector(link.getAttribute('href')); })
-    .filter(Boolean);
-
-  function updateActiveNav() {
-    if (!navSections.length) return;
-    var y = window.scrollY + window.innerHeight * 0.35;
-    var current = '';
-    navSections.forEach(function (sec) {
-      if (sec.offsetTop <= y) current = '#' + sec.id;
-    });
-    navLinks.forEach(function (link) {
-      link.classList.toggle('is-active', link.getAttribute('href') === current);
-    });
-  }
-
-  var ticking = false;
-  window.addEventListener('scroll', function () {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function () {
-      updateHeader();
-      updateActiveNav();
-      ticking = false;
-    });
-  }, { passive: true });
+  window.addEventListener('scroll', updateHeader, { passive: true });
   updateHeader();
-  updateActiveNav();
 
   /* ── Menú móvil ── */
   var hamburger = document.getElementById('hamburger');
@@ -86,7 +58,7 @@
     revealEls.forEach(function (el) { el.classList.add('is-in'); });
   }
 
-  /* ── Índice de la página de preguntas: grupo activo ── */
+  /* ── Preguntas frecuentes: tema activo en el índice ── */
   var faqNavLinks = Array.prototype.slice.call(document.querySelectorAll('.faq-nav a[href^="#"]'));
   if (faqNavLinks.length && 'IntersectionObserver' in window) {
     var groupObserver = new IntersectionObserver(function (entries) {
@@ -103,70 +75,48 @@
     });
   }
 
-  /* ── Formulario de contacto (Web3Forms) ── */
-  var form = document.getElementById('contact-form');
-  if (form) {
-    var success = document.getElementById('form-success');
-    var error = document.getElementById('form-error');
-    var btn = form.querySelector('.submit-btn');
-    var btnHTML = btn.innerHTML;
-
-    function showAlert(el, html) {
-      el.innerHTML = html;
-      el.style.display = 'block';
-      el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      error.style.display = 'none';
-      success.style.display = 'none';
-
-      var nombre = form.querySelector('[name="nombre"]').value.trim();
-      var email = form.querySelector('[name="email"]').value.trim();
-      var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!nombre || !email || !re.test(email)) {
-        showAlert(error, '<i class="bi bi-exclamation-circle-fill"></i> Por favor completá tu nombre y un email válido.');
-        return;
-      }
-
-      /* Sin clave de Web3Forms configurada: la consulta se envía por WhatsApp */
-      var key = form.querySelector('[name="access_key"]').value;
-      if (!key || key.indexOf('YOUR_') === 0) {
-        var empresa = form.querySelector('[name="empresa"]').value.trim();
-        var servicio = form.querySelector('[name="servicio"]').value;
-        var mensaje = form.querySelector('[name="mensaje"]').value.trim();
-        var texto = 'Hola Bweb! Soy ' + nombre + (empresa ? ' (' + empresa + ')' : '') + '.' +
-          (servicio ? '\nNecesito: ' + servicio : '') +
-          (mensaje ? '\n' + mensaje : '') +
-          '\nMi email: ' + email;
-        window.open('https://wa.me/59899788934?text=' + encodeURIComponent(texto), '_blank', 'noopener');
-        showAlert(success, '<i class="bi bi-whatsapp"></i> Te abrimos WhatsApp con tu consulta lista para enviar.');
-        return;
-      }
-
-      btn.textContent = 'Enviando…';
-      btn.disabled = true;
-
-      fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(Object.fromEntries(new FormData(form)))
-      })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          if (!data.success) throw new Error(data.message || 'Envío rechazado');
-          form.reset();
-          showAlert(success, '<i class="bi bi-check-circle-fill"></i> ¡Perfecto! Te contactamos en menos de 24 horas.');
-        })
-        .catch(function () {
-          showAlert(error, '<i class="bi bi-exclamation-circle-fill"></i> No pudimos enviar tu consulta. Probá de nuevo o escribinos por WhatsApp.');
-        })
-        .finally(function () {
-          btn.innerHTML = btnHTML;
-          btn.disabled = false;
-        });
+  /* ── Tienda: galería de fotos ── */
+  var galleryImg = document.getElementById('gallery-img');
+  var thumbs = document.querySelectorAll('.gallery-thumbs button');
+  thumbs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      thumbs.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      galleryImg.src = btn.dataset.src;
+      galleryImg.alt = btn.dataset.alt;
+      galleryImg.classList.toggle('is-full', btn.dataset.full === 'true');
     });
+  });
+
+  /* ── Tienda: cantidad, total y mensaje de WhatsApp ── */
+  var qtyInput = document.getElementById('qty');
+  if (qtyInput) {
+    var totalEl = document.getElementById('qty-total');
+    var minus = document.querySelector('[data-qty-step="-1"]');
+    var buyLinks = document.querySelectorAll('[data-buy-link]');
+    var formato = function (n) { return '$' + n.toLocaleString('es-UY'); };
+
+    var update = function () {
+      var n = parseInt(qtyInput.value, 10);
+      if (isNaN(n) || n < 1) n = 1;
+      if (n > 99) n = 99;
+      qtyInput.value = n;
+      minus.disabled = n <= 1;
+      totalEl.textContent = formato(n * PRECIO);
+      var texto = n === 1
+        ? 'Hola Bweb! Quiero comprar 1 cartel NFC de reseñas de Google ($1.200) programado con el link de mi negocio. Mi negocio es: '
+        : 'Hola Bweb! Quiero comprar ' + n + ' carteles NFC de reseñas de Google (' + n + ' x $1.200 = ' + formato(n * PRECIO) + ') programados con el link de mi negocio. Mi negocio es: ';
+      var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(texto);
+      buyLinks.forEach(function (a) { a.href = url; });
+    };
+
+    document.querySelectorAll('[data-qty-step]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        qtyInput.value = (parseInt(qtyInput.value, 10) || 1) + parseInt(btn.dataset.qtyStep, 10);
+        update();
+      });
+    });
+    qtyInput.addEventListener('change', update);
+    qtyInput.addEventListener('input', function () { if (qtyInput.value !== '') update(); });
+    update();
   }
 })();
