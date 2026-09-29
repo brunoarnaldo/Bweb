@@ -2,7 +2,7 @@
 
 Sitio estático de [bweb.uy](https://bweb.uy): la tienda del cartel NFC de reseñas de Google y el estudio de diseño web de Bweb.
 
-Se publica en **Cloudflare Pages**. No necesita compilar nada: se publica la carpeta tal cual.
+Se publica en **Cloudflare** (Worker `bweb` con archivos estáticos). No necesita compilar nada: se publica la carpeta tal cual.
 
 ## Estructura
 
@@ -18,11 +18,13 @@ Se publica en **Cloudflare Pages**. No necesita compilar nada: se publica la car
 | `og-image.jpg`, `og-cartel-nfc.jpg` | | Imágenes que aparecen al compartir el link (WhatsApp, redes) |
 | `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-*.png`, `logo.png`, `site.webmanifest` | | Íconos y logo |
 | `robots.txt`, `sitemap.xml` | | Para buscadores |
-| `_headers` | | Encabezados de seguridad y caché para Cloudflare Pages |
+| `_headers` | | Encabezados de seguridad y caché |
+| `wrangler.jsonc`, `.assetsignore` | | Configuración del deploy en Cloudflare y archivos que no se publican |
+| `vercel.json` | | URLs sin `.html` en las vistas previas de Vercel |
 
 El header, el menú y el footer se repiten en las cuatro páginas: si cambiás un link ahí, cambialo en todas.
 
-Las URLs públicas no llevan `.html` (Cloudflare Pages las redirige solo). Por eso los links internos, el canonical y el sitemap usan `/proyectos`, `/preguntas-frecuentes`, etc.
+Las URLs públicas no llevan `.html` (Cloudflare las redirige solo). Por eso los links internos, el canonical y el sitemap usan `/proyectos`, `/preguntas-frecuentes`, etc.
 
 ## Ver el sitio en tu compu
 
@@ -32,26 +34,24 @@ npx serve .
 
 Y abrí la URL que te muestra (por ejemplo http://localhost:3000). `serve` maneja las URLs sin `.html` igual que Cloudflare.
 
-## Publicar en Cloudflare Pages
+## Publicar en Cloudflare
 
-### 1. Conectar el repositorio (una sola vez)
+El repositorio ya está conectado al Worker **bweb** (Workers Builds). La configuración vive en `wrangler.jsonc`:
 
-1. En Cloudflare: **Workers & Pages → Create → Pages → Connect to Git** y elegí `brunoarnaldo/Bweb`.
-2. Configuración de build:
+| Campo en Cloudflare (Settings → Build) | Valor |
+| --- | --- |
+| Production branch | `main` |
+| Build command | *(vacío)* |
+| Deploy command | `npx wrangler deploy` |
 
-   | Campo | Valor |
-   | --- | --- |
-   | Production branch | `main` |
-   | Framework preset | `None` |
-   | Build command | *(vacío)* |
-   | Build output directory | `/` |
+Cada vez que se mergea algo a `main`, Cloudflare publica solo. Los pull requests generan una vista previa y el link aparece como comentario en el PR.
 
-3. **Save and Deploy**. Cada vez que se mergea algo a `main`, Cloudflare publica solo. Las otras ramas generan una URL de vista previa (`*.pages.dev`) para revisar antes de mergear.
+`.assetsignore` evita que se suban `.git` y los archivos del repo: sin él el build falla con "Asset too large".
 
 ### 2. Dominio bweb.uy
 
 1. El dominio tiene que estar en Cloudflare: **Add a site → bweb.uy** (plan Free). Después cambiá los nameservers en el registrador donde compraste el `.uy` por los dos que te da Cloudflare.
-2. En el proyecto de Pages: **Custom domains → Set up a custom domain** y agregá `bweb.uy`. Repetí con `www.bweb.uy`.
+2. En el Worker **bweb**: **Settings → Domains & Routes → Add → Custom domain** y agregá `bweb.uy`. Repetí con `www.bweb.uy`.
 3. Para tener una sola versión del sitio: **Rules → Redirect Rules → Create rule → plantilla "Redirect from WWW to root"** (301, conservando la ruta).
 4. En **SSL/TLS → Edge Certificates** activá **Always Use HTTPS**.
 
