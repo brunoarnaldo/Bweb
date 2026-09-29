@@ -131,6 +131,21 @@
         return;
       }
 
+      /* Sin clave de Web3Forms configurada: la consulta se envía por WhatsApp */
+      var key = form.querySelector('[name="access_key"]').value;
+      if (!key || key.indexOf('YOUR_') === 0) {
+        var empresa = form.querySelector('[name="empresa"]').value.trim();
+        var servicio = form.querySelector('[name="servicio"]').value;
+        var mensaje = form.querySelector('[name="mensaje"]').value.trim();
+        var texto = 'Hola Bweb! Soy ' + nombre + (empresa ? ' (' + empresa + ')' : '') + '.' +
+          (servicio ? '\nNecesito: ' + servicio : '') +
+          (mensaje ? '\n' + mensaje : '') +
+          '\nMi email: ' + email;
+        window.open('https://wa.me/59899788934?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+        showAlert(success, '<i class="bi bi-whatsapp"></i> Te abrimos WhatsApp con tu consulta lista para enviar.');
+        return;
+      }
+
       btn.textContent = 'Enviando…';
       btn.disabled = true;
 
