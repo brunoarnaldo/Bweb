@@ -65,6 +65,7 @@ Para probar cómo se ve el link al compartirlo: pegá la URL en WhatsApp o en el
 ## Cambios frecuentes
 
 - **Precio del cartel:** está en `index.html`, `cartel-nfc-resenas-google.html` y `preguntas-frecuentes.html` (textos, datos estructurados y mensajes de WhatsApp), y en `js/main.js` (`PRECIO`, que calcula el total según la cantidad). Buscá `1.200` y `1200`.
+- **Envíos y devoluciones del cartel:** están en `cartel-nfc-resenas-google.html` (nota debajo del botón de compra, tarjetas «Envíos a todo Uruguay» y «Devoluciones», preguntas y datos estructurados `shippingDetails` y `hasMerchantReturnPolicy`) y en `preguntas-frecuentes.html` (preguntas y datos estructurados). Buscá `días hábiles`.
 - **Número de WhatsApp:** buscá `59899788934` en las páginas y en `js/main.js`.
 - **Formulario de contacto:** está en `index.html` (sección `#contacto`, dentro de «¿Querés una web así para tu negocio?») y se envía con [Web3Forms](https://web3forms.com). Las consultas llegan al email con el que se creó la clave (`access_key` en el formulario). El asunto trae lo que necesita y el negocio, por ejemplo «Consulta web: Un sitio con varias secciones · Peluquería en Minas». Para recibirlas en otro email, generá una clave nueva en web3forms.com con ese email y reemplazala en `index.html`. El envío y los mensajes de «Listo» o error están en `js/main.js`.
 - **Fotos del cartel:** reemplazá los archivos en `img/` manteniendo el nombre (fondo blanco).

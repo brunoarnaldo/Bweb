@@ -55,6 +55,34 @@
     "seller": {
       "@type": "Organization",
       "name": "Bweb"
+    },
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "UY"
+      },
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 0,
+          "maxValue": 1,
+          "unitCode": "DAY"
+        },
+        "transitTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 1,
+          "maxValue": 2,
+          "unitCode": "DAY"
+        }
+      }
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "UY",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 5
     }
   }
 }
@@ -169,6 +197,7 @@
               <a class="btn btn-wa btn-lg btn-block" data-buy-link href="https://wa.me/59899788934?text=Hola%20Bweb%21%20Quiero%20comprar%201%20cartel%20NFC%20de%20rese%C3%B1as%20de%20Google%20%28%241.200%29%20programado%20con%20el%20link%20de%20mi%20negocio.%20Mi%20negocio%20es%3A%20" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i> Comprar por WhatsApp</a>
               <a class="btn btn-outline btn-block" href="https://wa.me/59899788934?text=Hola%20Bweb%2C%20tengo%20una%20pregunta%20sobre%20el%20cartel%20NFC%20de%20rese%C3%B1as" target="_blank" rel="noopener noreferrer">Hacer una pregunta</a>
             </div>
+            <p class="buy-note"><i class="bi bi-truck"></i> Envíos a todo Uruguay en 1 a 3 días hábiles.</p>
             <p class="buy-note"><i class="bi bi-shield-check"></i> Coordinamos la entrega y el pago por WhatsApp.</p>
           </div>
         </div>
@@ -204,7 +233,7 @@
     </section>
 
     <!-- ===== DETALLES ===== -->
-    <section class="section" aria-label="Qué necesitás y por qué te conviene">
+    <section class="section" aria-label="Qué necesitás, por qué te conviene, envíos y devoluciones">
       <div class="container info-grid">
         <div class="info-card reveal">
           <span class="icon-box"><i class="bi bi-clipboard-check"></i></span>
@@ -219,6 +248,20 @@
           <span class="icon-box"><i class="bi bi-graph-up-arrow"></i></span>
           <h2>Por qué te conviene</h2>
           <p>Las reseñas generan confianza en quienes te buscan y son una de las señales que Google tiene en cuenta para mostrar negocios locales en la Búsqueda y en Google Maps. Cuanto más fácil sea dejarlas, más reseñas vas a recibir.</p>
+        </div>
+        <div class="info-card reveal" id="envios">
+          <span class="icon-box"><i class="bi bi-truck"></i></span>
+          <h2>Envíos a todo Uruguay</h2>
+          <ul class="check-list">
+            <li><i class="bi bi-check-lg"></i> Lo recibís en 1 a 3 días hábiles, ya programado con tu link.</li>
+            <li><i class="bi bi-check-lg"></i> Enviamos a cualquier departamento. El costo del envío va por tu cuenta.</li>
+            <li><i class="bi bi-check-lg"></i> Coordinamos la entrega y el pago por WhatsApp.</li>
+          </ul>
+        </div>
+        <div class="info-card reveal" style="--d:1" id="devoluciones">
+          <span class="icon-box"><i class="bi bi-arrow-counterclockwise"></i></span>
+          <h2>Devoluciones</h2>
+          <p>Si te arrepentís de la compra, tenés 5 días hábiles desde que lo recibís para devolverlo. Escribinos por WhatsApp y lo coordinamos.</p>
         </div>
       </div>
     </section>
@@ -243,6 +286,14 @@
           <details class="faq-item">
             <summary>¿Cómo compro el cartel NFC? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
             <div class="faq-answer"><p>Entrá a la <a href="/cartel-nfc-resenas-google">página del producto</a>, elegí la cantidad y tocá «Comprar por WhatsApp». Nos pasás el nombre de tu negocio o el link de tu perfil de Google y coordinamos la entrega.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>¿Hacen envíos a todo el país? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
+            <div class="faq-answer"><p>Sí, enviamos a todo Uruguay. Lo recibís en 1 a 3 días hábiles, ya programado con tu link. El costo del envío va por tu cuenta y lo coordinamos por WhatsApp.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>¿Puedo devolver el cartel? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
+            <div class="faq-answer"><p>Sí. Tenés 5 días hábiles desde que lo recibís para devolverlo. Escribinos por WhatsApp y lo coordinamos.</p></div>
           </details>
           <details class="faq-item">
             <summary>¿Funciona con cualquier celular? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
