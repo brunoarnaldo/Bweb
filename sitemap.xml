@@ -3,14 +3,14 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://bweb.uy/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/cartel-nfc-resenas-google.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://bweb.uy/cartel-nfc-resenas-google</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/cartel-nfc-resenas-google.jpg</image:loc>
     </image:image>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://bweb.uy/proyectos</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/proyectos/acacripto.webp</image:loc>
     </image:image>
@@ -36,6 +36,6 @@
   </url>
   <url>
     <loc>https://bweb.uy/preguntas-frecuentes</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
   </url>
 </urlset>

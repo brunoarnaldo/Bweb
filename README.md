@@ -19,6 +19,8 @@ Se publica en **Cloudflare** (Worker `bweb` con archivos estáticos). No necesit
 | `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-*.png`, `logo.png`, `site.webmanifest` | | Íconos y logo |
 | `robots.txt`, `sitemap.xml` | | Para buscadores |
 | `_headers` | | Encabezados de seguridad y caché |
+| `wrangler.jsonc` | | Configuración del Worker de Cloudflare: URLs sin `.html` y `404.html` para las rutas que no existen |
+| `.assetsignore` | | Archivos del repositorio que no se publican (`.git`, este README, configuración) |
 | `vercel.json` | | URLs sin `.html` en las vistas previas de Vercel |
 
 El header, el menú y el footer se repiten en las cuatro páginas: si cambiás un link ahí, cambialo en todas.
@@ -35,9 +37,11 @@ Y abrí la URL que te muestra (por ejemplo http://localhost:3000). `serve` manej
 
 ## Publicar en Cloudflare
 
-El repositorio está conectado al Worker **bweb** (Workers Builds) y la configuración del build está en el panel de Cloudflare. Cada vez que se mergea algo a `main`, Cloudflare publica solo.
+El repositorio está conectado al Worker **bweb** (Workers Builds). Cada vez que se mergea algo a `main`, Cloudflare publica solo con lo que dice `wrangler.jsonc`.
 
-Cloudflare sirve las páginas sin `.html` (`/proyectos` muestra `proyectos.html`), igual que los links del sitio.
+Cloudflare sirve las páginas sin `.html` (`/proyectos` muestra `proyectos.html`), igual que los links del sitio, y muestra `404.html` cuando la ruta no existe.
+
+Todo lo que está en la carpeta se publica, salvo lo que figura en `.assetsignore`. Si sumás un archivo que no tiene que verse en el sitio (notas, configuración), agregalo ahí.
 
 ### Dominio bweb.uy
 

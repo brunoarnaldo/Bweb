@@ -1,0 +1,16 @@
+// Cloudflare Workers: publica esta carpeta como sitio estático (sin código de servidor).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bweb",
+  "compatibility_date": "2026-09-26",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".",
+    // /proyectos sirve proyectos.html y /proyectos.html redirige a /proyectos
+    "html_handling": "auto-trailing-slash",
+    // Las rutas que no existen muestran 404.html con código 404
+    "not_found_handling": "404-page"
+  }
+}
