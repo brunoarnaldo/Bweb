@@ -5,6 +5,46 @@
   var WHATSAPP = '59899788934';
   var PRECIO = 1200;
 
+  /* ── Píxel de Meta ──
+     Pegá acá el ID del píxel (Administrador de eventos de Meta → tu píxel → Configuración).
+     Mientras esté vacío, el píxel no se carga y no se mide nada. */
+  var META_PIXEL_ID = '1099627716298995';
+
+  if (META_PIXEL_ID) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', META_PIXEL_ID);
+    window.fbq('track', 'PageView');
+  }
+
+  // Manda un evento al píxel si está cargado. custom = true para eventos propios (no estándar de Meta).
+  var track = function (evento, datos, custom) {
+    if (window.fbq) window.fbq(custom ? 'trackCustom' : 'track', evento, datos || {});
+  };
+  window.bwebTrack = track;
+
+  /* ── Medición de los botones de WhatsApp ──
+     «Quiero comprar N carteles» cuenta como inicio de compra; cualquier otro mensaje, como contacto. */
+  var CARTEL = { content_name: 'Cartel NFC de reseñas de Google', content_ids: ['cartel-nfc'], content_type: 'product', currency: 'UYU' };
+  var conCartel = function (extra) { return Object.assign({}, CARTEL, extra); };
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href^="https://wa.me/' + WHATSAPP + '"]');
+    if (!link) return;
+    var texto = '';
+    try { texto = new URL(link.href).searchParams.get('text') || ''; } catch (err) { /* link sin texto */ }
+    var compra = texto.match(/Quiero comprar (\d+) cartel/);
+    if (compra) {
+      var n = parseInt(compra[1], 10);
+      track('InitiateCheckout', conCartel({ num_items: n, value: n * PRECIO }));
+    } else {
+      track('Contact', { content_category: /cartel|reseñas/i.test(texto) ? 'Cartel NFC' : /web/i.test(texto) ? 'Diseño web' : 'General' });
+    }
+  });
+
   /* ── Header: fondo al hacer scroll ── */
   var header = document.getElementById('site-header');
   function updateHeader() {
@@ -94,6 +134,7 @@
     var minus = document.querySelector('[data-qty-step="-1"]');
     var buyLinks = document.querySelectorAll('[data-buy-link]');
     var formato = function (n) { return '$' + n.toLocaleString('es-UY'); };
+    track('ViewContent', conCartel({ value: PRECIO }));
 
     var update = function () {
       var n = parseInt(qtyInput.value, 10);
@@ -134,8 +175,9 @@
     leadForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var datos = new FormData(leadForm);
+      var necesita = datos.get('Necesita');
       // El asunto del email dice qué necesita y de qué negocio es, para ordenar los presupuestos
-      datos.set('subject', 'Consulta web: ' + datos.get('Necesita') + ' · ' + datos.get('Negocio'));
+      datos.set('subject', 'Consulta web: ' + necesita + ' · ' + datos.get('Negocio'));
       leadBtn.disabled = true;
       leadBtn.textContent = 'Enviando…';
       setStatus('', '');
@@ -144,6 +186,7 @@
         .then(function (r) { return r.json(); })
         .then(function (res) {
           if (!res.success) throw new Error(res.message);
+          track('Lead', { content_category: 'Diseño web', content_name: necesita });
           leadForm.reset();
           setStatus('ok', '¡Listo! Recibimos tu consulta. Te escribimos por WhatsApp en menos de 24 horas.');
         })
