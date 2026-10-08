@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cartel NFC de reseñas de Google a $1.200 | Bweb</title>
-<meta name="description" content="Cartel NFC de reseñas de Google a $1.200 UYU, programado con el link de tu negocio. Sin app ni pilas. Elegí la cantidad y comprá por WhatsApp.">
+<meta name="description" content="Cartel NFC de reseñas de Google a $1.200 UYU o pack de 3 a $3.000, programado con el link de tu negocio. Sin app ni pilas. Comprá por WhatsApp.">
 <meta name="author" content="Bweb">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0B1220">
@@ -184,6 +184,20 @@
               <li><span class="icon-box"><i class="bi bi-phone"></i></span><span><strong>Sin instalar ninguna app</strong><span>iPhone XS o posterior y Android con NFC activado.</span></span></li>
               <li><span class="icon-box"><i class="bi bi-lightning-charge"></i></span><span><strong>Sin pilas ni carga</strong><span>El chip NFC es pasivo: lo ponés y funciona.</span></span></li>
             </ul>
+            <fieldset class="pack-picker">
+              <legend>Elegí tu opción</legend>
+              <label class="pack-option">
+                <input type="radio" name="pack" value="1" data-unidades="1" data-precio="1200" checked>
+                <span class="pack-body"><strong>1 cartel</strong><span>Para el mostrador o la caja</span></span>
+                <span class="pack-price">$1.200</span>
+              </label>
+              <label class="pack-option">
+                <input type="radio" name="pack" value="3" data-unidades="3" data-precio="3000">
+                <span class="pack-tag">Ahorrás $600</span>
+                <span class="pack-body"><strong>Pack de 3 carteles</strong><span>Caja y mesas · $1.000 cada uno</span></span>
+                <span class="pack-price">$3.000</span>
+              </label>
+            </fieldset>
             <div class="buy-row">
               <div>
                 <label for="qty">Cantidad</label>
@@ -193,7 +207,7 @@
                   <button type="button" data-qty-step="1" aria-label="Sumar uno">+</button>
                 </div>
               </div>
-              <p class="buy-total"><small>Total</small><strong id="qty-total" aria-live="polite">$1.200</strong></p>
+              <p class="buy-total" aria-live="polite"><small>Total · <span id="qty-detalle">1 cartel</span></small><strong id="qty-total">$1.200</strong></p>
             </div>
             <div class="buy-actions">
               <a class="btn btn-wa btn-lg btn-block" data-buy-link href="https://wa.me/59899788934?text=Hola%20Bweb%21%20Quiero%20comprar%201%20cartel%20NFC%20de%20rese%C3%B1as%20de%20Google%20%28%241.200%29%20programado%20con%20el%20link%20de%20mi%20negocio.%20Mi%20negocio%20es%3A%20" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i> Comprar por WhatsApp</a>
@@ -234,8 +248,36 @@
       </div>
     </section>
 
+    <!-- ===== POR QUÉ BWEB ===== -->
+    <section class="section" aria-labelledby="porque-titulo">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Por qué comprarlo en Bweb</span>
+          <h2 class="section-title" id="porque-titulo">Más que un cartel: que te encuentren en Google</h2>
+          <p class="section-lead">Somos un estudio de diseño web. El cartel es el primer paso para que tu negocio se vea bien cuando te buscan.</p>
+        </div>
+        <div class="info-grid is-3">
+          <div class="info-card reveal">
+            <span class="icon-box"><i class="bi bi-box-seam"></i></span>
+            <h3>Lo recibís listo</h3>
+            <p>Lo programamos con el link de reseñas de tu negocio antes de entregarlo. Si no sabés cuál es tu link, con el nombre del negocio lo buscamos nosotros.</p>
+          </div>
+          <div class="info-card reveal" style="--d:1">
+            <span class="icon-box"><i class="bi bi-link-45deg"></i></span>
+            <h3>Tu link de reseñas, gratis</h3>
+            <p>Para pedir reseñas también por WhatsApp e Instagram. Lo sacás en un minuto con nuestro <a href="/link-resenas-google">generador gratis</a>.</p>
+          </div>
+          <div class="info-card reveal" style="--d:2">
+            <span class="icon-box"><i class="bi bi-window"></i></span>
+            <h3>$1.200 de descuento en tu web</h3>
+            <p>Si en los 60 días siguientes a tu compra hacés tu web con Bweb, te descontamos $1.200. Mirá los <a href="/proyectos">sitios que hicimos</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== DETALLES ===== -->
-    <section class="section" aria-label="Qué necesitás, por qué te conviene, envíos y devoluciones">
+    <section class="section section-soft" aria-label="Qué necesitás, por qué te conviene, envíos y devoluciones">
       <div class="container info-grid">
         <div class="info-card reveal">
           <span class="icon-box"><i class="bi bi-clipboard-check"></i></span>
@@ -269,7 +311,7 @@
     </section>
 
     <!-- ===== PREGUNTAS DEL CARTEL ===== -->
-    <section class="section section-soft" aria-labelledby="faq-titulo">
+    <section class="section" aria-labelledby="faq-titulo">
       <div class="container faq-grid">
         <div class="faq-intro reveal">
           <span class="eyebrow">Preguntas del cartel</span>
@@ -286,8 +328,12 @@
             <div class="faq-answer"><p>Antes de entregártelo grabamos en el chip el link de reseñas de tu perfil de empresa en Google. Lo recibís listo para usar: lo ponés en el mostrador y empieza a funcionar.</p></div>
           </details>
           <details class="faq-item">
+            <summary>¿Hay precio por cantidad? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
+            <div class="faq-answer"><p>Sí. El pack de 3 carteles sale <strong>$3.000</strong>: $1.000 cada uno, $600 menos que comprarlos sueltos. Sirve para tener uno en la caja y otros en las mesas o en otro local.</p></div>
+          </details>
+          <details class="faq-item">
             <summary>¿Cómo compro el cartel NFC? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
-            <div class="faq-answer"><p>Entrá a la <a href="/cartel-nfc-resenas-google">página del producto</a>, elegí la cantidad y tocá «Comprar por WhatsApp». Nos pasás el nombre de tu negocio o el link de tu perfil de Google y coordinamos la entrega.</p></div>
+            <div class="faq-answer"><p>Entrá a la <a href="/cartel-nfc-resenas-google">página del producto</a>, elegí 1 cartel o el pack de 3, la cantidad, y tocá «Comprar por WhatsApp». Nos pasás el nombre de tu negocio o el link de tu perfil de Google y coordinamos la entrega.</p></div>
           </details>
           <details class="faq-item">
             <summary>¿Hacen envíos a todo el país? <span class="faq-toggle"><i class="bi bi-plus-lg"></i></span></summary>
@@ -314,12 +360,12 @@
     </section>
 
     <!-- ===== CIERRE ===== -->
-    <section class="section">
+    <section class="section section-soft">
       <div class="container">
         <div class="cta-band reveal">
           <span class="eyebrow on-dark">Tienda Bweb</span>
           <h2>Pedilo hoy, programado con tu link</h2>
-          <p>$1.200 por unidad. Elegí la cantidad arriba o escribinos y lo coordinamos por WhatsApp.</p>
+          <p>$1.200 por unidad o $3.000 el pack de 3. Elegí arriba o escribinos y lo coordinamos por WhatsApp.</p>
           <div class="cta-band-actions">
             <a class="btn btn-wa btn-lg" data-buy-link href="https://wa.me/59899788934?text=Hola%20Bweb%21%20Quiero%20comprar%201%20cartel%20NFC%20de%20rese%C3%B1as%20de%20Google%20%28%241.200%29%20programado%20con%20el%20link%20de%20mi%20negocio.%20Mi%20negocio%20es%3A%20" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i> Comprar por WhatsApp</a>
             <a class="btn btn-ghost-light btn-lg" href="https://wa.me/59899788934?text=Hola%20Bweb%2C%20tengo%20una%20pregunta%20sobre%20el%20cartel%20NFC%20de%20rese%C3%B1as" target="_blank" rel="noopener noreferrer">Hacer una pregunta</a>
@@ -331,7 +377,7 @@
   </main>
 
   <div class="buy-bar">
-    <div><small>Cartel NFC · por unidad</small><strong>$1.200</strong></div>
+    <div><small id="bar-detalle">1 cartel</small><strong id="bar-total">$1.200</strong></div>
     <a class="btn btn-wa" data-buy-link href="https://wa.me/59899788934?text=Hola%20Bweb%21%20Quiero%20comprar%201%20cartel%20NFC%20de%20rese%C3%B1as%20de%20Google%20%28%241.200%29%20programado%20con%20el%20link%20de%20mi%20negocio.%20Mi%20negocio%20es%3A%20" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i> Comprar</a>
   </div>
 

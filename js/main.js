@@ -27,13 +27,18 @@
   window.bwebTrack = track;
 
   /* ── Medición de los botones de WhatsApp ──
-     «Quiero comprar N carteles» cuenta como inicio de compra; cualquier otro mensaje, como contacto. */
+     Los botones de compra de la tienda traen la cantidad y el total (data-items y data-value).
+     En el resto, «Quiero comprar N carteles» cuenta como inicio de compra y cualquier otro mensaje, como contacto. */
   var CARTEL = { content_name: 'Cartel NFC de reseñas de Google', content_ids: ['cartel-nfc'], content_type: 'product', currency: 'UYU' };
   var conCartel = function (extra) { return Object.assign({}, CARTEL, extra); };
 
   document.addEventListener('click', function (e) {
     var link = e.target.closest && e.target.closest('a[href^="https://wa.me/' + WHATSAPP + '"]');
     if (!link) return;
+    if (link.dataset.value) {
+      track('InitiateCheckout', conCartel({ num_items: parseInt(link.dataset.items, 10), value: parseInt(link.dataset.value, 10) }));
+      return;
+    }
     var texto = '';
     try { texto = new URL(link.href).searchParams.get('text') || ''; } catch (err) { /* link sin texto */ }
     var compra = texto.match(/Quiero comprar (\d+) cartel/);
@@ -127,12 +132,18 @@
     });
   });
 
-  /* ── Tienda: cantidad, total y mensaje de WhatsApp ── */
+  /* ── Tienda: opción (1 cartel o pack), cantidad, total y mensaje de WhatsApp ──
+     Las opciones son los radios name="pack": data-unidades (carteles que trae) y data-precio. */
   var qtyInput = document.getElementById('qty');
   if (qtyInput) {
     var totalEl = document.getElementById('qty-total');
+    var detalleEl = document.getElementById('qty-detalle');
+    var qtyLabel = document.querySelector('label[for="qty"]');
+    var barDetalle = document.getElementById('bar-detalle');
+    var barTotal = document.getElementById('bar-total');
     var minus = document.querySelector('[data-qty-step="-1"]');
     var buyLinks = document.querySelectorAll('[data-buy-link]');
+    var opciones = document.querySelectorAll('input[name="pack"]');
     var formato = function (n) { return '$' + n.toLocaleString('es-UY'); };
     track('ViewContent', conCartel({ value: PRECIO }));
 
@@ -142,13 +153,45 @@
       if (n > 99) n = 99;
       qtyInput.value = n;
       minus.disabled = n <= 1;
-      totalEl.textContent = formato(n * PRECIO);
-      var texto = n === 1
-        ? 'Hola Bweb! Quiero comprar 1 cartel NFC de reseñas de Google ($1.200) programado con el link de mi negocio. Mi negocio es: '
-        : 'Hola Bweb! Quiero comprar ' + n + ' carteles NFC de reseñas de Google (' + n + ' x $1.200 = ' + formato(n * PRECIO) + ') programados con el link de mi negocio. Mi negocio es: ';
+
+      var elegida = document.querySelector('input[name="pack"]:checked');
+      var porPack = elegida ? parseInt(elegida.dataset.unidades, 10) : 1;
+      var precio = elegida ? parseInt(elegida.dataset.precio, 10) : PRECIO;
+      var carteles = n * porPack;
+      var total = n * precio;
+      var resumen, texto;
+      if (porPack === 1) {
+        resumen = n === 1 ? '1 cartel' : n + ' carteles';
+        texto = n === 1
+          ? 'Hola Bweb! Quiero comprar 1 cartel NFC de reseñas de Google (' + formato(precio) + ') programado con el link de mi negocio. Mi negocio es: '
+          : 'Hola Bweb! Quiero comprar ' + n + ' carteles NFC de reseñas de Google (' + n + ' x ' + formato(precio) + ' = ' + formato(total) + ') programados con el link de mi negocio. Mi negocio es: ';
+      } else {
+        resumen = n === 1 ? '1 pack de ' + porPack + ' carteles' : n + ' packs de ' + porPack + ' · ' + carteles + ' carteles';
+        texto = 'Hola Bweb! Quiero comprar ' + (n === 1 ? '1 pack' : n + ' packs') + ' de ' + porPack + ' carteles NFC de reseñas de Google (' +
+          (n === 1 ? formato(total) : carteles + ' carteles, ' + n + ' x ' + formato(precio) + ' = ' + formato(total)) +
+          ') programados con el link de mi negocio. Mi negocio es: ';
+      }
+
+      if (qtyLabel) qtyLabel.textContent = porPack === 1 ? 'Cantidad' : 'Cantidad de packs';
+      totalEl.textContent = formato(total);
+      if (detalleEl) detalleEl.textContent = resumen;
+      if (barDetalle) barDetalle.textContent = resumen;
+      if (barTotal) barTotal.textContent = formato(total);
       var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(texto);
-      buyLinks.forEach(function (a) { a.href = url; });
+      buyLinks.forEach(function (a) {
+        a.href = url;
+        a.dataset.items = carteles;
+        a.dataset.value = total;
+      });
     };
+
+    // Al cambiar de opción, la cantidad vuelve a 1
+    opciones.forEach(function (op) {
+      op.addEventListener('change', function () {
+        qtyInput.value = 1;
+        update();
+      });
+    });
 
     document.querySelectorAll('[data-qty-step]').forEach(function (btn) {
       btn.addEventListener('click', function () {
