@@ -1,6 +1,7 @@
 /* ==========================================================================
    Bweb — estilos compartidos
    Páginas: inicio, tienda (cartel NFC), proyectos, preguntas frecuentes, 404
+   y sus versiones en inglés (/en/)
    ========================================================================== */
 
 :root {
@@ -158,6 +159,26 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .header-actions { display: flex; align-items: center; gap: 10px; }
 
+/* Selector de idioma (ES / EN) */
+.lang-switch {
+  display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border-radius: 10px;
+  font-size: 13.5px; font-weight: 700; letter-spacing: .02em; color: rgba(255, 255, 255, .82); text-decoration: none;
+  background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .16);
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
+}
+.lang-switch i { font-size: 15px; color: var(--brand); }
+.lang-switch:hover { color: #FFFFFF; background: rgba(255, 255, 255, .09); border-color: rgba(255, 255, 255, .3); }
+
+/* Aviso arriba de todo: «esta página también está en inglés / español» */
+.lang-bar { position: relative; z-index: 101; background: var(--ink-3); border-bottom: 1px solid var(--line-dark); color: rgba(255, 255, 255, .78); font-size: 14px; }
+.lang-bar-inner { position: relative; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px 16px; min-height: 48px; padding-top: 8px; padding-bottom: 8px; padding-right: 64px; }
+.lang-bar p { display: inline-flex; align-items: center; gap: 8px; }
+.lang-bar p i { color: var(--brand); }
+.lang-bar a { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--brand); text-decoration: none; }
+.lang-bar a:hover { color: var(--brand-hover); }
+.lang-bar-close { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; padding: 0; border: 0; border-radius: 8px; display: grid; place-items: center; font-size: 15px; color: rgba(255, 255, 255, .6); background: transparent; cursor: pointer; transition: color 200ms ease, background-color 200ms ease; }
+.lang-bar-close:hover { color: #FFFFFF; background: rgba(255, 255, 255, .08); }
+
 .hamburger {
   display: none; position: relative;
   width: 44px; height: 44px; padding: 0; border-radius: 11px;
@@ -251,6 +272,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .showcase-foot strong { display: block; font-size: 17px; color: var(--ink); letter-spacing: -.02em; }
 .showcase-foot small { font-size: 13.5px; color: var(--muted); }
 .showcase-foot .go { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #FFFFFF; font-size: 18px; transition: transform 250ms var(--ease-out); }
+
+/* Vitrina de un sitio (inicio en inglés): captura en marco de navegador */
+.showcase-site .project-shot { border-radius: 24px; }
+.showcase-site .project-frame { aspect-ratio: 4 / 3.9; }
+.showcase-site .product-chip i { font-size: 15px; color: var(--brand-600); }
+.showcase-site .product-chip.chip-a { left: -18px; top: 34%; bottom: auto; }
+.showcase-site .product-chip.chip-b { right: -18px; bottom: 112px; }
 
 /* Escenario de producto (compartido) */
 .product-stage {
@@ -531,9 +559,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .promo { display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; gap: 32px; align-items: center; background: #FFFFFF; border: 1px solid var(--line); border-radius: var(--r-xl); padding: 10px 32px 10px 10px; box-shadow: var(--shadow-md); }
 .promo .product-stage { height: 220px; border-radius: 20px; }
 .promo .product-stage img { height: 190px; }
-.promo h2 { font-size: 26px; letter-spacing: -.03em; margin: 6px 0 8px; }
+.promo h2, .promo h3 { font-size: 26px; letter-spacing: -.03em; margin: 6px 0 8px; }
 .promo p { font-size: 15.5px; color: var(--muted); }
-.promo-price { font-size: 30px; font-weight: 800; letter-spacing: -.04em; color: var(--ink); line-height: 1; margin-bottom: 14px; text-align: right; }
+.promo .promo-price { font-size: 30px; font-weight: 800; letter-spacing: -.04em; color: var(--ink); line-height: 1; margin-bottom: 14px; text-align: right; }
 .promo-price span { display: block; font-size: 13px; font-weight: 600; letter-spacing: 0; color: var(--muted); margin-top: 4px; }
 .promo-actions { display: grid; gap: 8px; }
 
@@ -708,7 +736,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .hub-card.is-featured:hover { border-color: rgba(255, 107, 53, .7); }
   .hub-card:hover .hub-foot i { transform: translateX(3px); }
   /* Al pasar el mouse, la captura recorre el sitio; al salir vuelve rápido */
-  .project-card:hover .project-frame img, .case-visual:hover .project-frame img { object-position: 50% 100%; transition: object-position 6s cubic-bezier(.45, .05, .55, .95); }
+  .project-card:hover .project-frame img, .case-visual:hover .project-frame img, .showcase-site:hover .project-frame img { object-position: 50% 100%; transition: object-position 6s cubic-bezier(.45, .05, .55, .95); }
   .project-card:hover .project-link i { transform: translateX(3px); }
   .faq-item summary:hover .faq-toggle { border-color: rgba(11, 18, 32, .35); }
 }
@@ -728,13 +756,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .promo .product-stage { height: 200px; }
   .promo .product-stage img { height: 170px; }
   .promo-side { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 0 16px 14px; }
-  .promo-price { margin: 0; text-align: left; }
+  .promo .promo-price { margin: 0; text-align: left; }
   .promo-actions { grid-auto-flow: column; }
 }
 
 @media (max-width: 960px) {
   .main-nav { display: none; }
   .hamburger { display: block; }
+  .lang-switch { height: 44px; border-radius: 11px; }
   .section { padding: 96px 0; }
 
   .hero { padding-top: calc(var(--header-h) + 44px); padding-bottom: 88px; }
@@ -785,6 +814,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .showcase .product-stage img { height: 300px; }
   .price-badge strong { font-size: 24px; }
   .product-chip.chip-a { bottom: 64px; }
+  .showcase-site .product-chip.chip-a { left: 12px; }
+  .showcase-site .product-chip.chip-b { right: 12px; }
+
+  .lang-bar-inner { padding-right: 52px; }
+  .lang-bar-close { right: 12px; }
 
   .hub-media { height: 200px; }
 
@@ -838,5 +872,5 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .product-stage img.is-floating, .product-chip, .pill-dot::before { animation: none !important; }
   .accent-line { animation: none; }
   .mobile-nav a.mob-link { transform: none; }
-  .project-frame img, .project-card:hover .project-frame img, .case-visual:hover .project-frame img { transition: none; object-position: 50% 0%; }
+  .project-frame img, .project-card:hover .project-frame img, .case-visual:hover .project-frame img, .showcase-site:hover .project-frame img { transition: none; object-position: 50% 0%; }
 }

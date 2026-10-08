@@ -4,6 +4,8 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var WHATSAPP = '59899788934';
   var PRECIO = 1200;
+  // Las páginas de /en/ tienen <html lang="en">: ahí los textos que arma este archivo salen en inglés
+  var EN = /^en/i.test(document.documentElement.lang);
 
   /* ── Píxel de Meta ──
      Pegá acá el ID del píxel (Administrador de eventos de Meta → tu píxel → Configuración).
@@ -28,7 +30,8 @@
 
   /* ── Medición de los botones de WhatsApp ──
      Los botones de compra de la tienda traen la cantidad y el total (data-items y data-value).
-     En el resto, «Quiero comprar N carteles» cuenta como inicio de compra y cualquier otro mensaje, como contacto. */
+     En el resto, «Quiero comprar N carteles» (o «I want to buy N NFC…» en inglés) cuenta como inicio de compra
+     y cualquier otro mensaje, como contacto. */
   var CARTEL = { content_name: 'Cartel NFC de reseñas de Google', content_ids: ['cartel-nfc'], content_type: 'product', currency: 'UYU' };
   var conCartel = function (extra) { return Object.assign({}, CARTEL, extra); };
 
@@ -41,14 +44,57 @@
     }
     var texto = '';
     try { texto = new URL(link.href).searchParams.get('text') || ''; } catch (err) { /* link sin texto */ }
-    var compra = texto.match(/Quiero comprar (\d+) cartel/);
+    var compra = texto.match(/(?:Quiero comprar|I want to buy) (\d+) (?:cartel|NFC)/);
     if (compra) {
       var n = parseInt(compra[1], 10);
       track('InitiateCheckout', conCartel({ num_items: n, value: n * PRECIO }));
     } else {
-      track('Contact', { content_category: /cartel|reseñas/i.test(texto) ? 'Cartel NFC' : /web/i.test(texto) ? 'Diseño web' : 'General' });
+      // \bweb: «una web» o «website» cuentan como diseño web, pero no el «Bweb» del saludo
+      track('Contact', { content_category: /cartel|reseñas|nfc|review/i.test(texto) ? 'Cartel NFC' : /\bweb/i.test(texto) ? 'Diseño web' : 'General' });
     }
   });
+
+  /* ── Idioma: aviso para ver la página en el otro idioma ──
+     Cada página en español tiene su versión en inglés en /en/ (y al revés), marcadas con <link rel="alternate" hreflang>.
+     Si el navegador está en inglés y la página en español (o al revés), arriba aparece un aviso con el link.
+     No redirige solo: así Google, que visita desde EE. UU. y en inglés, sigue viendo e indexando las dos versiones.
+     Lo que elige la persona (el selector ES/EN, el link del aviso o cerrarlo) se recuerda en este navegador. */
+  var LANG_KEY = 'bweb-lang';
+  var idioma = EN ? 'en' : 'es';
+  var otroIdioma = EN ? 'es' : 'en';
+  var guardarIdioma = function (valor) {
+    try { localStorage.setItem(LANG_KEY, valor); } catch (err) { /* sin almacenamiento: el aviso vuelve a salir */ }
+  };
+  var elegido = null;
+  try { elegido = localStorage.getItem(LANG_KEY); } catch (err) { /* sin almacenamiento */ }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[data-lang]');
+    if (link) guardarIdioma(link.dataset.lang);
+  });
+
+  var alterna = document.querySelector('link[rel="alternate"][hreflang="' + otroIdioma + '"]');
+  var primero = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+  if (alterna && elegido !== idioma && (elegido === otroIdioma || primero.indexOf(otroIdioma) === 0)) {
+    var aviso = EN
+      ? { texto: 'Esta página también está en español.', link: 'Ver en español', cerrar: 'Cerrar' }
+      : { texto: 'This page is also available in English.', link: 'Read in English', cerrar: 'Close' };
+    // Solo la ruta (sin bweb.uy), para que también funcione en las vistas previas
+    var destino = new URL(alterna.href).pathname + location.hash;
+    var bar = document.createElement('div');
+    bar.className = 'lang-bar';
+    bar.lang = otroIdioma;
+    bar.innerHTML = '<div class="container lang-bar-inner">' +
+      '<p><i class="bi bi-translate" aria-hidden="true"></i> ' + aviso.texto + '</p>' +
+      '<a href="' + destino + '" hreflang="' + otroIdioma + '" data-lang="' + otroIdioma + '">' + aviso.link + ' <i class="bi bi-arrow-right"></i></a>' +
+      '<button class="lang-bar-close" type="button" aria-label="' + aviso.cerrar + '"><i class="bi bi-x-lg"></i></button>' +
+      '</div>';
+    bar.querySelector('button').addEventListener('click', function () {
+      guardarIdioma(idioma);
+      bar.remove();
+    });
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
 
   /* ── Header: fondo al hacer scroll ── */
   var header = document.getElementById('site-header');
@@ -67,7 +113,7 @@
     isOpen = open;
     hamburger.classList.toggle('open', open);
     hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    hamburger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    hamburger.setAttribute('aria-label', EN ? (open ? 'Close menu' : 'Open menu') : (open ? 'Cerrar menú' : 'Abrir menú'));
     mobileNav.classList.toggle('open', open);
     mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
     if (header) header.classList.toggle('menu-open', open);
@@ -144,7 +190,9 @@
     var minus = document.querySelector('[data-qty-step="-1"]');
     var buyLinks = document.querySelectorAll('[data-buy-link]');
     var opciones = document.querySelectorAll('input[name="pack"]');
-    var formato = function (n) { return '$' + n.toLocaleString('es-UY'); };
+    var formato = function (n) { return '$' + n.toLocaleString(EN ? 'en-US' : 'es-UY'); };
+    // En inglés el total aclara la moneda: «$1,200» solo se confundiría con dólares
+    var moneda = EN ? ' UYU' : '';
     track('ViewContent', conCartel({ value: PRECIO }));
 
     var update = function () {
@@ -160,7 +208,17 @@
       var carteles = n * porPack;
       var total = n * precio;
       var resumen, texto;
-      if (porPack === 1) {
+      if (EN && porPack === 1) {
+        resumen = n === 1 ? '1 stand' : n + ' stands';
+        texto = n === 1
+          ? 'Hi Bweb! I want to buy 1 NFC review stand (' + formato(precio) + ' UYU) set up with my business\'s review link. My business is: '
+          : 'Hi Bweb! I want to buy ' + n + ' NFC review stands (' + n + ' x ' + formato(precio) + ' = ' + formato(total) + ' UYU) set up with my business\'s review link. My business is: ';
+      } else if (EN) {
+        resumen = n === 1 ? '1 pack of ' + porPack + ' stands' : n + ' packs of ' + porPack + ' · ' + carteles + ' stands';
+        texto = 'Hi Bweb! I want to buy ' + (n === 1 ? '1 pack' : n + ' packs') + ' of ' + porPack + ' NFC review stands (' +
+          (n === 1 ? formato(total) : carteles + ' stands, ' + n + ' x ' + formato(precio) + ' = ' + formato(total)) +
+          ' UYU) set up with my business\'s review link. My business is: ';
+      } else if (porPack === 1) {
         resumen = n === 1 ? '1 cartel' : n + ' carteles';
         texto = n === 1
           ? 'Hola Bweb! Quiero comprar 1 cartel NFC de reseñas de Google (' + formato(precio) + ') programado con el link de mi negocio. Mi negocio es: '
@@ -172,11 +230,11 @@
           ') programados con el link de mi negocio. Mi negocio es: ';
       }
 
-      if (qtyLabel) qtyLabel.textContent = porPack === 1 ? 'Cantidad' : 'Cantidad de packs';
-      totalEl.textContent = formato(total);
+      if (qtyLabel) qtyLabel.textContent = EN ? (porPack === 1 ? 'Quantity' : 'Number of packs') : (porPack === 1 ? 'Cantidad' : 'Cantidad de packs');
+      totalEl.textContent = formato(total) + moneda;
       if (detalleEl) detalleEl.textContent = resumen;
       if (barDetalle) barDetalle.textContent = resumen;
-      if (barTotal) barTotal.textContent = formato(total);
+      if (barTotal) barTotal.textContent = formato(total) + moneda;
       var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(texto);
       buyLinks.forEach(function (a) {
         a.href = url;
@@ -219,10 +277,11 @@
       e.preventDefault();
       var datos = new FormData(leadForm);
       var necesita = datos.get('Necesita');
-      // El asunto del email dice qué necesita y de qué negocio es, para ordenar los presupuestos
-      datos.set('subject', 'Consulta web: ' + necesita + ' · ' + datos.get('Negocio'));
+      // El asunto del email dice qué necesita y de qué negocio es, para ordenar los presupuestos.
+      // Las opciones del formulario en inglés mandan el mismo texto en español; el asunto avisa que hay que responder en inglés.
+      datos.set('subject', (EN ? 'Consulta web (en inglés): ' : 'Consulta web: ') + necesita + ' · ' + datos.get('Negocio'));
       leadBtn.disabled = true;
-      leadBtn.textContent = 'Enviando…';
+      leadBtn.textContent = EN ? 'Sending…' : 'Enviando…';
       setStatus('', '');
 
       fetch(leadForm.action, { method: 'POST', body: datos, headers: { Accept: 'application/json' } })
@@ -231,10 +290,14 @@
           if (!res.success) throw new Error(res.message);
           track('Lead', { content_category: 'Diseño web', content_name: necesita });
           leadForm.reset();
-          setStatus('ok', '¡Listo! Recibimos tu consulta. Te escribimos por WhatsApp en menos de 24 horas.');
+          setStatus('ok', EN
+            ? 'Done! We got your message and will get back to you within 24 hours.'
+            : '¡Listo! Recibimos tu consulta. Te escribimos por WhatsApp en menos de 24 horas.');
         })
         .catch(function () {
-          setStatus('error', 'No se pudo enviar. Probá de nuevo o escribinos por WhatsApp.');
+          setStatus('error', EN
+            ? 'We couldn’t send it. Please try again or message us on WhatsApp.'
+            : 'No se pudo enviar. Probá de nuevo o escribinos por WhatsApp.');
         })
         .then(function () {
           leadBtn.disabled = false;
