@@ -6,7 +6,7 @@ Los números de costos son estimaciones: la prueba de 3 semanas te da los tuyos.
 
 ## Antes de gastar
 
-1. **Píxel activo:** pegá el ID en `js/main.js` (pasos en el README). Sin el píxel no hay audiencias para el retargeting.
+1. **Píxel activo:** ya está en el sitio (ID `1099627716298995`). Cuando se publique, confirmá en el Administrador de eventos → Probar eventos que llega `PageView`. Sin el píxel no hay audiencias para el retargeting.
 2. **WhatsApp Business conectado** a la página de Facebook de Bweb (Configuración de la página → WhatsApp), con el número 099 788 934.
 3. **Planilla de ventas** (abajo). Las ventas se cierran en WhatsApp, así que Meta no las ve: las anotás vos.
 4. **Tu número de corte.** Con el cartel a $1.200 (≈ USD 30), si te cuesta unos USD 8 y en promedio venden 1,3 por pedido, cada pedido te deja ≈ USD 28. **Si cada venta te cuesta más de USD 25 en anuncios, casi no te deja ganancia.** Cambiá el costo por el real.

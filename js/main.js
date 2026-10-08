@@ -8,7 +8,7 @@
   /* ── Píxel de Meta ──
      Pegá acá el ID del píxel (Administrador de eventos de Meta → tu píxel → Configuración).
      Mientras esté vacío, el píxel no se carga y no se mide nada. */
-  var META_PIXEL_ID = '';
+  var META_PIXEL_ID = '1099627716298995';
 
   if (META_PIXEL_ID) {
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?

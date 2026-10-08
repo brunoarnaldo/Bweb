@@ -68,12 +68,10 @@ Para probar cómo se ve el link al compartirlo: pegá la URL en WhatsApp o en el
 
 ## Píxel de Meta
 
-El píxel está listo pero apagado: se activa cuando pegás el ID.
+El píxel «Bweb» (ID `1099627716298995`) está en `js/main.js`, en `META_PIXEL_ID`. Se carga desde ahí en todas las páginas que usan `js/main.js`: no hace falta pegar el código de Meta en el HTML. Si lo dejás vacío (`''`), el píxel se apaga.
 
-1. En [Meta Business](https://business.facebook.com) entrá a **Administrador de eventos → Conectar orígenes de datos → Web → Píxel de Meta** y creá el píxel «Bweb».
-2. Copiá el ID (un número de 15 o 16 dígitos) y pegalo en `js/main.js`: `var META_PIXEL_ID = '123456789012345';`.
-3. Mergeá a `main` y, cuando Cloudflare publique, abrí **Administrador de eventos → Probar eventos** con `bweb.uy`: tiene que aparecer `PageView`.
-4. Verificá el dominio en **Configuración del negocio → Seguridad de la marca → Dominios** con el registro **TXT** en el DNS de Cloudflare.
+1. Cuando Cloudflare publique, abrí el [Administrador de eventos](https://business.facebook.com/events_manager2) → **Probar eventos** con `bweb.uy`: tiene que aparecer `PageView`.
+2. Verificá el dominio en **Configuración del negocio → Seguridad de la marca → Dominios** con el registro **TXT** en el DNS de Cloudflare.
 
 Eventos que manda el sitio:
 
