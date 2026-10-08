@@ -10,6 +10,7 @@ Los números de costos son estimaciones: la prueba de 3 semanas te da los tuyos.
 2. **WhatsApp Business conectado** a la página de Facebook de Bweb (Configuración de la página → WhatsApp), con el número 099 788 934.
 3. **Planilla de ventas** (abajo). Las ventas se cierran en WhatsApp, así que Meta no las ve: las anotás vos.
 4. **Tu número de corte.** Con el cartel a $1.200 (≈ USD 30), si te cuesta unos USD 8 y en promedio venden 1,3 por pedido, cada pedido te deja ≈ USD 28. **Si cada venta te cuesta más de USD 25 en anuncios, casi no te deja ganancia.** Cambiá el costo por el real.
+5. **El pack de 3 cambia la cuenta.** A $3.000 (≈ USD 75) y unos USD 24 de costo, un pack te deja ≈ USD 50. Cuantos más pedidos sean packs, más podés pagar por cada venta. Anotá en la planilla cuántos pedidos son packs.
 
 ## Campaña 1 · Cartel (prueba de 3 semanas)
 
@@ -34,10 +35,10 @@ Los números de costos son estimaciones: la prueba de 3 semanas te da los tuyos.
 
 **Textos:**
 
-- Principal 1: «¿Tus clientes se van contentos pero no te dejan reseña? Con el cartel NFC acercan el celular y se abre tu página de reseñas de Google. Sin app ni pilas. $1.200, programado con tu link y con envío a todo Uruguay.»
-- Principal 2: «Cada cliente contento que se va sin dejarte reseña es una venta que perdés en Google. Ponelo en el mostrador y que te la dejen en 5 segundos. $1.200 · Envíos a todo Uruguay.»
+- Principal 1: «¿Tus clientes se van contentos pero no te dejan reseña? Con el cartel NFC acercan el celular y se abre tu página de reseñas de Google. Sin app ni pilas. $1.200, o pack de 3 a $3.000 para la caja y las mesas. Programado con tu link y con envío a todo Uruguay.»
+- Principal 2: «Cada cliente contento que se va sin dejarte reseña es una venta que perdés en Google. Ponelo en el mostrador y que te la dejen en 5 segundos. $1.200 · Pack de 3 a $3.000 · Envíos a todo Uruguay.»
 - Título: «Más reseñas en Google, con un toque»
-- Descripción: «$1.200 · Programado con tu link»
+- Descripción: «$1.200 · Pack de 3 a $3.000»
 
 **Qué revisar cada 3 o 4 días:**
 
@@ -70,7 +71,7 @@ Textos para poner encima en CapCut o Canva:
 
 - 0 a 2 s: «¿Te faltan reseñas en Google?»
 - 2 a 6 s: «Tus clientes acercan el celular… y listo»
-- 6 a 8 s: «Cartel NFC · $1.200 · Envíos a todo Uruguay»
+- 6 a 8 s: «Cartel NFC · $1.200 · Pack de 3 a $3.000»
 
 ## Audiencias (retargeting)
 
@@ -105,7 +106,7 @@ Cuando «Compradores del cartel» y «Vieron proyectos» sumen más de 100 perso
 
 ## Oferta a compradores del cartel (por WhatsApp)
 
-Mandala de 7 a 10 días después de la entrega, cuando el cartel ya trajo reseñas:
+La oferta también está publicada en la tienda («Por qué comprarlo en Bweb») y en las preguntas frecuentes. Igual mandala por WhatsApp de 7 a 10 días después de la entrega, cuando el cartel ya trajo reseñas:
 
 > Hola {nombre}! ¿Cómo viene el cartel? ¿Ya te entraron reseñas nuevas? 🙌
 >
@@ -115,12 +116,24 @@ Los $1.200 (≈ USD 30) son entre el 6 % y el 15 % de una web de USD 200 a 500: 
 
 La oferta es por la web, no por la reseña: nunca ofrezcas descuentos a cambio de reseñas, Google lo prohíbe.
 
+## Venta en persona
+
+Llevá un cartel de muestra programado con el link de un negocio real (el tuyo o el de un cliente) y dejá que lo prueben con su propio celular: el producto se vende solo cuando lo ven funcionar.
+
+1. **Entrada:** «Hola, ¿cuántas reseñas tienen en Google? Te muestro algo en 10 segundos.»
+2. **Demo:** que acerquen su celular al cartel y vean cómo se abre la reseña.
+3. **Por qué:** «Los clientes contentos se van sin dejar reseña porque les da pereza buscarte. Con esto lo hacen en 5 segundos, ahí en la caja.»
+4. **Oferta:** «Sale $1.200, o $3.000 el pack de 3 para la caja y las mesas. Te lo dejo programado con el link de tu negocio.»
+5. **Cierre:** anotá el nombre del negocio y el WhatsApp, y coordinás el pago y la entrega por ahí.
+
+Rubros para empezar: cafés, restaurantes, peluquerías, barberías, gimnasios, talleres, consultorios y comercios con mostrador.
+
 ## Planilla semanal
 
-| Semana | Gasto USD | Chats | USD por chat | Pedidos | Carteles | USD por venta | Consultas web | Webs vendidas | Ingresos USD |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | | | | | | | | | |
-| 2 | | | | | | | | | |
-| 3 | | | | | | | | | |
+| Semana | Gasto USD | Chats | USD por chat | Pedidos | De esos, packs | Carteles | USD por venta | Consultas web | Webs vendidas | Ingresos USD |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | | | | | | | | | | |
+| 2 | | | | | | | | | | |
+| 3 | | | | | | | | | | |
 
 **USD por venta** = gasto ÷ pedidos. Compará con tu número de corte (≈ USD 25). Las webs vendidas a compradores del cartel van en la misma fila: son las que hacen rentable la campaña aunque el cartel solo empate.
