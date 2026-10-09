@@ -27,6 +27,7 @@ Se publica en **Cloudflare** (Worker `bweb` con archivos estáticos). No necesit
 | `.assetsignore` | | Archivos del repositorio que no se publican (`.git`, este README, configuración) |
 | `vercel.json` | | URLs sin `.html` en las vistas previas de Vercel |
 | `MARKETING.md` | | Guía de Meta Ads: eventos del píxel, campaña del cartel, video, audiencias y oferta a compradores (no se publica) |
+| `marketing/` | | Piezas para redes: el carrusel «Cómo hacemos una web» en PNG, PDF y su HTML (no se publica) |
 
 El header, el menú y el footer se repiten en las seis páginas en español y en las seis en inglés (todas menos las 404): si cambiás un link ahí, cambialo en todas.
 
