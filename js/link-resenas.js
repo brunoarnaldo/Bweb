@@ -1,4 +1,4 @@
-/* Generador de link de reseñas de Google (página /link-resenas-google) */
+/* Generador de link de reseñas de Google (páginas /link-resenas-google y /en/google-review-link) */
 (function () {
   'use strict';
 
@@ -7,6 +7,44 @@
      Cómo sacarla y restringirla a bweb.uy: ver el README. */
   var GOOGLE_MAPS_KEY = '';
   var WHATSAPP = '59899788934';
+
+  /* Textos que arma este archivo: la página en inglés (/en/google-review-link) usa los de EN */
+  var EN = /^en/i.test(document.documentElement.lang);
+  var T = EN ? {
+    vacio: 'Paste your “Ask for reviews” link or your business’s Place ID.',
+    invalido: 'We didn’t recognize that link. It has to be the “Ask for reviews” link (it starts with g.page/r/) or a Place ID (it starts with ChIJ).',
+    mapa: function (busqueda) {
+      return 'That’s your business’s Google Maps link: it helps people find you, but it doesn’t open the review window. ' +
+        (busqueda ? 'Search for your business by name above, ' : 'Follow the 3 steps below, ') + 'or ';
+    },
+    mapaWa: 'Hi Bweb, can you help me get my business’s review link? This is my Google Maps link: ',
+    mapaLink: 'send us the link on WhatsApp',
+    mapaFin: ' and we’ll get it for you.',
+    listo: 'Ready to share',
+    compartir: 'Thanks for choosing us! Would you leave us a Google review? It only takes a minute: ',
+    cartel: function (link, nombre) { return 'Hi Bweb! I want to buy 1 NFC review stand ($1,200 UYU) set up with this link: ' + link + ' . My business is: ' + nombre; },
+    copiado: 'Copied',
+    sinResultados: 'We couldn’t find that business. Try adding the city.',
+    archivoQR: 'google-review-qr.png',
+    idiomaMapa: 'en'
+  } : {
+    vacio: 'Pegá el link de «Pedir reseñas» o el Place ID de tu negocio.',
+    invalido: 'No reconocimos ese link. Tiene que ser el de «Pedir reseñas» (empieza con g.page/r/) o un Place ID (empieza con ChIJ).',
+    mapa: function (busqueda) {
+      return 'Ese es el link de tu negocio en Google Maps: sirve para encontrarte, pero no abre la ventana de reseña. ' +
+        (busqueda ? 'Buscá tu negocio por nombre arriba, ' : 'Seguí los 3 pasos de abajo, ') + 'o ';
+    },
+    mapaWa: 'Hola Bweb, ¿me ayudan a sacar el link de reseñas de mi negocio? Este es mi link de Google Maps: ',
+    mapaLink: 'mandanos el link por WhatsApp',
+    mapaFin: ' y te lo armamos.',
+    listo: 'Listo para compartir',
+    compartir: '¡Gracias por elegirnos! ¿Nos dejás una reseña en Google? Te lleva un minuto: ',
+    cartel: function (link, nombre) { return 'Hola Bweb! Quiero comprar 1 cartel NFC de reseñas de Google ($1.200) programado con este link: ' + link + ' . Mi negocio es: ' + nombre; },
+    copiado: 'Copiado',
+    sinResultados: 'No encontramos ese negocio. Probá agregando la ciudad.',
+    archivoQR: 'qr-resenas-google.png',
+    idiomaMapa: 'es'
+  };
 
   var $ = function (id) { return document.getElementById(id); };
   var pasteForm = $('tool-paste');
@@ -62,21 +100,15 @@
     msg.textContent = '';
     msg.hidden = !tipo;
     if (!tipo) return;
-    var textos = {
-      vacio: 'Pegá el link de «Pedir reseñas» o el Place ID de tu negocio.',
-      invalido: 'No reconocimos ese link. Tiene que ser el de «Pedir reseñas» (empieza con g.page/r/) o un Place ID (empieza con ChIJ).',
-      mapa: 'Ese es el link de tu negocio en Google Maps: sirve para encontrarte, pero no abre la ventana de reseña. ' +
-        (busquedaActiva ? 'Buscá tu negocio por nombre arriba, ' : 'Seguí los 3 pasos de abajo, ') + 'o '
-    };
-    msg.appendChild(document.createTextNode(textos[tipo]));
+    msg.appendChild(document.createTextNode(tipo === 'mapa' ? T.mapa(busquedaActiva) : T[tipo]));
     if (tipo === 'mapa') {
       var a = document.createElement('a');
-      a.href = waBweb('Hola Bweb, ¿me ayudan a sacar el link de reseñas de mi negocio? Este es mi link de Google Maps: ' + entrada.value.trim());
+      a.href = waBweb(T.mapaWa + entrada.value.trim());
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.textContent = 'mandanos el link por WhatsApp';
+      a.textContent = T.mapaLink;
       msg.appendChild(a);
-      msg.appendChild(document.createTextNode(' y te lo armamos.'));
+      msg.appendChild(document.createTextNode(T.mapaFin));
     }
   }
 
@@ -107,11 +139,11 @@
   /* ── Mostrar el resultado ── */
   function mostrar(link, nombre, metodo) {
     linkOut.value = link;
-    nombreOut.textContent = nombre || 'Listo para compartir';
+    nombreOut.textContent = nombre || T.listo;
     copiar.innerHTML = copiarHtml;
     $('tool-probar').href = link;
-    $('tool-compartir').href = 'https://wa.me/?text=' + encodeURIComponent('¡Gracias por elegirnos! ¿Nos dejás una reseña en Google? Te lleva un minuto: ' + link);
-    $('tool-cartel').href = waBweb('Hola Bweb! Quiero comprar 1 cartel NFC de reseñas de Google ($1.200) programado con este link: ' + link + ' . Mi negocio es: ' + (nombre || ''));
+    $('tool-compartir').href = 'https://wa.me/?text=' + encodeURIComponent(T.compartir + link);
+    $('tool-cartel').href = waBweb(T.cartel(link, nombre || ''));
     dibujarQR(link);
     result.hidden = false;
     result.focus({ preventScroll: true });
@@ -129,7 +161,7 @@
   /* ── Copiar y descargar ── */
   copiar.addEventListener('click', function () {
     var listo = function () {
-      copiar.innerHTML = '<i class="bi bi-check-lg"></i> Copiado';
+      copiar.innerHTML = '<i class="bi bi-check-lg"></i> ' + T.copiado;
       setTimeout(function () { copiar.innerHTML = copiarHtml; }, 2000);
     };
     var aMano = function () {
@@ -144,7 +176,7 @@
     qrCanvas.toBlob(function (blob) {
       var a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'qr-resenas-google.png';
+      a.download = T.archivoQR;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -183,7 +215,7 @@
       cargando = new Promise(function (resolve, reject) {
         window.bwebMapsListo = resolve;
         var s = document.createElement('script');
-        s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(GOOGLE_MAPS_KEY) + '&loading=async&language=es&callback=bwebMapsListo';
+        s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(GOOGLE_MAPS_KEY) + '&loading=async&language=' + T.idiomaMapa + '&callback=bwebMapsListo';
         s.async = true;
         s.onerror = reject;
         document.head.appendChild(s);
@@ -229,7 +261,7 @@
     if (!items.length) {
       var vacio = document.createElement('li');
       vacio.className = 'is-empty';
-      vacio.textContent = 'No encontramos ese negocio. Probá agregando la ciudad.';
+      vacio.textContent = T.sinResultados;
       lista.appendChild(vacio);
     }
     items.forEach(function (it, i) {
