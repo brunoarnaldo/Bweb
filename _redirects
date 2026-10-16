@@ -1,0 +1,9 @@
+# Cloudflare: páginas que ya no existen (el sitio dejó de vender el cartel NFC). Llevan a la home para no perder visitas ni links compartidos.
+/cartel-nfc-resenas-google        /     301
+/cartel-nfc-resenas-google.html   /     301
+/link-resenas-google              /     301
+/link-resenas-google.html         /     301
+/en/nfc-review-stand              /en/  301
+/en/nfc-review-stand.html         /en/  301
+/en/google-review-link            /en/  301
+/en/google-review-link.html       /en/  301
