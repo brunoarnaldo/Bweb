@@ -3,31 +3,14 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://bweb.uy/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-resenas-google.jpg</image:loc>
+      <image:loc>https://bweb.uy/img/proyectos/la-barraquita.webp</image:loc>
     </image:image>
-  </url>
-  <url>
-    <loc>https://bweb.uy/cartel-nfc-resenas-google</loc>
-    <lastmod>2026-10-08</lastmod>
-    <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-resenas-google.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-detalle-toque.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-detalle-estrellas.jpg</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://bweb.uy/link-resenas-google</loc>
-    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://bweb.uy/proyectos</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/proyectos/acacripto.webp</image:loc>
     </image:image>
@@ -40,18 +23,18 @@
   </url>
   <url>
     <loc>https://bweb.uy/preguntas-frecuentes</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-16</lastmod>
   </url>
   <url>
     <loc>https://bweb.uy/en/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/proyectos/la-barraquita.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://bweb.uy/en/projects</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <image:image>
       <image:loc>https://bweb.uy/img/proyectos/acacripto.webp</image:loc>
     </image:image>
@@ -64,23 +47,6 @@
   </url>
   <url>
     <loc>https://bweb.uy/en/faq</loc>
-    <lastmod>2026-10-08</lastmod>
-  </url>
-  <url>
-    <loc>https://bweb.uy/en/google-review-link</loc>
-    <lastmod>2026-10-08</lastmod>
-  </url>
-  <url>
-    <loc>https://bweb.uy/en/nfc-review-stand</loc>
-    <lastmod>2026-10-08</lastmod>
-    <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-resenas-google.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-detalle-toque.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://bweb.uy/img/cartel-nfc-detalle-estrellas.jpg</image:loc>
-    </image:image>
+    <lastmod>2026-10-16</lastmod>
   </url>
 </urlset>

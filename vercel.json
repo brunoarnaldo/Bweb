@@ -1,4 +1,10 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/cartel-nfc-resenas-google", "destination": "/", "permanent": true },
+    { "source": "/link-resenas-google", "destination": "/", "permanent": true },
+    { "source": "/en/nfc-review-stand", "destination": "/en/", "permanent": true },
+    { "source": "/en/google-review-link", "destination": "/en/", "permanent": true }
+  ]
 }
