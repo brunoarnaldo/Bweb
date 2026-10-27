@@ -21,9 +21,13 @@
     window.fbq('track', 'PageView');
   }
 
-  // Manda un evento al píxel si está cargado
+  // Nombre de cada evento del píxel en Google Analytics (generate_lead es el evento estándar de Google para consultas)
+  var GA_EVENTOS = { Contact: 'whatsapp_click', Lead: 'generate_lead' };
+
+  // Manda un evento al píxel y a Google Analytics (la etiqueta está en el <head> de cada página), si están cargados
   var track = function (evento, datos) {
     if (window.fbq) window.fbq('track', evento, datos || {});
+    if (window.gtag && GA_EVENTOS[evento]) window.gtag('event', GA_EVENTOS[evento], datos || {});
   };
 
   /* ── Medición de los botones de WhatsApp ──
