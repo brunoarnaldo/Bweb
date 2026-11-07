@@ -93,6 +93,31 @@ Los clientes del cartel y de webs anteriores ya confían en vos: son los más f�
 - Público: «Clientes».
 - Texto: «Ya trabajamos juntos. Si tu negocio todavía no tiene web, o la que tiene no te trae consultas, te armamos una propuesta en 24 horas.»
 
+## Armar y leer las campañas con Claude
+
+Meta lanzó un conector oficial de Meta Ads para Claude: lee la biblioteca pública de anuncios y arma campañas en tu cuenta. Sirve para preparar las campañas de arriba más rápido, no para reemplazar tu criterio.
+
+**Dos cuidados antes de conectar nada:**
+
+1. **Cuenta publicitaria de respaldo.** Conectar herramientas externas mal a una cuenta de Meta puede terminar en un baneo. Creá una segunda cuenta publicitaria en el Business de Bweb, probá ahí y recién cuando todo funcione apuntalo a la principal.
+2. **El botón de lanzar lo apretás vos.** Claude prepara creativos, textos y campaña; vos revisás y publicás. Siempre pedile «NO la publiques todavía».
+
+**Setup (una vez):**
+
+1. En Claude → Personalizar → Conectores, agregá **Meta Ads** y autorizá con la cuenta de respaldo.
+2. Para los creativos en video: **HyperFrames** (gratis, corre en tu compu: `npx hyperframes skills`). Higgsfield (`mcp.higgsfield.ai/mcp`) solo si querés video realista desde una foto: es pago.
+3. Skills de marketing (gratis, MIT) en Claude Code: `npx skills add coreyhaines31/marketingskills`.
+4. Preguntale a Claude qué conectores tiene activos: tienen que aparecer Meta Ads y el de video.
+
+**Pedidos, en orden:**
+
+1. *Competencia:* «Soy Bweb, hago webs a medida para negocios de Uruguay (USD 200 a 500). Buscá en la biblioteca de anuncios de Meta qué anuncios de diseño web y agencias están corriendo en Uruguay y Argentina hace más de 30 días, y decime qué ángulos y formatos se repiten.»
+2. *Creativos:* «Con las capturas de `img/proyectos/` armá 6 variantes para la Campaña 1: 2 carruseles, 2 videos verticales de 10 a 15 s con HyperFrames y 2 antes y después. Textos con voseo, sin prometer resultados que no podamos sostener.»
+3. *Campaña:* «Armá la Campaña 1 tal como está en MARKETING.md (Interacción → WhatsApp, USD 5 por día, Uruguay 25 a 65, el mensaje de bienvenida), con los creativos agrupados por ángulo. NO la publiques todavía.»
+4. *Lectura:* cada 3 o 4 días, «Traé gasto, chats y USD por chat de cada anuncio de la Campaña 1 y decime qué hacer según la tabla de MARKETING.md». Los chats que terminan en venta los anotás vos en la planilla: Meta no los ve.
+
+Ojo: los anuncios que genera se parecen a lo que le funciona a la competencia, no necesariamente a Bweb. Revisá que se vean como los proyectos reales.
+
 ## Venta en persona
 
 Llevá el celular con los proyectos abiertos y mostrá uno del mismo rubro o de la misma ciudad.
