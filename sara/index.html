@@ -1,0 +1,1540 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F7DAD8">
+<meta name="robots" content="noindex, nofollow">
+<title>Los 15 de Sara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap">
+<style>
+  :root {
+    --amarillo-crema: #FBE9A9;
+    --borde-crema: #D9BD6A;
+    --amarillo-suave: #F7DF8E;
+    --hoja: #9DB08A;
+    --crema: #FFF9EF;
+    --papel: #FFFDF8;
+    --arena: #F9E6E3;
+    --rubor: #F7DAD8;
+    --amarillo: #FBEFC0;
+    --miel: #7A5F1E;
+    --tinta: #3B302E;
+    --texto: #5F5450;
+    --titulo: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: clip;
+    background: var(--crema);
+    color: var(--tinta);
+    font-family: 'Jost', Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  body.cerrado {
+    overflow: hidden;
+  }
+
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-family: var(--titulo);
+    font-size: 44px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .seccion {
+    position: relative;
+    padding: 72px 20px;
+    overflow: hidden;
+  }
+
+  .seccion > * {
+    max-width: 460px;
+    margin-inline: auto;
+  }
+
+  .seccion--oscura {
+    background: var(--amarillo);
+    color: var(--tinta);
+  }
+
+  .volanta {
+    margin-bottom: 8px;
+    color: var(--miel);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .seccion--oscura .volanta {
+    color: var(--miel);
+  }
+
+  .bajada {
+    margin-top: 12px;
+    color: var(--texto);
+  }
+
+  /* Revelado al hacer scroll */
+  .js .aparecer {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .js .aparecer.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Sobre de entrada */
+  .entrada {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 20px;
+    background: var(--rubor);
+    color: var(--tinta);
+    text-align: center;
+    transition: opacity 0.7s ease, visibility 0.7s;
+  }
+
+  .entrada.fuera {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .entrada-para {
+    font-family: var(--titulo);
+    font-size: 30px;
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .sobre {
+    position: relative;
+    width: min(320px, 100%);
+    aspect-ratio: 3 / 2;
+    border-radius: 6px;
+    background: #F3C9C4;
+    box-shadow: 0 24px 50px rgba(122, 95, 30, 0.22);
+  }
+
+  .carta {
+    position: absolute;
+    inset: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: var(--titulo);
+    font-size: 40px;
+    font-style: italic;
+    transition: transform 0.8s ease 0.35s;
+  }
+
+  .bolsillo {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    background: var(--arena);
+    clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .solapa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 58%;
+    background: #FFFDF8;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 0.6s ease;
+  }
+
+  .sello {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    width: 76px;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--papel);
+    box-shadow: 0 6px 14px rgba(122, 95, 30, 0.3);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    animation: latido 2.2s ease-in-out infinite;
+  }
+
+  .sello svg {
+    width: 68px;
+    height: 68px;
+  }
+
+  .entrada.abierto .sello {
+    opacity: 0;
+    animation: none;
+  }
+
+  .entrada.abierto .solapa {
+    transform: rotateX(180deg);
+  }
+
+  .entrada.abierto .carta {
+    z-index: 1;
+    transform: translateY(-46%);
+  }
+
+  .entrada-sin-musica {
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 0;
+    background: none;
+    color: var(--tinta);
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  /* Portada */
+  .portada {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px 20px 56px;
+    background: var(--rubor);
+    color: var(--tinta);
+    text-align: center;
+  }
+
+  .arco {
+    position: relative;
+    width: min(340px, 82vw);
+    aspect-ratio: 3 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--hoja);
+    border-radius: 8px;
+    background: var(--papel);
+    color: var(--texto);
+    font: inherit;
+    font-size: 15px;
+    overflow: hidden;
+  }
+
+  .arco img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .portada-chico {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .portada h1 {
+    margin: -8px 0 0;
+    font-family: var(--titulo);
+    font-size: clamp(104px, 32vw, 150px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 0.95;
+  }
+
+  .bajar {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tinta);
+    animation: asomar 2s ease-in-out infinite;
+  }
+
+  .bajar svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Mensaje */
+  .mensaje {
+    text-align: center;
+  }
+
+  .mensaje p {
+    font-family: var(--titulo);
+    font-size: 29px;
+    line-height: 1.3;
+  }
+
+  .mensaje em {
+    color: var(--miel);
+  }
+
+  /* Canción de la noche */
+  .cancion-noche {
+    margin-top: 28px;
+  }
+
+  .mensaje .cancion-noche .volanta {
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .cancion-noche iframe {
+    display: block;
+    border: 0;
+    border-radius: 12px;
+  }
+
+  /* Cuenta regresiva */
+  .cuenta {
+    text-align: center;
+  }
+
+  .reloj {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 28px;
+  }
+
+  .reloj div + div {
+    border-left: 1px solid rgba(59, 48, 46, 0.2);
+  }
+
+  .reloj strong {
+    display: block;
+    font-family: var(--titulo);
+    font-size: clamp(44px, 13vw, 60px);
+    font-weight: 400;
+    line-height: 1;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .reloj span {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .reloj-fin {
+    margin-top: 24px;
+    font-family: var(--titulo);
+    font-size: 30px;
+    font-style: italic;
+  }
+
+  /* Entrada de la fiesta */
+  .boleto {
+    position: relative;
+    margin-top: 28px;
+    border-radius: 18px;
+    background: var(--papel);
+    box-shadow: 0 14px 34px rgba(47, 59, 47, 0.12);
+  }
+
+  .boleto-parte {
+    padding: 24px;
+  }
+
+  .boleto-parte + .boleto-parte {
+    border-top: 2px dashed var(--arena);
+  }
+
+  .boleto::before,
+  .boleto::after {
+    content: "";
+    position: absolute;
+    top: var(--corte, 62%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--crema);
+  }
+
+  .boleto::before {
+    left: -12px;
+  }
+
+  .boleto::after {
+    right: -12px;
+  }
+
+  .boleto dl {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+  }
+
+  .boleto dt {
+    color: var(--miel);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .boleto dd {
+    margin: 0;
+    font-family: var(--titulo);
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .boleto dd small {
+    display: block;
+    margin-top: 4px;
+    color: var(--texto);
+    font-family: 'Jost', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .acciones {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .boton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 16px;
+    border: 1px solid var(--borde-crema);
+    border-radius: 10px;
+    background: var(--amarillo-crema);
+    color: var(--tinta);
+    font: inherit;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.15s;
+  }
+
+  .boton:hover {
+    background: var(--amarillo-suave);
+  }
+
+  .boton:active {
+    transform: scale(0.98);
+  }
+
+  .boton--linea {
+    background: transparent;
+    color: var(--tinta);
+  }
+
+  .boton--linea:hover {
+    background: var(--arena);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  summary:focus-visible {
+    outline: 3px solid var(--miel);
+    outline-offset: 2px;
+  }
+
+  .agenda {
+    margin-top: 10px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .nota {
+    margin-top: 12px;
+    color: var(--texto);
+    font-size: 15px;
+    text-align: center;
+  }
+
+  /* Galería */
+  .galeria {
+    max-width: 460px;
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .galeria .arco {
+    width: 100%;
+    background: var(--arena);
+    color: var(--texto);
+    border-color: var(--hoja);
+    font-size: 14px;
+  }
+
+  /* La primera foto (horizontal) ocupa todo el ancho */
+  .galeria .arco:first-child {
+    grid-column: 1 / -1;
+    aspect-ratio: 4 / 3;
+  }
+
+  .galeria .arco.con-foto {
+    cursor: zoom-in;
+  }
+
+  .visor {
+    width: min(92vw, 520px);
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--papel);
+  }
+
+  .visor::backdrop {
+    background: rgba(20, 26, 20, 0.85);
+  }
+
+  .visor img {
+    display: block;
+    width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+  }
+
+  .visor button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--crema);
+    color: var(--tinta);
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  /* Vestimenta */
+  .vestimenta {
+    text-align: center;
+  }
+
+  .vestimenta strong {
+    display: block;
+    margin-top: 12px;
+    font-family: var(--titulo);
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  /* Formularios */
+  .formulario {
+    margin-top: 24px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .formulario label,
+  .formulario legend {
+    display: block;
+    margin-bottom: 6px;
+    padding: 0;
+    font-weight: 500;
+  }
+
+  .campo {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 14px;
+    border: 1px solid var(--borde-crema);
+    border-radius: 10px;
+    background: var(--papel);
+    color: var(--tinta);
+    font: inherit;
+    font-size: 16px;
+  }
+
+  .opciones {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .opciones-fila {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .opcion {
+    position: relative;
+    margin: 0 !important;
+  }
+
+  .opcion input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .opcion span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    border: 1px solid var(--borde-crema);
+    border-radius: 10px;
+    background: var(--papel);
+    cursor: pointer;
+  }
+
+  .opcion input:checked + span {
+    background: var(--amarillo-crema);
+    color: var(--tinta);
+  }
+
+  .opcion input:focus-visible + span {
+    outline: 3px solid var(--miel);
+    outline-offset: 2px;
+  }
+
+  .marca {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    margin: 0 !important;
+    padding: 12px 14px !important;
+    border: 1px solid var(--borde-crema);
+    border-radius: 10px;
+    background: var(--papel);
+    font-weight: 400 !important;
+    cursor: pointer;
+  }
+
+  .marca[hidden] {
+    display: none !important;
+  }
+
+  .marca input {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: var(--miel);
+  }
+
+  .gracias,
+  .error-envio {
+    color: var(--miel);
+    font-weight: 500;
+  }
+
+  .seccion--oscura .error-envio {
+    color: var(--miel);
+  }
+
+  .boton:disabled {
+    cursor: wait;
+    opacity: 0.7;
+  }
+
+  /* Regalos */
+  .regalo {
+    margin-top: 24px;
+    border: 1px solid var(--borde-crema);
+    border-radius: 12px;
+  }
+
+  .regalo summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 12px 16px;
+    font-weight: 500;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .regalo summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .regalo summary::after {
+    content: "+";
+    font-size: 26px;
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+
+  .regalo[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  .regalo-datos {
+    display: grid;
+    gap: 10px;
+    padding: 0 16px 16px;
+  }
+
+  .regalo-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .copiar {
+    flex: none;
+    min-width: 76px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--borde-crema);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--tinta);
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* Pase personal */
+  .pase {
+    margin-top: 24px;
+    padding: 28px 24px;
+    border-radius: 14px;
+    background: var(--papel);
+    color: var(--tinta);
+    text-align: center;
+    animation: subirPase 0.7s ease;
+  }
+
+  .pase h3 {
+    font-family: var(--titulo);
+    font-size: 38px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .pase p {
+    margin-top: 10px;
+    color: var(--texto);
+  }
+
+  .pase-mesa {
+    width: 190px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    margin: 20px auto 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border: 3px solid var(--borde-crema);
+    border-radius: 50%;
+    background: var(--amarillo-crema);
+    animation: aparecerMesa 0.7s ease 0.2s backwards;
+  }
+
+  .pase-mesa span {
+    color: var(--miel);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .pase-mesa strong {
+    font-family: var(--titulo);
+    font-size: 88px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  .pase-mesa strong.mesa-larga {
+    font-size: 36px;
+    line-height: 1.1;
+  }
+
+  /* Contacto */
+  .contacto {
+    padding: 40px 20px 96px;
+    text-align: center;
+  }
+
+  .contacto a {
+    color: var(--miel);
+    font-weight: 500;
+  }
+
+  /* Botón de música */
+  .musica {
+    position: fixed;
+    right: 16px;
+    bottom: 20px;
+    z-index: 10;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 0;
+    border: 2px solid var(--crema);
+    border-radius: 50%;
+    background: var(--amarillo-crema);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+
+  .musica i {
+    width: 4px;
+    height: 20px;
+    border-radius: 2px;
+    background: var(--tinta);
+    transform: scaleY(0.35);
+  }
+
+  .musica.sonando i {
+    animation: barra 0.9s ease-in-out infinite;
+  }
+
+  .musica.sonando i:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .musica.sonando i:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Hojas y papelitos */
+  .hojas {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hojas span {
+    position: absolute;
+    top: -24px;
+    width: var(--t, 12px);
+    height: var(--t, 12px);
+    border-radius: 60% 40% 70% 30%;
+    background: #F3B9BC;
+    opacity: 0.55;
+    animation: caer var(--d, 16s) linear var(--r, 0s) infinite;
+  }
+
+  /* Flores */
+  .defs-flores {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  .ramo {
+    position: absolute;
+    z-index: 2;
+    max-width: none !important;
+    margin: 0 !important;
+    pointer-events: none;
+    overflow: visible;
+    filter: drop-shadow(0 4px 6px rgba(122, 95, 30, 0.16));
+    animation: mecer 7s ease-in-out infinite alternate;
+  }
+
+  .ramo--centro {
+    position: relative;
+    display: block;
+    width: 170px;
+    margin: 20px auto 0 !important;
+  }
+
+  .ramo--volcado {
+    scale: -1 1;
+  }
+
+  .ramo--abajo {
+    scale: -1 -1;
+  }
+
+  .entrada .ramo:first-child {
+    top: -20px;
+    right: -44px;
+    width: 280px;
+  }
+
+  .entrada .ramo:nth-child(2) {
+    bottom: -18px;
+    left: -44px;
+    width: 280px;
+  }
+
+  .arco-marco {
+    position: relative;
+    display: flex;
+  }
+
+  .arco-marco .ramo:nth-of-type(1) {
+    top: -26px;
+    right: -66px;
+    width: 230px;
+  }
+
+  .arco-marco .ramo:nth-of-type(2) {
+    bottom: -30px;
+    left: -62px;
+    width: 200px;
+  }
+
+  .boleto > .ramo {
+    top: -62px;
+    right: -30px;
+    width: 180px;
+  }
+
+  .ramo--esquina {
+    top: 10px;
+    right: -26px;
+    width: 150px;
+  }
+
+  .ramo--pie {
+    bottom: -30px;
+    left: -30px;
+    width: 170px;
+  }
+
+  @keyframes mecer {
+    from {
+      rotate: -1.5deg;
+    }
+
+    to {
+      rotate: 1.5deg;
+    }
+  }
+
+  .hojas span.papelito {
+    border-radius: 2px;
+    background: var(--c);
+    opacity: 1;
+    animation-iteration-count: 1;
+  }
+
+  @keyframes latido {
+    50% {
+      transform: translate(-50%, -50%) scale(1.07);
+    }
+  }
+
+  @keyframes asomar {
+    50% {
+      transform: translateY(7px);
+    }
+  }
+
+  @keyframes barra {
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes caer {
+    to {
+      transform: translate(70px, 110vh) rotate(420deg);
+    }
+  }
+
+  @keyframes aparecerMesa {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+
+  @keyframes subirPase {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .hojas,
+    .ramo,
+    .sello,
+    .bajar {
+      animation: none;
+    }
+
+    .hojas {
+      display: none;
+    }
+
+    .js .aparecer {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="cerrado">
+  <svg class="defs-flores" aria-hidden="true"><defs id="defs-flores"></defs></svg>
+
+  <div class="entrada" id="entrada" role="dialog" aria-modal="true" aria-label="Abrir la invitación">
+    <svg class="ramo " data-ramo="grande" viewBox="0 0 300 220" aria-hidden="true"></svg>
+    <svg class="ramo ramo--abajo" data-ramo="grande" viewBox="0 0 300 220" aria-hidden="true"></svg>
+    <p class="entrada-para">Tenés una invitación</p>
+    <div class="sobre">
+      <div class="carta" aria-hidden="true">Sara</div>
+      <div class="bolsillo"></div>
+      <div class="solapa"></div>
+      <button class="sello" id="abrir" type="button" aria-label="Abrir la invitación con música"><svg viewBox="-45 -45 90 90" aria-hidden="true"><use href="#flor-rosa"/></svg></button>
+    </div>
+    <p>Tocá el sello para abrirla</p>
+    <button class="entrada-sin-musica" id="abrir-sin-musica" type="button">Abrir sin música</button>
+  </div>
+
+  <div class="hojas" id="hojas" aria-hidden="true"></div>
+  <button class="musica" id="musica" type="button" aria-label="Reproducir música"><i></i><i></i><i></i></button>
+
+  <header class="portada">
+    <div class="arco-marco">
+      <div class="arco">
+        [Foto de Sara]
+        <img src="sara-portada.jpg" alt="Sara" onerror="this.remove()">
+      </div>
+      <svg class="ramo " data-ramo="grande" viewBox="0 0 300 220" aria-hidden="true"></svg>
+      <svg class="ramo ramo--abajo" data-ramo="grande" viewBox="0 0 300 220" aria-hidden="true"></svg>
+    </div>
+    <p class="portada-chico">Mis quince</p>
+    <h1>Sara</h1>
+    <a class="bajar" href="#mensaje" aria-label="Ver la invitación">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </a>
+  </header>
+
+  <main>
+    <section class="seccion mensaje" id="mensaje">
+      <p class="aparecer">Hay noches que se quedan para siempre. Quiero que la de mis 15 sea una de esas, <em>y que estés ahí conmigo.</em></p>
+      <svg class="ramo ramo--centro" data-ramo="chico" viewBox="0 0 300 220" aria-hidden="true"></svg>
+      <div class="cancion-noche aparecer">
+        <p class="volanta">La canción de la noche</p>
+        <div id="spotify"></div>
+      </div>
+    </section>
+
+    <section class="seccion seccion--oscura cuenta">
+      <p class="volanta aparecer">Cada vez falta menos</p>
+      <div class="reloj aparecer" role="timer">
+        <div><strong id="dias">--</strong><span>Días</span></div>
+        <div><strong id="horas">--</strong><span>Horas</span></div>
+        <div><strong id="minutos">--</strong><span>Min</span></div>
+        <div><strong id="segundos">--</strong><span>Seg</span></div>
+      </div>
+      <p class="reloj-fin" id="comenzo" hidden>¡Llegó la noche!</p>
+    </section>
+
+    <section class="seccion">
+      <p class="volanta aparecer">Tu lugar</p>
+      <h2 class="aparecer">La noche</h2>
+      <div class="boleto aparecer" id="boleto">
+        <svg class="ramo " data-ramo="grande" viewBox="0 0 300 220" aria-hidden="true"></svg>
+        <div class="boleto-parte">
+          <dl>
+            <div><dt>Cuándo</dt><dd>Sábado 12 de diciembre de 2026</dd></div>
+            <div><dt>Ingreso</dt><dd>De 21:00 a 21:30</dd></div>
+            <div><dt>Dónde</dt><dd>Salón Arequita<small>Av. Valeriano Magri, 30000 Minas</small></dd></div>
+            <div><dt>Importante</dt><dd>Obligatorio presentar cédula</dd></div>
+          </dl>
+        </div>
+        <div class="boleto-parte">
+          <div class="acciones">
+            <a class="boton" id="como-llegar" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+            <button class="boton boton--linea" id="agendar" type="button" aria-expanded="false" aria-controls="agenda">Agendar</button>
+          </div>
+          <div class="agenda" id="agenda" hidden>
+            <a class="boton boton--linea" id="agenda-google" href="#" target="_blank" rel="noopener">Google Calendar</a>
+            <button class="boton boton--linea" id="agenda-ics" type="button">Apple / Outlook</button>
+          </div>
+          <p class="nota" id="agenda-nota" hidden>La fecha está por confirmarse.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion" style="background: var(--arena)">
+      <svg class="ramo ramo--esquina" data-ramo="chico" viewBox="0 0 300 220" aria-hidden="true"></svg>
+      <p class="volanta aparecer">Quince años</p>
+      <h2 class="aparecer">Mis fotos</h2>
+      <div class="galeria aparecer">
+        <button class="arco" type="button" aria-label="Ver foto 1: Sara en la playa">[Foto]<img src="sara-1.jpg" alt="" onerror="this.remove()"></button>
+        <button class="arco" type="button" aria-label="Ver foto 2: Sara de bebé en el pasto">[Foto]<img src="sara-2.jpg" alt="" onerror="this.remove()"></button>
+        <button class="arco" type="button" aria-label="Ver foto 3: Sara de chiquita con una galletita">[Foto]<img src="sara-3.jpg" alt="" onerror="this.remove()"></button>
+      </div>
+    </section>
+
+    <section class="seccion seccion--oscura vestimenta">
+      <p class="volanta aparecer">Qué ponerte</p>
+      <h2 class="aparecer">Vestimenta</h2>
+      <strong class="aparecer">Formal</strong>
+      <svg class="ramo ramo--pie ramo--volcado" data-ramo="chico" viewBox="0 0 300 220" aria-hidden="true"></svg>
+    </section>
+
+    <section class="seccion">
+      <p class="volanta aparecer">Que no pare</p>
+      <h2 class="aparecer">Elegí una canción</h2>
+      <p class="bajada aparecer">Sumá el tema que no puede faltar esa noche.</p>
+      <form class="formulario aparecer" id="form-cancion">
+        <a class="boton boton--linea" href="https://www.youtube.com" target="_blank" rel="noopener">Buscar en YouTube</a>
+        <div>
+          <label for="cancion">Link o nombre de la canción</label>
+          <input class="campo" id="cancion" name="cancion" required>
+        </div>
+        <button class="boton" type="submit">Enviar canción</button>
+        <p class="gracias" id="cancion-gracias" role="status" hidden>¡Gracias! Ya está en la lista.</p>
+        <p class="error-envio" id="cancion-error" role="alert" hidden>No se pudo enviar. Probá de nuevo en un momento.</p>
+      </form>
+    </section>
+
+    <section class="seccion" style="padding-top: 0">
+      <p class="volanta aparecer">Si querés</p>
+      <h2 class="aparecer">Un regalo</h2>
+      <p class="bajada aparecer">Tu presencia es lo más importante.</p>
+      <details class="regalo aparecer">
+        <summary>Datos para transferir</summary>
+        <div class="regalo-datos">
+          <div class="regalo-fila"><span>Prex</span></div>
+          <div class="regalo-fila"><span id="dato-cuenta">23703341</span><button class="copiar" type="button" data-copiar="#dato-cuenta">Copiar</button></div>
+          <div class="regalo-fila"><span id="dato-titular">Sara Clavijo</span><button class="copiar" type="button" data-copiar="#dato-titular">Copiar</button></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="seccion seccion--oscura" id="asistencia">
+      <svg class="ramo ramo--esquina" data-ramo="grande" viewBox="0 0 300 220" aria-hidden="true"></svg>
+      <p class="volanta aparecer">Contame</p>
+      <h2 class="aparecer">¿Venís?</h2>
+      <p class="bajada aparecer">Confirmá tu asistencia antes del 30 de noviembre.</p>
+      <form class="formulario aparecer" id="form-asistencia">
+        <div>
+          <label for="nombre">Tu nombre</label>
+          <input class="campo" id="nombre" name="nombre" autocomplete="name" required>
+        </div>
+        <fieldset class="opciones">
+          <legend>Tu respuesta</legend>
+          <div class="opciones-fila">
+            <label class="opcion"><input type="radio" name="respuesta" value="si" checked><span>¡Voy!</span></label>
+            <label class="opcion"><input type="radio" name="respuesta" value="no"><span>No puedo</span></label>
+          </div>
+        </fieldset>
+        <label class="marca" id="marca-celiaco">
+          <input type="checkbox" name="celiaco" value="si">
+          <span>Necesito menú especial (en caso de ser celíaco/a u otro)</span>
+        </label>
+        <button class="boton boton--linea" style="background: var(--crema)" type="submit">Enviar respuesta</button>
+        <p class="error-envio" id="asistencia-error" role="alert" hidden>No se pudo enviar. Probá de nuevo en un momento.</p>
+      </form>
+      <div class="pase" id="pase" role="status" hidden>
+        <h3 id="pase-titulo"></h3>
+        <p id="pase-texto"></p>
+        <div class="pase-mesa" id="pase-mesa" hidden>
+          <span>Tu mesa</span>
+          <strong id="mesa-numero"></strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="contacto">
+    <svg class="ramo ramo--centro" data-ramo="chico" viewBox="0 0 300 220" aria-hidden="true"></svg>
+    <p>¿Alguna duda? Escribinos por WhatsApp al <a id="contacto" href="https://wa.me/59893837310" target="_blank" rel="noopener">093 837 310</a></p>
+  </footer>
+
+  <dialog class="visor" id="visor">
+    <img id="visor-foto" alt="">
+    <button id="visor-cerrar" type="button" aria-label="Cerrar foto">×</button>
+  </dialog>
+
+<script>
+  // Completar cuando estén los datos
+  const FECHA_FIESTA = '2026-12-12T21:00:00-03:00';
+  const PLANILLA = 'https://script.google.com/macros/s/AKfycbxYrAqO2w11a-_JZ-9Lm4ve2ygLqI-VE2CgBgDpoEpED9zZK2-IVviMRIcxJI5R0R_t/exec'; // Link de la app web de Google
+    const LUGAR = 'Salón Arequita, Av. Valeriano Magri, 30000 Minas, Lavalleja';
+
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => document.querySelectorAll(selector);
+
+  // Flores dibujadas: rosas, capullos, florcitas y hojas
+  const COLORES_FLOR = {
+    rosa: ['#E38F98', '#F3B9BC', '#FCE3E1'],
+    crema: ['#E3CDA6', '#F8EBD3', '#FFFBEF'],
+    amarilla: ['#EBCB6C', '#FBE99F', '#FFF9D6']
+  };
+  const PETALO = 'M0 0C-14-8-19-27-10-37C-4-42 4-42 10-37C19-27 14-8 0 0Z';
+
+  function capa(color, cantidad, escala, giro) {
+    let petalos = '';
+    for (let i = 0; i < cantidad; i++) {
+      petalos += `<path d="${PETALO}" fill="url(#degrade-${color})" stroke="${COLORES_FLOR[color][0]}" stroke-opacity="0.35" stroke-width="0.7" transform="rotate(${giro + i * 360 / cantidad}) scale(${escala})"/>`;
+    }
+    return petalos;
+  }
+
+  const defsFlores = Object.entries(COLORES_FLOR).map(([color, [fuerte, medio, claro]]) => `
+    <radialGradient id="degrade-${color}" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="40">
+      <stop offset="0.1" stop-color="${fuerte}"/><stop offset="0.6" stop-color="${medio}"/><stop offset="1" stop-color="${claro}"/>
+    </radialGradient>
+    <g id="flor-${color}">${capa(color, 8, 1, 0)}${capa(color, 7, 0.8, 20)}${capa(color, 6, 0.6, 8)}${capa(color, 5, 0.42, 30)}${capa(color, 4, 0.26, 12)}</g>
+    <g id="capullo-${color}">${capa(color, 3, 0.55, -40)}${capa(color, 2, 0.42, 0)}</g>`).join('');
+
+  $('#defs-flores').innerHTML = `${defsFlores}
+    <linearGradient id="degrade-hoja" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7F9770"/><stop offset="1" stop-color="#B9C9A6"/></linearGradient>
+    <g id="flor-hoja"><path d="M0 0C10-10 12-26 0-42C-12-26-10-10 0 0Z" fill="url(#degrade-hoja)"/><path d="M0 0V-34" stroke="#6F8761" stroke-width="0.8" fill="none"/></g>
+    <g id="flor-blanca">${[0, 72, 144, 216, 288].map((giro) => `<circle cy="-7" r="6" fill="#FFFDF6" stroke="#E9E0CC" stroke-width="0.6" transform="rotate(${giro})"/>`).join('')}<circle r="3" fill="#F2D77E"/></g>`;
+
+  const RAMOS = {
+    grande: [
+      ['hoja', 44, 112, 1, -100], ['hoja', 76, 74, 0.9, -40], ['hoja', 262, 128, 1, 100], ['hoja', 226, 172, 0.9, 150],
+      ['hoja', 116, 48, 0.8, -15], ['hoja', 196, 40, 0.8, 25], ['hoja', 150, 182, 0.9, 175], ['hoja', 84, 168, 0.8, -140],
+      ['blanca', 24, 92, 1, 0], ['blanca', 40, 150, 0.9, 20], ['blanca', 280, 96, 1, 0], ['blanca', 248, 56, 0.9, 30],
+      ['blanca', 132, 24, 0.85, 0], ['blanca', 196, 196, 0.85, 0], ['capullo-rosa', 14, 126, 0.9, -95], ['capullo-amarilla', 290, 150, 0.9, 105],
+      ['crema', 100, 112, 1.05, 10], ['rosa', 168, 84, 1, 40], ['amarilla', 222, 124, 0.8, 70], ['rosa', 142, 152, 0.72, -30], ['amarilla', 72, 62, 0.45, 10]
+    ],
+    chico: [
+      ['hoja', 88, 112, 0.9, -95], ['hoja', 212, 112, 0.9, 95], ['hoja', 118, 76, 0.75, -35], ['hoja', 186, 76, 0.75, 35],
+      ['blanca', 66, 110, 1, 0], ['blanca', 236, 110, 1, 0], ['blanca', 100, 146, 0.8, 0], ['blanca', 200, 146, 0.8, 0],
+      ['crema', 118, 112, 0.65, 15], ['rosa', 182, 112, 0.65, -20], ['amarilla', 150, 116, 0.72, 40]
+    ]
+  };
+
+  $$('[data-ramo]').forEach((ramo) => {
+    ramo.innerHTML = RAMOS[ramo.dataset.ramo]
+      .map(([tipo, x, y, escala, giro]) => `<use href="#${tipo.startsWith('capullo') ? tipo : `flor-${tipo}`}" transform="translate(${x} ${y}) rotate(${giro}) scale(${escala})"/>`)
+      .join('');
+  });
+
+  // Sobre de entrada y música
+  const CANCION = 'spotify:track:5hnyJvgoWiQUYZttV4wXy6';
+  const botonMusica = $('#musica');
+  let reproductor = null;
+  let reproducirAlCargar = false;
+
+  window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    IFrameAPI.createController($('#spotify'), { uri: CANCION, width: '100%', height: 80 }, (controlador) => {
+      reproductor = controlador;
+      controlador.addListener('playback_update', (evento) => marcarMusica(!evento.data.isPaused));
+      if (reproducirAlCargar) controlador.play();
+    });
+  };
+
+  function reproducir() {
+    if (reproductor) reproductor.play();
+    else reproducirAlCargar = true;
+  }
+
+  function abrirSobre(conMusica) {
+    const entrada = $('#entrada');
+    if (conMusica) reproducir();
+    entrada.classList.add('abierto');
+    setTimeout(() => {
+      entrada.classList.add('fuera');
+      document.body.classList.remove('cerrado');
+    }, 1300);
+  }
+
+  $('#abrir').addEventListener('click', () => abrirSobre(true));
+  $('#abrir-sin-musica').addEventListener('click', () => abrirSobre(false));
+  botonMusica.addEventListener('click', () => (reproductor ? reproductor.togglePlay() : reproducir()));
+
+  function marcarMusica(sonando) {
+    botonMusica.classList.toggle('sonando', sonando);
+    botonMusica.setAttribute('aria-label', sonando ? 'Pausar música' : 'Reproducir música');
+  }
+
+  // Revelado al hacer scroll
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((item) => {
+      if (item.isIntersecting) {
+        item.target.classList.add('visible');
+        observador.unobserve(item.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  $$('.aparecer').forEach((elemento) => observador.observe(elemento));
+
+  // Hojas que caen
+  const hojas = $('#hojas');
+  for (let i = 0; i < 14; i++) {
+    const hoja = document.createElement('span');
+    hoja.style.left = `${Math.random() * 100}%`;
+    hoja.style.setProperty('--t', `${8 + Math.random() * 8}px`);
+    hoja.style.setProperty('--d', `${13 + Math.random() * 12}s`);
+    hoja.style.setProperty('--r', `${-Math.random() * 25}s`);
+    hojas.append(hoja);
+  }
+
+  // Papelitos al confirmar
+  function festejar() {
+    const colores = ['#F3B9BC', '#FBE99F', '#F8EBD3', '#E38F98'];
+    for (let i = 0; i < 44; i++) {
+      const papelito = document.createElement('span');
+      papelito.className = 'papelito';
+      papelito.style.left = `${Math.random() * 100}%`;
+      papelito.style.setProperty('--t', `${6 + Math.random() * 7}px`);
+      papelito.style.setProperty('--d', `${2 + Math.random() * 2}s`);
+      papelito.style.setProperty('--r', `${Math.random() * 0.5}s`);
+      papelito.style.setProperty('--c', colores[i % colores.length]);
+      hojas.append(papelito);
+      papelito.addEventListener('animationend', () => papelito.remove());
+    }
+  }
+
+  // Cuenta regresiva
+  const dos = (numero) => String(numero).padStart(2, '0');
+
+  function actualizarReloj() {
+    const segundos = Math.max(0, Math.floor((new Date(FECHA_FIESTA) - Date.now()) / 1000));
+    $('#dias').textContent = dos(Math.floor(segundos / 86400));
+    $('#horas').textContent = dos(Math.floor(segundos / 3600) % 24);
+    $('#minutos').textContent = dos(Math.floor(segundos / 60) % 60);
+    $('#segundos').textContent = dos(segundos % 60);
+    $('#comenzo').hidden = segundos > 0;
+  }
+
+  if (FECHA_FIESTA) {
+    actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+  }
+
+  // Cómo llegar y agenda
+  $$('a[href="#"]').forEach((enlace) => enlace.addEventListener('click', (evento) => {
+    if (enlace.getAttribute('href') === '#') evento.preventDefault();
+  }));
+
+  if (LUGAR) {
+    $('#como-llegar').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(LUGAR)}`;
+  }
+
+  // La duración de 5 horas es solo para reservar el espacio en el calendario
+  const fechaCalendario = (fecha) => fecha.toISOString().replace(/[-:]|\.\d{3}/g, '');
+  const inicio = FECHA_FIESTA ? fechaCalendario(new Date(FECHA_FIESTA)) : '';
+  const fin = FECHA_FIESTA ? fechaCalendario(new Date(new Date(FECHA_FIESTA).getTime() + 5 * 3600000)) : '';
+
+  $('#agendar').addEventListener('click', (evento) => {
+    if (!FECHA_FIESTA) {
+      $('#agenda-nota').hidden = false;
+      return;
+    }
+    const agenda = $('#agenda');
+    agenda.hidden = !agenda.hidden;
+    evento.currentTarget.setAttribute('aria-expanded', String(!agenda.hidden));
+  });
+
+  if (FECHA_FIESTA) {
+    $('#agenda-google').href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Los 15 de Sara')}&dates=${inicio}/${fin}&location=${encodeURIComponent(LUGAR)}`;
+  }
+
+  $('#agenda-ics').addEventListener('click', () => {
+    const contenido = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Sara//XV//ES', 'BEGIN:VEVENT',
+      `UID:xv-sara-${inicio}`, `DTSTAMP:${fechaCalendario(new Date())}`, `DTSTART:${inicio}`, `DTEND:${fin}`,
+      'SUMMARY:Los 15 de Sara', `LOCATION:${LUGAR.replace(/,/g, '\\,')}`, 'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(new Blob([contenido], { type: 'text/calendar' }));
+    enlace.download = 'los-15-de-sara.ics';
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
+  });
+
+  // Galería
+  const visor = $('#visor');
+  $$('.galeria .arco').forEach((arco) => {
+    const foto = arco.querySelector('img');
+    if (foto) foto.addEventListener('load', () => arco.classList.add('con-foto'));
+    arco.addEventListener('click', () => {
+      const cargada = arco.querySelector('img');
+      if (!cargada) return;
+      $('#visor-foto').src = cargada.src;
+      visor.showModal();
+    });
+  });
+  $('#visor-cerrar').addEventListener('click', () => visor.close());
+  visor.addEventListener('click', (evento) => {
+    if (evento.target === visor) visor.close();
+  });
+
+  // Copiar datos del regalo
+  $$('[data-copiar]').forEach((boton) => boton.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText($(boton.dataset.copiar).textContent);
+      boton.textContent = '¡Listo!';
+    } catch {
+      boton.textContent = 'Error';
+    }
+    setTimeout(() => { boton.textContent = 'Copiar'; }, 1600);
+  }));
+
+  // Canción y asistencia: se guardan en la planilla
+  async function guardarEnPlanilla(datos) {
+    if (!PLANILLA) throw new Error('Falta el link de la planilla');
+    // Con text/plain, Google acepta el envío y se puede leer la respuesta
+    const respuesta = await fetch(PLANILLA, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(datos)
+    });
+    const resultado = await respuesta.json();
+    if (!resultado.ok) throw new Error('La planilla no guardó el dato');
+    return resultado;
+  }
+
+  async function enviarFormulario(formulario, error, datos) {
+    const boton = formulario.querySelector('button[type="submit"]');
+    const textoBoton = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = 'Enviando...';
+    error.hidden = true;
+    try {
+      return await guardarEnPlanilla(datos);
+    } catch {
+      error.hidden = false;
+      return null;
+    } finally {
+      boton.disabled = false;
+      boton.textContent = textoBoton;
+    }
+  }
+
+  $('#form-cancion').addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const formulario = evento.target;
+    $('#cancion-gracias').hidden = true;
+    const datos = { tipo: 'cancion', cancion: $('#cancion').value.trim() };
+    if (!await enviarFormulario(formulario, $('#cancion-error'), datos)) return;
+    formulario.reset();
+    $('#cancion-gracias').hidden = false;
+  });
+
+  // La opción de celíaco solo tiene sentido si la persona viene
+  $$('input[name="respuesta"]').forEach((opcion) => opcion.addEventListener('change', () => {
+    $('#marca-celiaco').hidden = opcion.value === 'no' && opcion.checked;
+  }));
+
+  $('#form-asistencia').addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const formulario = evento.target;
+    const datos = new FormData(formulario);
+    const nombre = datos.get('nombre').trim();
+    const viene = datos.get('respuesta') === 'si';
+    const celiaco = viene && datos.get('celiaco') === 'si';
+    const respuesta = { tipo: 'asistencia', nombre, viene, celiaco };
+    const resultado = await enviarFormulario(formulario, $('#asistencia-error'), respuesta);
+    if (!resultado) return;
+    const mesa = String(resultado.mesa || '').replace(/^mesa\s*/i, '');
+    if (!viene) {
+      $('#pase-titulo').textContent = `Gracias por avisar, ${nombre}`;
+      $('#pase-texto').textContent = 'Te voy a extrañar esa noche.';
+    } else if (mesa) {
+      $('#pase-titulo').textContent = `¡Te espero, ${nombre}!`;
+      $('#pase-texto').hidden = true;
+      $('#mesa-numero').textContent = mesa;
+      $('#mesa-numero').classList.toggle('mesa-larga', mesa.length > 3);
+      $('#pase-mesa').hidden = false;
+    } else {
+      $('#pase-titulo').textContent = '¡Gracias por confirmar!';
+      $('#pase-texto').hidden = true;
+    }
+    formulario.hidden = true;
+    $('#pase').hidden = false;
+    if (viene) festejar();
+  });
+
+  // Ubica los cortes del boleto sobre la línea punteada
+  function ubicarCortes() {
+    const parte = $('.boleto-parte');
+    $('#boleto').style.setProperty('--corte', `${parte.offsetHeight - 12}px`);
+  }
+
+  ubicarCortes();
+  window.addEventListener('resize', ubicarCortes);
+  document.fonts.ready.then(ubicarCortes);
+</script>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+</body>
+</html>

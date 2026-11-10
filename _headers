@@ -7,3 +7,7 @@
 
 /img/*
   Cache-Control: public, max-age=604800
+
+# Invitación privada: que Google no la indexe
+/sara/*
+  X-Robots-Tag: noindex, nofollow
