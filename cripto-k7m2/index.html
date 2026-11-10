@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es-UY" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Criptomonedas como método de pago</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.replace('no-js','js');</script>
+<style>
+  :root{
+    --ink:#14202B;
+    --paper:#E6EBEF;
+    --card:#F9FBFC;
+    --amber:#F5A524;
+    --amber-soft:#FFF0D1;
+    --amber-deep:#8A5200;
+    --muted:#4D5B66;
+    --rule:#C9D2D9;
+    --ok:#0E7A5F;
+    --ok-soft:#E3F3EE;
+    --bad:#C2402F;
+    --bad-soft:#FBE7E4;
+    --focus:#2F6FDE;
+    --display:'Bricolage Grotesque', 'Arial Black', Arial, sans-serif;
+    --text:'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background-color:var(--paper);
+    background-image:radial-gradient(rgba(20,32,43,.09) 1px, transparent 1px);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:var(--text);
+    font-size:clamp(1rem, 1.25vw, 1.2rem);
+    line-height:1.5;
+  }
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  h1:focus,h2:focus{outline:none}
+  button{font:inherit;color:inherit}
+  p{margin:0}
+
+  /* ---------- Estructura ---------- */
+  .app{display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);height:100vh;height:100dvh}
+  .top{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:12px clamp(16px,4vw,48px);
+    border-bottom:2px solid var(--ink);background:var(--paper);
+  }
+  .brand{font-family:var(--display);font-weight:700;font-size:1rem;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #pos{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700;white-space:nowrap}
+  .stage{position:relative;overflow:hidden}
+  .slide{position:absolute;inset:0;overflow-y:auto;padding:clamp(20px,3.2vw,44px) clamp(16px,5vw,72px) 36px}
+  .js .slide{display:none}
+  .js .slide.is-active{display:block;animation:fade .25s ease both}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .inner{max-width:1180px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,2.2vw,30px)}
+
+  .nav{
+    display:flex;align-items:center;gap:14px;
+    padding:12px clamp(16px,4vw,48px) 16px;
+    border-top:2px solid var(--ink);background:var(--paper);
+  }
+  .chain{flex:1;display:flex;align-items:center;justify-content:center;overflow-x:auto;padding:6px 4px}
+  .bond{flex:none;width:14px;height:2px;background:var(--ink)}
+  .link{
+    flex:none;width:32px;height:32px;display:grid;place-items:center;
+    border:2px solid var(--ink);border-radius:4px;background:var(--card);
+    font-size:.8rem;font-weight:700;cursor:pointer;padding:0;
+    transition:transform .15s ease, background-color .15s ease;
+  }
+  .link.is-past{background:var(--ink);color:var(--paper)}
+  .link.is-done{background:var(--ink);color:var(--paper)}
+  .link.is-current{background:var(--amber);color:var(--ink);transform:translateY(-3px);box-shadow:3px 3px 0 var(--ink)}
+
+  .btn{
+    font-weight:700;padding:10px 18px;cursor:pointer;
+    border:2px solid var(--ink);border-radius:6px;background:var(--card);
+    box-shadow:3px 3px 0 var(--ink);transition:transform .08s, box-shadow .08s;
+  }
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .btn-primary{background:var(--amber)}
+
+  /* ---------- Tipografía ---------- */
+  h1,h2,h3{font-family:var(--display);margin:0;color:var(--ink)}
+  h1{font-weight:800;font-size:clamp(2.6rem,6.6vw,6.2rem);line-height:.95;letter-spacing:-.035em;max-width:13ch}
+  h2{font-weight:700;font-size:clamp(1.9rem,4.2vw,3.5rem);line-height:1.02;letter-spacing:-.025em;max-width:24ch}
+  h3{font-weight:700;font-size:clamp(1.2rem,1.7vw,1.55rem);line-height:1.15;letter-spacing:-.01em}
+  .lead{font-size:clamp(1.1rem,1.6vw,1.45rem);line-height:1.45;max-width:62ch;color:var(--muted)}
+  .hint{color:var(--muted);font-weight:700}
+  .source{font-size:.9rem;color:var(--muted)}
+  .q-count{font-size:.9rem;font-weight:700;color:var(--amber-deep)}
+
+  .block{background:var(--card);border:2px solid var(--ink);border-radius:6px;box-shadow:5px 5px 0 var(--ink)}
+
+  /* ---------- Portada ---------- */
+  .cover .lead{color:var(--ink)}
+  .history{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+  .history li{position:relative;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+  .history li:not(:first-child)::before{content:"";position:absolute;left:-22px;top:50%;width:20px;height:2px;background:var(--ink)}
+  .h-when{font-size:.85rem;color:var(--muted)}
+  .h-what{font-family:var(--display);font-weight:700;font-size:clamp(1.05rem,1.6vw,1.45rem);line-height:1.1}
+  .history .h-next{background:var(--amber)}
+  .history .h-next .h-when{color:var(--ink)}
+  .js .cover .history li{animation:drop .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 110ms + 250ms)}
+  @keyframes drop{from{opacity:0;transform:translateY(-28px)}to{opacity:1;transform:none}}
+  .cover-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:8px}
+  .byline{line-height:1.4}
+  .cover-foot .btn{font-size:1.15rem;padding:14px 28px}
+
+  /* ---------- Preguntas ---------- */
+  .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .opts-row{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px}
+  .opt{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    padding:13px 16px;cursor:pointer;
+    background:var(--card);border:2px solid var(--ink);border-radius:6px;
+    box-shadow:4px 4px 0 var(--ink);transition:transform .08s, box-shadow .08s, background-color .15s;
+    font-size:clamp(1rem,1.3vw,1.2rem);line-height:1.3;
+  }
+  .opts-row .opt{justify-content:center;text-align:center;padding:12px 10px;gap:8px}
+  .opt:hover:not(:disabled){background:var(--amber-soft)}
+  .opt:active:not(:disabled){transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+  .opt:disabled{cursor:default;color:var(--ink)}
+  .key{flex:none;width:2em;height:2em;display:grid;place-items:center;border:2px solid currentColor;border-radius:4px;font-weight:700}
+  .opt.is-right{background:var(--ok);color:#fff}
+  .opt.is-wrong{background:var(--bad);color:#fff}
+  .opt.is-dim{opacity:.5}
+  .tag{margin-left:auto;font-size:.78em;font-weight:700;padding:1px 9px;border:1.5px solid currentColor;border-radius:999px;white-space:nowrap}
+  .opts-row .tag{margin-left:0;padding:0 7px}
+  .feedback{margin-top:14px;padding:12px 16px;border-left:6px solid var(--ok);background:var(--ok-soft)}
+  .feedback.is-bad{border-left-color:var(--bad);background:var(--bad-soft)}
+  .fb-title{font-weight:700;margin-bottom:2px}
+
+  /* ---------- Cómo se paga ---------- */
+  .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+  .steps li{position:relative;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+  .steps li:not(:last-child)::after{content:"";position:absolute;right:-30px;top:50%;width:28px;height:2px;background:var(--ink)}
+  .step-n{width:2.1em;height:2.1em;display:grid;place-items:center;background:var(--amber);border:2px solid var(--ink);border-radius:4px;font-weight:700}
+  .steps p{color:var(--muted)}
+  .terms{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;align-items:start}
+  .subhead{font-size:clamp(1.15rem,1.6vw,1.45rem);margin-top:4px}
+  .ways{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .ways .block{padding:16px 20px;display:flex;flex-direction:column;gap:6px}
+  .ways p{color:var(--muted)}
+
+  /* ---------- Futuro y economía ---------- */
+  .future{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .future .block{padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+  .future p{color:var(--muted)}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .two-col .block{padding:18px 22px;display:flex;flex-direction:column;gap:8px}
+  .two-col ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
+  .views{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--ink);padding-top:12px}
+  .term-block{padding:0}
+  .term{
+    width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 18px;background:none;border:0;cursor:pointer;text-align:left;
+    font-family:var(--display);font-weight:700;font-size:clamp(1.05rem,1.4vw,1.3rem);
+  }
+  .sign{flex:none;width:1.6em;height:1.6em;display:grid;place-items:center;border:2px solid var(--ink);border-radius:4px;font-family:var(--text)}
+  .sign::before{content:"+"}
+  .term[aria-expanded="true"] .sign{background:var(--amber)}
+  .term[aria-expanded="true"] .sign::before{content:"−"}
+  .def{padding:0 18px 16px;color:var(--ink)}
+
+  /* ---------- Funciones del dinero ---------- */
+  .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start}
+  .trio .q{padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+
+  /* ---------- Libro de cuentas ---------- */
+  .ledger .row{display:grid;grid-template-columns:9.5rem minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:baseline;padding:14px 22px}
+  .ledger .row + .row{border-top:2px solid var(--ink)}
+  .r-when{font-weight:700;color:var(--muted)}
+  .r-what{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.3vw,2.1rem);line-height:1.1;letter-spacing:-.015em}
+  .r-note{color:var(--muted)}
+  .stats .row{grid-template-columns:minmax(0,1.05fr) minmax(0,1.4fr)}
+  .sim-tools{padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+  .sim-tools label{font-weight:700}
+  input[type=range]{width:100%;accent-color:var(--ink);height:28px}
+  .presets{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--card);cursor:pointer;font-size:.92rem;font-weight:700}
+  .chip:hover{background:var(--amber-soft)}
+  .sim-out{font-size:clamp(1.05rem,1.5vw,1.35rem)}
+  .note{font-weight:700}
+
+  /* ---------- Tabla ---------- */
+  .table-wrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:clamp(.95rem,1.2vw,1.15rem)}
+  th,td{padding:12px 16px;text-align:left;border-bottom:1.5px solid var(--rule)}
+  thead th{background:var(--ink);color:var(--paper);font-family:var(--display);font-weight:700;border-bottom:0}
+  thead th.crypto{background:var(--amber);color:var(--ink)}
+  tbody th{font-weight:700}
+  td.crypto{background:var(--amber-soft);font-weight:700}
+  tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+  .pros{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .pros .block{padding:16px 20px;display:flex;flex-direction:column;gap:4px}
+
+  /* ---------- Países ---------- */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  .cards article{padding:22px;display:flex;flex-direction:column;gap:10px}
+  .tagline{font-weight:700;color:var(--amber-deep)}
+
+  /* ---------- Uruguay ---------- */
+  .timeline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+  .timeline li{position:relative;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+  .timeline li:not(:last-child)::after{content:"";position:absolute;right:-30px;top:50%;width:28px;height:2px;background:var(--ink)}
+  .year{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3vw,2.6rem);line-height:1;letter-spacing:-.02em}
+  .solo{padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+
+  /* ---------- Verdadero o falso ---------- */
+  .vf-list{display:flex;flex-direction:column;gap:18px}
+  .vf{padding:16px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;align-items:center}
+  .vf .q-count,.vf .feedback{grid-column:1 / -1}
+  .vf .q-text{font-size:clamp(1.05rem,1.5vw,1.35rem);font-weight:700}
+  .vf .opts-row{width:22rem}
+
+  /* ---------- Resultado ---------- */
+  .result{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:28px;align-items:start}
+  .score-card{padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+  .score{font-family:var(--display);font-weight:800;font-size:clamp(3.5rem,9vw,7.5rem);line-height:.9;letter-spacing:-.04em}
+  .score small{font-size:.38em;letter-spacing:-.01em}
+  .takeaways{padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+  .takeaways ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:10px}
+  details{border-top:2px solid var(--ink);padding-top:12px}
+  summary{cursor:pointer;font-weight:700}
+  details ul{margin:10px 0 0;padding-left:1.2em;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+  details a{color:var(--ink)}
+
+  /* ---------- Sin JavaScript: todo apilado ---------- */
+  .no-js .app{display:block;height:auto}
+  .no-js .stage{overflow:visible}
+  .no-js .slide{position:static;border-bottom:2px solid var(--ink)}
+  .no-js .nav,.no-js #pos{display:none}
+
+  /* ---------- Pantallas chicas ---------- */
+  @media (max-width:1000px){
+    .steps,.terms,.timeline{grid-template-columns:repeat(2,1fr)}
+    .steps li:not(:last-child)::after,.timeline li:not(:last-child)::after{display:none}
+    .trio,.cards,.ways{grid-template-columns:1fr}
+    .result{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .brand{font-size:.9rem}
+    .history{grid-template-columns:repeat(2,1fr);gap:14px}
+    .history li:not(:first-child)::before{display:none}
+    .opts,.steps,.terms,.timeline,.pros,.future,.two-col{grid-template-columns:1fr}
+    .timeline li:not(:last-child)::after{display:none}
+    .ledger .row,.stats .row{grid-template-columns:1fr;gap:4px}
+    .vf{grid-template-columns:minmax(0,1fr)}
+    .vf .opts-row{width:auto}
+    .nav{flex-wrap:wrap;justify-content:space-between}
+    .chain{order:-1;flex-basis:100%}
+    .link{width:24px;height:24px;font-size:.7rem}
+    .bond{width:6px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <span class="brand">Criptomonedas como método de pago</span>
+    <span id="pos" aria-live="polite">Bloque 1 de 11</span>
+  </header>
+
+  <main class="stage" id="stage">
+
+    <!-- 1. Portada -->
+    <section class="slide is-active" data-title="Portada">
+      <div class="inner cover">
+        <h1 tabindex="-1">Criptomonedas como método de pago</h1>
+        <p class="lead">Cómo funcionan, si pueden reemplazar al efectivo y la tarjeta, y qué se viene.</p>
+        <ol class="history" aria-label="Historia de los métodos de pago">
+          <li class="block" style="--i:0"><span class="h-when">Hace miles de años</span><span class="h-what">Trueque</span></li>
+          <li class="block" style="--i:1"><span class="h-when">600 a. C.</span><span class="h-what">Monedas</span></li>
+          <li class="block" style="--i:2"><span class="h-when">Siglo XI</span><span class="h-what">Billetes</span></li>
+          <li class="block" style="--i:3"><span class="h-when">1950</span><span class="h-what">Tarjeta</span></li>
+          <li class="block" style="--i:4"><span class="h-when">Años 90</span><span class="h-what">Transferencia</span></li>
+          <li class="block h-next" style="--i:5"><span class="h-when">2009</span><span class="h-what">¿Cripto?</span></li>
+        </ol>
+        <div class="cover-foot">
+          <p class="byline"><strong>Bruno Arnaldo</strong><br>Economía, 6.º año, Liceo Fabini</p>
+          <button class="btn btn-primary" type="button" data-go="1">Empezar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ¿Qué es? -->
+    <section class="slide" data-title="¿Qué es una criptomoneda?">
+      <div class="inner">
+        <h2 tabindex="-1">Para arrancar: ¿qué es una criptomoneda?</h2>
+        <div class="q" data-qid="intro" data-answer="b">
+          <p class="q-count"></p>
+          <p class="hint" style="margin:6px 0 14px">Elegí la opción que te parezca correcta.</p>
+          <div class="opts">
+            <button class="opt" type="button" data-v="a"><span class="key">A</span><span class="label">Monedas de metal para coleccionar</span></button>
+            <button class="opt" type="button" data-v="b"><span class="key">B</span><span class="label">Dinero digital que funciona por internet, sin un banco que lo controle</span></button>
+            <button class="opt" type="button" data-v="c"><span class="key">C</span><span class="label">La app de un banco para pagar con el celular</span></button>
+            <button class="opt" type="button" data-v="d"><span class="key">D</span><span class="label">Las monedas o puntos de un videojuego</span></button>
+          </div>
+          <div class="feedback" hidden>
+            <p class="fb-title"></p>
+            <p>Es dinero 100 % digital: no hay billetes ni un banco central que lo emita. Cada pago queda anotado en una red de miles de computadoras. La primera fue Bitcoin, en 2009.</p>
+          </div>
+        </div>
+        <h3 class="subhead">Palabras clave</h3>
+        <p class="hint" style="margin-top:-8px">Tocá cada una para ver qué significa.</p>
+        <div class="terms">
+          <div class="block term-block">
+            <button class="term" type="button" aria-expanded="false" aria-controls="def-blockchain">Blockchain <span class="sign" aria-hidden="true"></span></button>
+            <p class="def" id="def-blockchain" hidden>Una “cadena de bloques”: un libro de cuentas público donde se anota cada pago, bloque tras bloque, y nadie lo puede borrar. Esta presentación también es una cadena: mirá abajo.</p>
+          </div>
+          <div class="block term-block">
+            <button class="term" type="button" aria-expanded="false" aria-controls="def-wallet">Wallet <span class="sign" aria-hidden="true"></span></button>
+            <p class="def" id="def-wallet" hidden>La billetera: la app donde guardás tu cripto. Tiene una dirección, que funciona como un número de cuenta.</p>
+          </div>
+          <div class="block term-block">
+            <button class="term" type="button" aria-expanded="false" aria-controls="def-clave">Clave privada <span class="sign" aria-hidden="true"></span></button>
+            <p class="def" id="def-clave" hidden>La contraseña secreta de tu billetera. Con ella se firman los pagos. Si la perdés o te la roban, perdés tu cripto.</p>
+          </div>
+          <div class="block term-block">
+            <button class="term" type="button" aria-expanded="false" aria-controls="def-bitcoin">Bitcoin <span class="sign" aria-hidden="true"></span></button>
+            <p class="def" id="def-bitcoin" hidden>La primera y más famosa criptomoneda. Su precio sube y baja muchísimo.</p>
+          </div>
+          <div class="block term-block">
+            <button class="term" type="button" aria-expanded="false" aria-controls="def-stable">Stablecoin <span class="sign" aria-hidden="true"></span></button>
+            <p class="def" id="def-stable" hidden>Una cripto que vale siempre cerca de 1 dólar, como USDT o USDC. Ya la vamos a ver.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Cómo se paga -->
+    <section class="slide" data-title="Cómo se paga con cripto">
+      <div class="inner">
+        <h2 tabindex="-1">¿Cómo funciona un pago con cripto?</h2>
+        <ol class="steps">
+          <li class="block"><span class="step-n">1</span><h3>El comercio muestra un QR</h3><p>Con el monto y la dirección de su billetera.</p></li>
+          <li class="block"><span class="step-n">2</span><h3>El cliente lo escanea</h3><p>Y confirma el pago desde una app en su celular.</p></li>
+          <li class="block"><span class="step-n">3</span><h3>La red valida el pago</h3><p>Miles de computadoras lo revisan y lo anotan en la blockchain.</p></li>
+          <li class="block"><span class="step-n">4</span><h3>El comercio recibe</h3><p>En cripto, o ya pasado a pesos si usa una pasarela de pago.</p></li>
+        </ol>
+        <h3 class="subhead">Hoy se puede pagar con cripto de tres formas</h3>
+        <div class="ways">
+          <div class="block"><h3>De billetera a billetera</h3><p>Escaneás un QR y la cripto pasa directo de tu wallet a la del comercio.</p></div>
+          <div class="block"><h3>Con una pasarela de pago</h3><p>Vos pagás en cripto y el comercio recibe pesos o dólares. La pasarela hace el cambio.</p></div>
+          <div class="block"><h3>Con una tarjeta cripto</h3><p>Funciona como una tarjeta común: el sistema convierte tu stablecoin en el momento y el comercio cobra en su moneda.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Funciones del dinero -->
+    <section class="slide" data-title="¿Es dinero?">
+      <div class="inner">
+        <h2 tabindex="-1">¿La cripto es dinero de verdad?</h2>
+        <p class="lead">En Economía, el dinero cumple tres funciones. Para cada una, elegí si la cripto la cumple.</p>
+        <div class="trio">
+          <div class="q block" data-qid="cambio" data-answer="medias">
+            <p class="q-count"></p>
+            <h3>Medio de cambio</h3>
+            <p>¿Sirve para comprar y vender cosas?</p>
+            <div class="opts-row">
+              <button class="opt" type="button" data-v="si"><span class="label">Sí</span></button>
+              <button class="opt" type="button" data-v="medias"><span class="label">A medias</span></button>
+              <button class="opt" type="button" data-v="no"><span class="label">No</span></button>
+            </div>
+            <div class="feedback" hidden><p class="fb-title"></p><p>Se puede pagar con cripto, pero muy pocos comercios la aceptan.</p></div>
+          </div>
+          <div class="q block" data-qid="cuenta" data-answer="no">
+            <p class="q-count"></p>
+            <h3>Unidad de cuenta</h3>
+            <p>¿Los precios se ponen en cripto?</p>
+            <div class="opts-row">
+              <button class="opt" type="button" data-v="si"><span class="label">Sí</span></button>
+              <button class="opt" type="button" data-v="medias"><span class="label">A medias</span></button>
+              <button class="opt" type="button" data-v="no"><span class="label">No</span></button>
+            </div>
+            <div class="feedback" hidden><p class="fb-title"></p><p>Los precios están en pesos o en dólares. Nadie pone un alfajor a 0,00002 BTC.</p></div>
+          </div>
+          <div class="q block" data-qid="reserva" data-answer="no">
+            <p class="q-count"></p>
+            <h3>Reserva de valor</h3>
+            <p>¿Bitcoin guarda su valor sin grandes cambios?</p>
+            <div class="opts-row">
+              <button class="opt" type="button" data-v="si"><span class="label">Sí</span></button>
+              <button class="opt" type="button" data-v="medias"><span class="label">A medias</span></button>
+              <button class="opt" type="button" data-v="no"><span class="label">No</span></button>
+            </div>
+            <div class="feedback" hidden><p class="fb-title"></p><p>Bitcoin pasó de unos US$ 118.000 en julio de 2025 a unos US$ 60.000 en julio de 2026: perdió casi la mitad en un año. Las stablecoins sí son estables.</p></div>
+          </div>
+        </div>
+        <p class="source">Precios de Bitcoin: Fortune (julio de 2025 y julio de 2026).</p>
+      </div>
+    </section>
+
+    <!-- 5. Stablecoins -->
+    <section class="slide" data-title="Stablecoins">
+      <div class="inner">
+        <h2 tabindex="-1">Stablecoins: la cripto que sí se usa para pagar</h2>
+        <p class="lead">Una stablecoin, como USDT o USDC, vale siempre cerca de 1 dólar porque la empresa que la emite guarda reservas. Es rápida como cualquier cripto, pero sin los sustos del Bitcoin.</p>
+        <div class="block ledger stats">
+          <div class="row"><span class="r-what">US$ 1,79 billones</span><span class="r-note">Movidos con stablecoins en un solo mes: junio de 2026, récord.</span></div>
+          <div class="row"><span class="r-what">US$ 482.000 millones</span><span class="r-note">En pagos reales hasta septiembre de 2026, y creciendo un 45 %.</span></div>
+          <div class="row"><span class="r-what">US$ 305.000 millones</span><span class="r-note">Es el total de stablecoins que existían en septiembre de 2026.</span></div>
+          <div class="row"><span class="r-what">62 %</span><span class="r-note">De las operaciones cripto en Argentina son con stablecoins: la gente las usa para protegerse de la inflación.</span></div>
+        </div>
+        <p class="note">Ojo: en español, un billón es un millón de millones.</p>
+        <p class="source">Fuentes: Visa Onchain Analytics y Allium, vía Datawallet (octubre de 2026) y OneBullEx; Chainalysis (2024) vía CoinMarketCap.</p>
+      </div>
+    </section>
+
+    <!-- 6. Comparación -->
+    <section class="slide" data-title="Comparación">
+      <div class="inner">
+        <h2 tabindex="-1">Cripto frente a los otros métodos de pago</h2>
+        <div class="block table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Pregunta</th><th scope="col">Efectivo</th><th scope="col">Tarjeta</th><th scope="col">Transferencia</th><th scope="col" class="crypto">Cripto</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">¿Sirve para pagar a otro país?</th><td>No</td><td>Sí, con recargo</td><td>Sí, lenta y cara</td><td class="crypto">Sí, en minutos</td></tr>
+              <tr><th scope="row">¿Se puede reclamar si algo sale mal?</th><td>No</td><td>Sí</td><td>Difícil</td><td class="crypto">No</td></tr>
+              <tr><th scope="row">¿Lo aceptan los comercios?</th><td>Casi todos</td><td>Casi todos</td><td>Muchos</td><td class="crypto">Muy pocos</td></tr>
+              <tr><th scope="row">¿Mantiene su valor?</th><td>Sí</td><td>Sí</td><td>Sí</td><td class="crypto">Solo las stablecoins</td></tr>
+              <tr><th scope="row">¿Necesita un banco?</th><td>No</td><td>Sí</td><td>Sí</td><td class="crypto">No</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pros">
+          <div class="block"><h3>A favor</h3><p>Rápida entre países, funciona las 24 horas y no necesita banco.</p></div>
+          <div class="block"><h3>En contra</h3><p>Su precio cambia mucho, hay estafas y no hay a quién reclamar.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Uruguay -->
+    <section class="slide" data-title="Uruguay">
+      <div class="inner">
+        <h2 tabindex="-1">¿Y en Uruguay?</h2>
+        <ol class="timeline">
+          <li class="block"><span class="year">2017</span><p>El BCU prueba el e-Peso: el mismo peso uruguayo, pero digital, en el celular. Lo usaron hasta 10.000 personas durante 6 meses.</p></li>
+          <li class="block"><span class="year">2022</span><p>Abre en Punta del Este el primer cajero cripto del país: más de 1.000 operaciones en sus primeras horas.</p></li>
+          <li class="block"><span class="year">2024</span><p>La Ley 20.345 pone al Banco Central (BCU) a controlar a las empresas que trabajan con cripto.</p></li>
+          <li class="block"><span class="year">2026</span><p>El BCU publica las reglas (Circular 2507): autorización y controles contra el lavado de dinero.</p></li>
+        </ol>
+        <div class="q block solo" data-qid="uy" data-answer="a">
+          <p class="q-count"></p>
+          <p style="font-weight:700;font-size:clamp(1.05rem,1.5vw,1.35rem)">¿Quién controla a las empresas cripto en Uruguay?</p>
+          <div class="opts">
+            <button class="opt" type="button" data-v="a"><span class="key">A</span><span class="label">El Banco Central del Uruguay (BCU)</span></button>
+            <button class="opt" type="button" data-v="b"><span class="key">B</span><span class="label">La DGI</span></button>
+            <button class="opt" type="button" data-v="c"><span class="key">C</span><span class="label">La Intendencia</span></button>
+            <button class="opt" type="button" data-v="d"><span class="key">D</span><span class="label">Nadie, es totalmente libre</span></button>
+          </div>
+          <div class="feedback" hidden><p class="fb-title"></p><p>Desde la Ley 20.345 (2024), el BCU autoriza y controla a las empresas cripto. En julio de 2026 publicó las reglas detalladas.</p></div>
+        </div>
+        <p class="source">Fuentes: HRF CBDC Tracker (e-Peso); El Observador y EFE (2022); BeInCrypto (2024); El Observador (2026).</p>
+      </div>
+    </section>
+
+    <!-- 8. Lo que se viene -->
+    <section class="slide" data-title="Lo que se viene">
+      <div class="inner">
+        <h2 tabindex="-1">Lo que se viene</h2>
+        <p class="lead">Los pronósticos coinciden en algo: el futuro de los pagos con cripto pasa por las stablecoins, no por Bitcoin.</p>
+        <div class="future">
+          <div class="block"><h3>Muchas más stablecoins</h3><p>Citi calcula que podrían pasar de unos US$ 305.000 millones hoy a US$ 1,9 billones en 2030: más de 6 veces.</p></div>
+          <div class="block"><h3>Tarjetas cripto en todos lados</h3><p>Visa planea tarjetas conectadas a stablecoins en más de 100 países para fines de 2026. Mastercard ya las acepta en más de 150 millones de comercios.</p></div>
+          <div class="block"><h3>Pagos hechos por inteligencia artificial</h3><p>Agentes de IA ya hicieron 66,3 millones de pagos con stablecoins en 90 días, por ejemplo para pagar datos o servicios sin que intervenga una persona.</p></div>
+          <div class="block"><h3>Monedas digitales de los bancos centrales</h3><p>No va a haber un único formato: stablecoins, depósitos de bancos y monedas digitales oficiales, como el e-Peso, van a convivir.</p></div>
+        </div>
+        <div class="q block solo" data-qid="futuro" data-answer="b">
+          <p class="q-count"></p>
+          <p style="font-weight:700;font-size:clamp(1.05rem,1.5vw,1.35rem)">Según estos pronósticos, ¿qué cripto va a crecer más como medio de pago?</p>
+          <div class="opts">
+            <button class="opt" type="button" data-v="a"><span class="key">A</span><span class="label">Bitcoin</span></button>
+            <button class="opt" type="button" data-v="b"><span class="key">B</span><span class="label">Las stablecoins</span></button>
+            <button class="opt" type="button" data-v="c"><span class="key">C</span><span class="label">Las monedas de los videojuegos</span></button>
+            <button class="opt" type="button" data-v="d"><span class="key">D</span><span class="label">Ninguna: la cripto va a desaparecer</span></button>
+          </div>
+          <div class="feedback" hidden><p class="fb-title"></p><p>Las stablecoins son estables y ya las están sumando Visa, Mastercard y los bancos. Bitcoin sigue funcionando más como inversión.</p></div>
+        </div>
+        <p class="source">Fuentes: Citi vía Funds Society; Visa y Mastercard vía KuCoin (2026); Token Terminal vía iProUP (septiembre de 2026).</p>
+      </div>
+    </section>
+
+    <!-- 9. Economía -->
+    <section class="slide" data-title="Qué significa para la economía">
+      <div class="inner">
+        <h2 tabindex="-1">¿Y qué significa para la economía?</h2>
+        <div class="two-col">
+          <div class="block">
+            <h3>Oportunidades</h3>
+            <ul>
+              <li><strong>Remesas:</strong> mandar plata a otro país en segundos y por menos del 1 % de comisión.</li>
+              <li><strong>Inclusión:</strong> alcanza con un celular, no hace falta una cuenta en el banco.</li>
+              <li><strong>Empresas:</strong> pagos internacionales más rápidos y baratos.</li>
+            </ul>
+          </div>
+          <div class="block">
+            <h3>Riesgos</h3>
+            <ul>
+              <li><strong>Dolarización digital:</strong> si todos usan dólares digitales, se usa menos el peso y el Banco Central pierde control sobre la economía.</li>
+              <li><strong>Uruguay ya está muy dolarizado:</strong> más de dos tercios de los depósitos bancarios están en dólares.</li>
+              <li><strong>Estafas y errores</strong> sin vuelta atrás.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="q block solo" data-qid="economia" data-answer="a">
+          <p class="q-count"></p>
+          <p style="font-weight:700;font-size:clamp(1.05rem,1.5vw,1.35rem)">¿Por qué a un banco central le preocupa que todos paguen con stablecoins en dólares?</p>
+          <div class="opts">
+            <button class="opt" type="button" data-v="a"><span class="key">A</span><span class="label">Porque se usaría menos la moneda del país y perdería control sobre la economía</span></button>
+            <button class="opt" type="button" data-v="b"><span class="key">B</span><span class="label">Porque gastan mucha electricidad</span></button>
+            <button class="opt" type="button" data-v="c"><span class="key">C</span><span class="label">Porque son ilegales en todo el mundo</span></button>
+            <button class="opt" type="button" data-v="d"><span class="key">D</span><span class="label">Porque no funcionan en el celular</span></button>
+          </div>
+          <div class="feedback" hidden><p class="fb-title"></p><p>El Banco de Pagos Internacionales advirtió en 2026 que las stablecoins en dólares esquivan los controles que usan los países y que esa dolarización es difícil de revertir.</p></div>
+        </div>
+        <p class="source">Fuentes: Crypto Economy (remesas); BIS, Working Paper 1370 (julio de 2026); Montevideo Portal y Bloomberg (dolarización en Uruguay).</p>
+      </div>
+    </section>
+
+    <!-- 10. Verdadero o falso -->
+    <section class="slide" data-title="Verdadero o falso">
+      <div class="inner">
+        <h2 tabindex="-1">Último desafío: ¿verdadero o falso?</h2>
+        <div class="vf-list">
+          <div class="q block vf" data-qid="vf1" data-answer="f">
+            <p class="q-count"></p>
+            <p class="q-text">En El Salvador, hoy todos los comercios están obligados a aceptar Bitcoin.</p>
+            <div class="opts-row">
+              <button class="opt" type="button" data-v="v"><span class="label">Verdadero</span></button>
+              <button class="opt" type="button" data-v="f"><span class="label">Falso</span></button>
+            </div>
+            <div class="feedback" hidden><p class="fb-title"></p><p>Fue obligatorio desde 2021, pero en 2025, para conseguir un préstamo del FMI de US$ 1.400 millones, pasó a ser voluntario.</p></div>
+          </div>
+          <div class="q block vf" data-qid="vf2" data-answer="f">
+            <p class="q-count"></p>
+            <p class="q-text">Si pagás con cripto a una dirección equivocada, el banco te devuelve la plata.</p>
+            <div class="opts-row">
+              <button class="opt" type="button" data-v="v"><span class="label">Verdadero</span></button>
+              <button class="opt" type="button" data-v="f"><span class="label">Falso</span></button>
+            </div>
+            <div class="feedback" hidden><p class="fb-title"></p><p>No hay banco en el medio: un pago en cripto no se puede revertir.</p></div>
+          </div>
+          <div class="q block vf" data-qid="vf3" data-answer="v">
+            <p class="q-count"></p>
+            <p class="q-text">Con una tarjeta cripto, el comercio puede cobrar en su moneda de siempre.</p>
+            <div class="opts-row">
+              <button class="opt" type="button" data-v="v"><span class="label">Verdadero</span></button>
+              <button class="opt" type="button" data-v="f"><span class="label">Falso</span></button>
+            </div>
+            <div class="feedback" hidden><p class="fb-title"></p><p>La tarjeta convierte la stablecoin a la moneda local en el momento del pago. Para el comercio es una venta normal.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Resultado y conclusión -->
+    <section class="slide" data-title="Resultado y conclusión" data-result>
+      <div class="inner">
+        <h2 tabindex="-1">Tu resultado</h2>
+        <div class="result">
+          <div class="block score-card">
+            <p class="score"><span id="score">0</span> <small>de <span id="score-total">10</span></small></p>
+            <p id="score-msg" aria-live="polite"></p>
+            <div><button class="btn btn-primary" type="button" id="restart">Volver a empezar</button></div>
+          </div>
+          <div class="block takeaways">
+            <h3>Conclusión</h3>
+            <ul>
+              <li><strong>Hoy la cripto es un complemento, no un reemplazo.</strong> Bitcoin funciona más como inversión, porque su precio cambia demasiado.</li>
+              <li><strong>Las stablecoins son el medio de pago real</strong> y lo que más va a crecer: tarjetas, remesas, pagos entre empresas y hasta pagos hechos por IA.</li>
+              <li><strong>El desafío es regularlas</strong> sin que los países pierdan el control de su moneda. Estados Unidos y Uruguay ya empezaron.</li>
+            </ul>
+            <div class="views">
+              <h3>Dos miradas sobre el futuro</h3>
+              <p><strong>Stanley Druckenmiller, inversor:</strong> cree que en 10 o 15 años todos los sistemas de pago van a funcionar con stablecoins.</p>
+              <p><strong>Banco de Pagos Internacionales:</strong> dice que las stablecoins todavía no cumplen todo lo que se le pide al dinero, y que deberían complementar a las monedas de cada país, no reemplazarlas.</p>
+              <p class="hint">¿Vos qué pensás?</p>
+            </div>
+            <details>
+              <summary>Fuentes</summary>
+              <ul>
+                <li><a href="https://www.fortune.com/article/price-of-bitcoin-07-28-2026/" target="_blank" rel="noopener">Fortune: precio de Bitcoin, 28 de julio de 2026</a></li>
+                <li><a href="https://www.datawallet.com/es/crypto/stablecoin-statistics" target="_blank" rel="noopener">Datawallet: estadísticas de stablecoins 2026</a></li>
+                <li><a href="https://www.onebullex.com/pt-br/news/articles/allium-stablecoin-payments-hit-482-billion-through-september-2026-up-45-4" target="_blank" rel="noopener">OneBullEx: pagos con stablecoins según Allium</a></li>
+                <li><a href="https://coinmarketcap.com/academy/article/chainalysis-report-finds-argentina-turns-to-stablecoins-amid-economic-turmoil" target="_blank" rel="noopener">CoinMarketCap: informe de Chainalysis sobre Argentina</a></li>
+                <li><a href="https://cbdctracker.hrf.org/currency/uruguay" target="_blank" rel="noopener">HRF CBDC Tracker: el e-Peso de Uruguay</a></li>
+                <li><a href="https://www.elobservador.com.uy/nota/punta-del-este-inauguro-el-primer-cajero-de-criptomonedas-y-tuvo-1-000-operaciones-en-pocas-horas-202218145958/amp" target="_blank" rel="noopener">El Observador: primer cajero cripto en Punta del Este (2022)</a></li>
+                <li><a href="https://es.beincrypto.com/uruguay-aprueba-ley-permite-regulacion-criptomonedas/" target="_blank" rel="noopener">BeInCrypto: Uruguay aprueba la Ley 20.345</a></li>
+                <li><a href="https://www.elobservador.com.uy/opinion/el-banco-central-le-pone-reglas-al-ecosistema-activos-virtuales-uruguay-n6051810" target="_blank" rel="noopener">El Observador: el BCU le pone reglas a las empresas cripto (2026)</a></li>
+                <li><a href="https://www.fundssociety.com/es/noticias/alternativos/stablecoins-entre-el-auge-y-la-desconfianza-de-los-inversores-institucionales/" target="_blank" rel="noopener">Funds Society: las proyecciones de Citi para 2030</a></li>
+                <li><a href="https://www.kucoin.com/news/flash/visa-captures-over-100m-in-stablecoin-card-transactions-in-july-2026" target="_blank" rel="noopener">KuCoin: Visa, Mastercard y las tarjetas con stablecoins (2026)</a></li>
+                <li><a href="https://www.iproup.com/economia-digital/71300-stablecoins-agentes-inteligencia-artificial-economia-paralela-sin-bancos.amp" target="_blank" rel="noopener">iProUP: pagos de agentes de IA con stablecoins</a></li>
+                <li><a href="https://crypto-economy.com/es/?p=109971" target="_blank" rel="noopener">Crypto Economy: stablecoins y remesas</a></li>
+                <li><a href="https://www.bis.org/publ/work1370.htm" target="_blank" rel="noopener">BIS: dolarización y stablecoins (julio de 2026)</a></li>
+                <li><a href="https://www.unlock-bc.com/en/bis-warns-stablecoins-could-undermine-capital-controls" target="_blank" rel="noopener">Unlock: la postura del BIS sobre las stablecoins</a></li>
+                <li><a href="https://www.montevideo.com.uy/Noticias/BCU-planea-desalentar-uso-del-dolar-e-implementar-medidas-para-impulsar-el-del-peso-uc947960" target="_blank" rel="noopener">Montevideo Portal: el BCU quiere impulsar el peso</a></li>
+                <li><a href="https://decrypt.co/es/361144/druckenmiller-stablecoins-sistema-pagos-futuro-cripto" target="_blank" rel="noopener">Decrypt: Druckenmiller sobre las stablecoins</a></li>
+                <li><a href="https://www.bloomberglinea.com/latinoamerica/el-salvador/el-fmi-llega-a-un-acuerdo-con-el-salvador-para-un-prestamo-de-us1400-millones/" target="_blank" rel="noopener">Bloomberg Línea: acuerdo de El Salvador con el FMI</a></li>
+                <li><a href="https://www.everycrsreport.com/files/2026-08-20_IN12553_0b329134f6be0cc12f78017358552f4053d52c5e.html" target="_blank" rel="noopener">Congressional Research Service: Ley GENIUS</a></li>
+              </ul>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="nav" aria-label="Navegación de la presentación">
+    <button class="btn" type="button" id="prev">Anterior</button>
+    <div class="chain" id="chain"></div>
+    <button class="btn btn-primary" type="button" id="next">Siguiente</button>
+  </nav>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var chain = document.getElementById('chain');
+  var pos = document.getElementById('pos');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var stage = document.getElementById('stage');
+  var qs = Array.prototype.slice.call(document.querySelectorAll('.q'));
+  var answers = {};
+  var cur = 0;
+  var fmt = new Intl.NumberFormat('es-UY');
+
+  // Cadena de bloques de navegación
+  var links = slides.map(function (s, i) {
+    if (i > 0) {
+      var bond = document.createElement('span');
+      bond.className = 'bond';
+      bond.setAttribute('aria-hidden', 'true');
+      chain.appendChild(bond);
+    }
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'link';
+    b.textContent = i + 1;
+    b.setAttribute('aria-label', 'Ir al bloque ' + (i + 1) + ': ' + s.dataset.title);
+    b.addEventListener('click', function () { go(i); });
+    chain.appendChild(b);
+    return b;
+  });
+
+  // Numeración de preguntas
+  qs.forEach(function (q, i) {
+    var c = q.querySelector('.q-count');
+    if (c) c.textContent = 'Pregunta ' + (i + 1) + ' de ' + qs.length;
+  });
+  document.getElementById('score-total').textContent = qs.length;
+
+  function go(i, silent) {
+    i = Math.max(0, Math.min(total - 1, i));
+    slides[cur].classList.remove('is-active');
+    cur = i;
+    var s = slides[cur];
+    s.classList.add('is-active');
+    s.scrollTop = 0;
+    pos.textContent = 'Bloque ' + (cur + 1) + ' de ' + total;
+    links.forEach(function (l, j) {
+      l.classList.toggle('is-current', j === cur);
+      l.classList.toggle('is-past', j < cur);
+      if (j === cur) l.setAttribute('aria-current', 'step'); else l.removeAttribute('aria-current');
+    });
+    prev.disabled = cur === 0;
+    next.disabled = cur === total - 1;
+    if (s.hasAttribute('data-result')) renderResult();
+    if (!silent) {
+      var h = s.querySelector('h1, h2');
+      if (h) h.focus({ preventScroll: true });
+    }
+    try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) {}
+  }
+
+  function updateDone() {
+    slides.forEach(function (s, j) {
+      var sq = s.querySelectorAll('.q');
+      var done = sq.length > 0 && Array.prototype.every.call(sq, function (q) { return q.dataset.qid in answers; });
+      links[j].classList.toggle('is-done', done);
+      links[j].textContent = done ? '✓' : String(j + 1);
+      links[j].setAttribute('aria-label', 'Ir al bloque ' + (j + 1) + ': ' + s.dataset.title + (done ? ', respondido' : ''));
+    });
+  }
+
+  function labelOf(btn) {
+    var l = btn.querySelector('.label');
+    return (l ? l.textContent : btn.textContent).trim();
+  }
+
+  function addTag(btn, text) {
+    var t = document.createElement('span');
+    t.className = 'tag';
+    t.textContent = text;
+    btn.appendChild(t);
+  }
+
+  function answer(q, btn) {
+    var id = q.dataset.qid;
+    if (id in answers) return;
+    var right = q.dataset.answer;
+    var ok = btn.dataset.v === right;
+    answers[id] = ok;
+    var rightLabel = '';
+    q.querySelectorAll('.opt').forEach(function (o) {
+      o.disabled = true;
+      var short = !!o.closest('.opts-row');
+      if (o.dataset.v === right) {
+        o.classList.add('is-right');
+        addTag(o, short ? '✓' : (ok ? 'Correcta' : 'La correcta'));
+        rightLabel = labelOf(o);
+      } else if (o === btn) {
+        o.classList.add('is-wrong');
+        addTag(o, short ? '✗' : 'Tu respuesta');
+      } else {
+        o.classList.add('is-dim');
+      }
+    });
+    var fb = q.querySelector('.feedback');
+    fb.hidden = false;
+    fb.classList.toggle('is-bad', !ok);
+    fb.querySelector('.fb-title').textContent = ok ? 'Correcto.' : 'No era esa. La respuesta es: ' + rightLabel + '.';
+    var after = document.querySelector('[data-after="' + id + '"]');
+    if (after) {
+      after.hidden = false;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setTimeout(function () { after.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); }, 150);
+    }
+    updateDone();
+  }
+
+  qs.forEach(function (q) {
+    q.querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () { answer(q, b); });
+    });
+  });
+
+  // Glosario
+  document.querySelectorAll('.term').forEach(function (t) {
+    t.addEventListener('click', function () {
+      var open = t.getAttribute('aria-expanded') === 'true';
+      t.setAttribute('aria-expanded', String(!open));
+      document.getElementById(t.getAttribute('aria-controls')).hidden = open;
+    });
+  });
+
+  // Resultado
+  function renderResult() {
+    var n = qs.length;
+    var keys = Object.keys(answers);
+    var right = keys.filter(function (k) { return answers[k]; }).length;
+    document.getElementById('score').textContent = right;
+    var msg;
+    if (keys.length === 0) msg = 'Todavía no respondiste ninguna pregunta. Volvé a los bloques con preguntas para jugar.';
+    else if (right === n) msg = 'Perfecto: entendiste todo.';
+    else if (right >= n - 2) msg = 'Muy bien.';
+    else if (right >= Math.ceil(n / 2)) msg = 'Bien. Repasá las preguntas que fallaste.';
+    else msg = 'Te conviene volver a mirar la presentación.';
+    var missing = n - keys.length;
+    if (keys.length > 0 && missing > 0) msg += ' Te quedaron ' + missing + (missing === 1 ? ' pregunta' : ' preguntas') + ' sin responder.';
+    document.getElementById('score-msg').textContent = msg;
+  }
+
+  document.getElementById('restart').addEventListener('click', function () {
+    Object.keys(answers).forEach(function (k) { delete answers[k]; });
+    qs.forEach(function (q) {
+      q.querySelectorAll('.opt').forEach(function (o) {
+        o.disabled = false;
+        o.classList.remove('is-right', 'is-wrong', 'is-dim');
+        var t = o.querySelector('.tag');
+        if (t) t.remove();
+      });
+      q.querySelector('.feedback').hidden = true;
+    });
+    document.querySelectorAll('[data-after]').forEach(function (a) { a.hidden = true; });
+    updateDone();
+    go(0);
+  });
+
+  // Navegación
+  document.querySelectorAll('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { go(Number(b.dataset.go)); });
+  });
+  prev.addEventListener('click', function () { go(cur - 1); });
+  next.addEventListener('click', function () { go(cur + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches && e.target.matches('input, textarea, select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(total - 1); }
+  });
+
+  var sx = null, sy = null;
+  stage.addEventListener('touchstart', function (e) {
+    if (e.target.closest('input, .table-wrap')) { sx = null; return; }
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 70 && Math.abs(dy) < 50) go(cur + (dx < 0 ? 1 : -1));
+    sx = null;
+  });
+
+  var start = parseInt(location.hash.slice(1), 10);
+  go(isFinite(start) ? start - 1 : 0, true);
+})();
+</script>
+</body>
+</html>

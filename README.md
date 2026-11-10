@@ -14,6 +14,7 @@ Se publica en **Cloudflare** (Worker `bweb` con archivos estáticos). No necesit
 | `politica-de-privacidad.html` | `/politica-de-privacidad` | Política de privacidad (formulario, WhatsApp y píxel de Meta) |
 | `404.html` | — | Página de error |
 | `sara/` | `/sara/` | Invitación a los 15 de Sara. No está enlazada desde el sitio ni en el sitemap, y no se indexa (`noindex` en la página y en `_headers`) |
+| `cripto-k7m2/` | `/cripto-k7m2/` | Presentación con quiz «Criptomonedas como método de pago» (Economía, liceo). No está enlazada desde el sitio ni en el sitemap, y no se indexa (`noindex` en la página y en `_headers`) |
 | `en/` | `/en/…` | Versión en inglés: `index.html` (`/en/`), `projects.html`, `faq.html`, `privacy-policy.html` y `404.html`. Ver «Versión en inglés» |
 | `css/styles.css`, `js/main.js` | | Estilos y comportamiento compartidos (menú, aviso de idioma, formulario, píxel de Meta) |
 | `img/proyectos/` | | Capturas de los proyectos |

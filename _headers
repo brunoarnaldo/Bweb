@@ -11,3 +11,7 @@
 # Invitación privada: que Google no la indexe
 /sara/*
   X-Robots-Tag: noindex, nofollow
+
+# Presentación privada de Economía: que Google no la indexe
+/cripto-k7m2/*
+  X-Robots-Tag: noindex, nofollow
