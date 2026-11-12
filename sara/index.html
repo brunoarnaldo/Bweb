@@ -339,10 +339,16 @@
     line-height: 1.5;
   }
 
-  .cancion-noche iframe {
+  .cancion-titulo {
+    font-family: var(--titulo);
+    font-size: 24px;
+    font-style: italic;
+  }
+
+  .cancion-noche audio {
     display: block;
-    border: 0;
-    border-radius: 12px;
+    width: 100%;
+    margin-top: 12px;
   }
 
   /* Cuenta regresiva */
@@ -925,16 +931,23 @@
     scale: -1 -1;
   }
 
+  /* Los ramos se achican en pantallas bajas para no tapar los textos */
   .entrada .ramo:first-child {
     top: -20px;
     right: -44px;
-    width: 280px;
+    width: min(280px, 30vh);
   }
 
   .entrada .ramo:nth-child(2) {
     bottom: -18px;
     left: -44px;
-    width: 280px;
+    width: min(280px, 30vh);
+  }
+
+  /* Los textos y el sobre siempre quedan por encima de los ramos */
+  .entrada > :not(.ramo) {
+    position: relative;
+    z-index: 3;
   }
 
   .arco-marco {
@@ -1094,7 +1107,8 @@
       <svg class="ramo ramo--centro" data-ramo="chico" viewBox="0 0 300 220" aria-hidden="true"></svg>
       <div class="cancion-noche aparecer">
         <p class="volanta">La canción de la noche</p>
-        <div id="spotify"></div>
+        <p class="cancion-titulo">Chasing Cars · Snow Patrol</p>
+        <audio id="cancion-audio" src="cancion.mp3" controls preload="metadata"></audio>
       </div>
     </section>
 
@@ -1177,9 +1191,8 @@
       <details class="regalo aparecer">
         <summary>Datos para transferir</summary>
         <div class="regalo-datos">
-          <div class="regalo-fila"><span>Prex</span></div>
-          <div class="regalo-fila"><span id="dato-cuenta">23703341</span><button class="copiar" type="button" data-copiar="#dato-cuenta">Copiar</button></div>
-          <div class="regalo-fila"><span id="dato-titular">Sara Clavijo</span><button class="copiar" type="button" data-copiar="#dato-titular">Copiar</button></div>
+          <div class="regalo-fila"><span>Cuenta Prex: <span id="dato-cuenta">312108</span></span><button class="copiar" type="button" data-copiar="#dato-cuenta">Copiar</button></div>
+          <div class="regalo-fila"><span id="dato-titular">Natalia Ackermann</span><button class="copiar" type="button" data-copiar="#dato-titular">Copiar</button></div>
         </div>
       </details>
     </section>
@@ -1288,27 +1301,23 @@
   });
 
   // Sobre de entrada y música
-  const CANCION = 'spotify:track:5hnyJvgoWiQUYZttV4wXy6';
+  // La canción completa se sirve desde esta misma carpeta (cancion.mp3)
+  const audio = $('#cancion-audio');
   const botonMusica = $('#musica');
-  let reproductor = null;
-  let reproducirAlCargar = false;
-
-  window.onSpotifyIframeApiReady = (IFrameAPI) => {
-    IFrameAPI.createController($('#spotify'), { uri: CANCION, width: '100%', height: 80 }, (controlador) => {
-      reproductor = controlador;
-      controlador.addListener('playback_update', (evento) => marcarMusica(!evento.data.isPaused));
-      if (reproducirAlCargar) controlador.play();
-    });
-  };
 
   function reproducir() {
-    if (reproductor) reproductor.play();
-    else reproducirAlCargar = true;
+    audio.play().catch(() => marcarMusica(false));
   }
+
+  audio.addEventListener('play', () => marcarMusica(true));
+  audio.addEventListener('pause', () => marcarMusica(false));
 
   function abrirSobre(conMusica) {
     const entrada = $('#entrada');
-    if (conMusica) reproducir();
+    if (conMusica) {
+      audio.currentTime = 0;
+      reproducir();
+    }
     entrada.classList.add('abierto');
     setTimeout(() => {
       entrada.classList.add('fuera');
@@ -1318,7 +1327,7 @@
 
   $('#abrir').addEventListener('click', () => abrirSobre(true));
   $('#abrir-sin-musica').addEventListener('click', () => abrirSobre(false));
-  botonMusica.addEventListener('click', () => (reproductor ? reproductor.togglePlay() : reproducir()));
+  botonMusica.addEventListener('click', () => (audio.paused ? reproducir() : audio.pause()));
 
   function marcarMusica(sonando) {
     botonMusica.classList.toggle('sonando', sonando);
@@ -1535,6 +1544,5 @@
   window.addEventListener('resize', ubicarCortes);
   document.fonts.ready.then(ubicarCortes);
 </script>
-<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
