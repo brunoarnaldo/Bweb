@@ -14,7 +14,7 @@ No es una retoma: es salir a vender por primera vez de forma ordenada. El sitio 
 | 31/01 | 4 webs vendidas en total y 3 clientes de mantenimiento |
 | Siempre | Responder cada consulta en menos de 1 hora y mandar propuesta en menos de 24 h |
 
-Tiempo: **30 min por día** de semana (en paralelo a Acá Cripto) y una hora el sábado. En semana de
+Todo es online, sin salir a la calle. Tiempo: **30 min por día** de semana (en paralelo a Acá Cripto) y una hora el sábado. En semana de
 parcial, solo la tarea ⭐.
 
 ## 1 · La oferta (cerrar esto primero, día 1)
@@ -36,7 +36,7 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 
 1. **Gente que ya te conoce**: clientes viejos, los del cartel NFC, familia, amigos, la familia de Sara. Mensaje directo: «Estoy tomando 2 webs para diciembre, ¿conocés a alguien que necesite?».
 2. **Comercios de Acá Cripto sin web**: ya te conocen por el mapa. Ofrecer el paquete Esencial.
-3. **Puerta a puerta en Minas**: el guion de «Venta en persona» de `MARKETING.md`. Rubros: ferreterías, raciones, ropa, repuestos, peluquerías, consultorios, talleres.
+3. **Prospección online**: buscar en Google Maps negocios de Minas y alrededores **sin web** (o con una vieja) y escribirles por WhatsApp o Instagram con una captura de cómo aparecen hoy en Google y el link a un proyecto del mismo rubro. Rubros: ferreterías, raciones, ropa, repuestos, peluquerías, consultorios, talleres y negocios que venden solo por Instagram.
 4. **Meta Ads**: Campaña 1 de `MARKETING.md` (USD 5 por día, 21 días). **Se lanza recién cuando estén listos la oferta, la plantilla de propuesta y la primera respuesta de WhatsApp.**
 
 ## 3 · Semana a semana
@@ -56,9 +56,9 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 
 | Día | Tarea | ⭐ Mínimo |
 |---|---|---|
-| Lun–Vie | 5 contactos nuevos por día (mensaje o en persona) y seguimiento a los que contestaron | 3 contactos |
+| Lun–Vie | 5 contactos nuevos por día (WhatsApp, Instagram o mail) y seguimiento a los que contestaron | 3 contactos |
 | Mié | Publicar en Instagram de Bweb el caso de Acá Cripto (antes/después o recorrido en el celular) | 1 publicación |
-| Sáb | Puerta a puerta en Minas: 8 negocios con el celular y los proyectos abiertos | 4 negocios |
+| Sáb | Prospección online: 10 negocios sin web en Google Maps, mensaje con captura y link a un proyecto del rubro | 5 mensajes |
 | Dom | Completar la planilla semanal (contactos, propuestas, ventas) | La planilla |
 
 ### Semanas 3 a 5 · 30/11 al 20/12 · Anuncios y propuestas
@@ -73,7 +73,7 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 
 - Entregar lo vendido. **Pedir reseña y foto o captura para `/proyectos` a cada cliente al publicar.**
 - Juzgar la campaña: USD por web vendida contra el número de corte (≈ USD 60).
-- Decidir enero: subir presupuesto, cambiar anuncios o volcarse al puerta a puerta y los referidos.
+- Decidir enero: subir presupuesto, cambiar anuncios o volcarse a la prospección online y los referidos.
 
 ### Enero · Repetir lo que funcionó
 
