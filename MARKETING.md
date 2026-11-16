@@ -135,6 +135,43 @@ mapa o directorio → Acá Cripto.
 > con la ficha del mapa y una web propia los encuentran más fácil en Google. Si te interesa, te mando
 > una propuesta en 24 horas.
 
+### Promo de temporada (hasta el 15/12, 3 cupos)
+
+**«Tu web antes de la temporada».** Esencial a USD 200 (en vez de 250). Negocio y Empresa sin bajar el
+precio, con 2 meses de mantenimiento gratis (USD 40); Empresa suma además la puesta a punto del perfil
+de Google. Vale para quien confirme y pague el 50 % hasta el 15/12. Cuando se llenan los 3 cupos o
+pasa la fecha, se termina: no se estira. **Nunca menos de USD 200.**
+
+Línea para sumar al final de cualquier mensaje de arriba:
+
+> Hasta el 15/12 tengo 3 cupos con precio de temporada, para que la web esté lista antes de que
+> arranque el verano.
+
+**Posteo de Black Friday (viernes 27/11) en Instagram y Facebook de Bweb.** Carrusel de 4 placas:
+
+1. «Tu web antes de la temporada» · 3 cupos hasta el 15/12
+2. La captura de un proyecto en el celular (La Barraquita o GRADIN)
+3. Esencial USD ~~250~~ 200 · Negocio y Empresa con 2 meses de mantenimiento de regalo
+4. «Escribinos por WhatsApp: propuesta en 24 horas»
+
+Texto:
+
+> En diciembre te buscan más que nunca. ¿Te encuentran? 🔎
+>
+> Hasta el 15/12 tomamos 3 webs con precio de temporada:
+> ✅ Web Esencial a USD 200 (en vez de 250)
+> ✅ Negocio y Empresa con 2 meses de mantenimiento de regalo
+>
+> Lista en días, pensada para el celular y con los pedidos directo a tu WhatsApp.
+> Escribinos y en 24 horas te mandamos la propuesta. Link en el perfil.
+
+**Historia del mismo día:** la placa 1 con el sticker de enlace a WhatsApp y una segunda con «Quedan
+3 cupos» (actualizala cuando se ocupe uno: «Quedan 2»).
+
+**Anuncios:** si la Campaña 1 arranca antes del 15/12, sumá un tercer texto principal:
+«Hasta el 15/12 tomamos 3 webs con precio de temporada. Web para tu negocio lista antes del verano,
+con pedidos directo a tu WhatsApp. Pedí tu propuesta, te la mandamos en 24 horas.»
+
 ### Seguimiento
 
 - **A los 2 días, sin respuesta al primer mensaje:** «¡Hola! ¿Pudiste ver el mensaje? Cualquier cosa me

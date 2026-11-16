@@ -57,6 +57,11 @@
   .paso b { display: block; color: var(--ink); }
   .pie { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .oculto { display: none; }
+  .aviso { margin: 8px 0 0; font-size: 13px; font-weight: 600; color: #B91C1C; }
+  input.mal { border-color: #B91C1C; }
+  .tachado { font-size: 18px; font-weight: 600; color: var(--muted); text-decoration: line-through; margin-right: 6px; }
+  .promo { margin-top: 10px; border: 1px dashed var(--brand); border-radius: 12px; padding: 12px 16px; font-size: 14px; }
+  .promo b { color: var(--brand-ink); }
 
   @media print {
     @page { size: A4; margin: 0; }
@@ -86,7 +91,7 @@
 
   <label for="paquete">Paquete</label>
   <select id="paquete">
-    <option value="esencial">Esencial · USD 250</option>
+    <option value="esencial">Esencial · USD 250 (200 en promo)</option>
     <option value="negocio" selected>Negocio · USD 300</option>
     <option value="empresa">Empresa · USD 450</option>
   </select>
@@ -98,10 +103,13 @@
   <textarea id="extras" placeholder="Fotos de 20 productos | 40"></textarea>
 
   <div class="fila">
-    <div><label for="precio">Precio base (USD)</label><input id="precio" type="number" min="0" step="10" value="300"></div>
+    <div><label for="precio">Precio base (USD)</label><input id="precio" type="number" min="200" step="10" value="300"></div>
     <div><label for="dias">Plazo (días hábiles)</label><input id="dias" type="number" min="1" value="10"></div>
   </div>
 
+  <p class="aviso oculto" id="avisoPiso">Ojo: el mínimo es USD 200.</p>
+
+  <label class="check"><input id="promo" type="checkbox"> Promo de temporada (hasta el 15/12)</label>
   <label class="check"><input id="mant" type="checkbox" checked> Ofrecer mantenimiento</label>
   <div class="fila">
     <div><label for="mantPrecio">Mantenimiento USD/mes</label><input id="mantPrecio" type="number" min="0" value="20"></div>
@@ -133,9 +141,11 @@
 
   <h3>Inversión</h3>
   <div class="precio">
-    <div><span class="monto">USD <span id="pPrecio"></span></span><small id="pDetalle">Pago único · 50 % para arrancar y 50 % al publicar</small></div>
+    <div><span class="tachado oculto" id="pLista"></span><span class="monto">USD <span id="pPrecio"></span></span><small id="pDetalle">Pago único · 50 % para arrancar y 50 % al publicar</small></div>
     <div style="text-align:right"><b style="color:var(--ink)"><span id="pDias"></span> días hábiles</b><small>desde que tenemos tus textos y fotos</small></div>
   </div>
+
+  <div class="promo oculto" id="pPromo"></div>
 
   <div id="bloqueMant">
     <h3>Mantenimiento (opcional)</h3>
@@ -181,7 +191,18 @@
     ]}
   };
 
+  // Promo «Tu web antes de la temporada»: hasta el 15/12, 3 cupos. Nunca menos de USD 200.
+  const PISO = 200;
+  const PROMO = {
+    hasta: new Date('2026-12-15T23:59:59-03:00'),
+    textoFecha: '15 de diciembre',
+    esencial: { precio: 200, regalos: [] },
+    negocio: { regalos: ['2 meses de mantenimiento gratis (USD 40)'] },
+    empresa: { regalos: ['2 meses de mantenimiento gratis (USD 40)', 'la puesta a punto del perfil de Google (Google Business Profile)'] }
+  };
+
   const $ = id => document.getElementById(id);
+  $('promo').checked = new Date() <= PROMO.hasta;
   const hoy = new Date();
   $('pFecha').textContent = hoy.toLocaleDateString('es-UY', { day: 'numeric', month: 'long', year: 'numeric' });
   $('pNum').textContent = hoy.toISOString().slice(2, 10).replaceAll('-', '');
@@ -206,7 +227,29 @@
       tr.append(a, b); return tr;
     }));
 
+    const clave = $('paquete').value;
+    const enPromo = $('promo').checked;
+    const promo = PROMO[clave];
     const base = Number($('precio').value) || 0;
+    const listaTachada = enPromo && promo.precio && base < p.precio;
+    $('pLista').classList.toggle('oculto', !listaTachada);
+    texto($('pLista'), 'USD ' + p.precio);
+    const regalos = enPromo ? promo.regalos : [];
+    const cajaPromo = $('pPromo');
+    cajaPromo.classList.toggle('oculto', !enPromo);
+    if (enPromo) {
+      const partes = [];
+      if (listaTachada) partes.push('precio de temporada (USD ' + base + ' en vez de ' + p.precio + ')');
+      if (regalos.length) partes.push('de regalo: ' + regalos.join(' y '));
+      cajaPromo.replaceChildren();
+      const t = document.createElement('b'); t.textContent = 'Tu web antes de la temporada. ';
+      cajaPromo.append(t, document.createTextNode(
+        (partes.length ? 'Incluye ' + partes.join('; ') + '. ' : '') +
+        'Válido confirmando hasta el ' + PROMO.textoFecha + ', con cupos limitados.'));
+    }
+    const bajoPiso = base < PISO;
+    $('avisoPiso').classList.toggle('oculto', !bajoPiso);
+    $('precio').classList.toggle('mal', bajoPiso);
     const sumaExtras = extras.reduce((t, x) => t + (Number((x[1] || '').trim()) || 0), 0);
     texto($('pPrecio'), base + sumaExtras);
     texto($('pDetalle'), (sumaExtras ? 'Paquete USD ' + base + ' + extras USD ' + sumaExtras + ' · ' : 'Pago único · ') + '50 % para arrancar y 50 % al publicar');
@@ -217,13 +260,16 @@
     document.title = 'Propuesta Bweb · ' + ($('negocio').value || '');
   }
 
-  $('paquete').addEventListener('change', () => {
-    const p = PAQUETES[$('paquete').value];
-    $('precio').value = p.precio; $('dias').value = p.dias; render();
-  });
+  function precioSugerido() {
+    const clave = $('paquete').value, p = PAQUETES[clave];
+    $('precio').value = ($('promo').checked && PROMO[clave].precio) || p.precio;
+    $('dias').value = p.dias; render();
+  }
+  $('paquete').addEventListener('change', precioSugerido);
+  $('promo').addEventListener('change', precioSugerido);
   $('f').addEventListener('input', render);
   $('imprimir').addEventListener('click', () => window.print());
-  render();
+  precioSugerido();
 </script>
 </body>
 </html>

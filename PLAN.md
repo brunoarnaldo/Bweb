@@ -28,6 +28,8 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 | **Empresa** | Empresa con varias áreas o equipo | Web a medida, formularios, SEO por página, analítica, 2 idiomas opcional | USD 450 (de 350 a 500 según el alcance) |
 | **Mantenimiento** | Todos los anteriores | Hosting y dominio al día, copias, hasta 1 h de cambios por mes, informe corto de visitas | USD 20 por mes (a confirmar) |
 
+- **Mínimo: USD 200.** Ninguna web por debajo, con promo o sin promo.
+- **Promo de temporada «Tu web antes de la temporada»** (hasta el 15/12, 3 cupos): Esencial a USD 200; Negocio y Empresa con 2 meses de mantenimiento gratis (Empresa suma el perfil de Google). Detalle y textos en `MARKETING.md`. El generador de propuestas la aplica sola hasta esa fecha.
 - Cobro: **50 % para arrancar, 50 % al publicar.**
 - El mantenimiento es lo que da ingreso fijo: ofrecerlo en **todas** las propuestas.
 - **Propuestas:** `propuestas/index.html` (no se publica). Se abre en el navegador, se elige el paquete, se completan negocio, objetivo y extras, y se guarda el PDF. Lleva 10 minutos.
@@ -59,12 +61,14 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 |---|---|---|
 | Lun–Vie | 5 contactos nuevos por día (WhatsApp, Instagram o mail) y seguimiento a los que contestaron | 3 contactos |
 | Mié | Publicar en Instagram de Bweb el caso de Acá Cripto (antes/después o recorrido en el celular) | 1 publicación |
+| Vie 27/11 | **Black Friday:** carrusel e historia de la promo de temporada (textos en `MARKETING.md`) | El carrusel publicado |
 | Sáb | Prospección online: 10 negocios sin web en Google Maps, mensaje con captura y link a un proyecto del rubro | 5 mensajes |
 | Dom | Completar la planilla semanal (contactos, propuestas, ventas) | La planilla |
 
 ### Semanas 3 a 5 · 30/11 al 20/12 · Anuncios y propuestas
 
-- **Lanzar la Campaña 1** (USD 5 por día, 21 días ≈ USD 105). Con webs de 200–500, una sola venta paga la prueba.
+- **Lanzar la Campaña 1** (USD 5 por día, 21 días ≈ USD 105) con el texto de la promo. Con webs de 200–500, una sola venta paga la prueba.
+- **15/12: se cierra la promo.** Si quedan cupos, no se estira: el 14/12 va una historia de «último día».
 - Seguir con 3 contactos por día y el seguimiento.
 - Toda consulta: primera respuesta en menos de 1 hora (texto en `MARKETING.md`) y propuesta en menos de 24 h.
 - Seguimiento de propuestas: a los 2 días («¿Pudiste mirarla?») y a los 7 días (con una fecha: «Puedo arrancar el lunes»).
