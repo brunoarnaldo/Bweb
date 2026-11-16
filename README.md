@@ -28,6 +28,7 @@ Se publica en **Cloudflare** (Worker `bweb` con archivos estáticos). No necesit
 | `vercel.json` | | URLs sin `.html` y las mismas redirecciones en las vistas previas de Vercel |
 | `MARKETING.md` | | Guía de Meta Ads para conseguir consultas de diseño web (no se publica) |
 | `PLAN.md` | | Plan de arranque comercial: oferta, fuentes de clientes y semana a semana (no se publica) |
+| `propuestas/index.html` | | Generador de propuestas en PDF (paquetes, extras, mantenimiento). Se abre en el navegador, no se publica |
 
 El header, el menú y el footer se repiten en las cuatro páginas en español y en las cuatro en inglés (todas menos las 404): si cambiás un link ahí, cambialo en todas.
 

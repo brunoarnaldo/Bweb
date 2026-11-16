@@ -23,14 +23,15 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 
 | Paquete | Para quién | Qué incluye | Precio |
 |---|---|---|---|
-| **Esencial** | Negocio chico que vive en Instagram | Web de 1 página, botón de WhatsApp, mapa, horarios, Google Business Profile | USD 200–250 |
-| **Negocio** | Comercio chico con catálogo o servicios | Hasta 5 secciones, catálogo con pedido por WhatsApp, SEO básico | USD 280–300 |
-| **Empresa** | Empresa con varias áreas o equipo | Web a medida, formularios, SEO por página, analítica, 2 idiomas opcional | USD 350–500 |
-| **Mantenimiento** | Todos los anteriores | Cambios menores, hosting, copias, informe mensual corto | USD 15–25 por mes (a definir) |
+| **Esencial** | Negocio chico que vive en Instagram | Web de 1 página, botón de WhatsApp, mapa, horarios, Google Business Profile | USD 250 (piso USD 200) |
+| **Negocio** | Comercio chico con catálogo o servicios | Hasta 5 secciones, catálogo con pedido por WhatsApp, SEO básico | USD 300 |
+| **Empresa** | Empresa con varias áreas o equipo | Web a medida, formularios, SEO por página, analítica, 2 idiomas opcional | USD 450 (de 350 a 500 según el alcance) |
+| **Mantenimiento** | Todos los anteriores | Hosting y dominio al día, copias, hasta 1 h de cambios por mes, informe corto de visitas | USD 20 por mes (a confirmar) |
 
 - Cobro: **50 % para arrancar, 50 % al publicar.**
 - El mantenimiento es lo que da ingreso fijo: ofrecerlo en **todas** las propuestas.
-- Plantilla de propuesta de una página (nombre del negocio, qué se hace, plazo, precio, forma de pago). Una vez armada, cada propuesta lleva 15 minutos.
+- **Propuestas:** `propuestas/index.html` (no se publica). Se abre en el navegador, se elige el paquete, se completan negocio, objetivo y extras, y se guarda el PDF. Lleva 10 minutos.
+- **Mensajes listos** para referidos, Google Maps, Instagram, comercios de Acá Cripto, seguimiento y objeciones: «Mensajes para conseguir clientes» en `MARKETING.md`.
 
 ## 2 · Las cuatro fuentes de clientes (de la más barata a la más cara)
 
@@ -46,7 +47,7 @@ Tres paquetes con precio fijo: simplifican la propuesta y la decisión del clien
 | Día | Tarea | ⭐ Mínimo |
 |---|---|---|
 | Lun | Definir los precios de la tabla de arriba (y el de mantenimiento) | Precios decididos |
-| Mar | Plantilla de propuesta (Google Docs o PDF) | Plantilla lista |
+| Mar | ~~Plantilla de propuesta~~ ✅ (`propuestas/index.html`). Probarla con un negocio inventado y ajustar textos | 1 PDF de prueba |
 | Mié | Lista de 30 contactos: conocidos, clientes viejos, comercios del mapa sin web | 15 nombres |
 | Jue | Google Business Profile de Bweb (Minas) + pedir 3 reseñas a clientes de La Barraquita, GRADIN y el cartel | Perfil creado |
 | Vie | Mandar el mensaje de «estoy tomando 2 webs» a 10 de la lista | 10 mensajes |

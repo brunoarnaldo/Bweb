@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Propuesta Bweb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --ink: #0B1220; --text: #3A4557; --muted: #5F6B7E; --line: rgba(11,18,32,.12);
+    --bg: #fff; --bg-soft: #F6F5F2; --brand: #FF6B35; --brand-ink: #C2410C; --brand-50: #FFF4EE;
+    --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--text); background: var(--bg-soft); line-height: 1.55; }
+  .app { display: grid; grid-template-columns: 360px 1fr; gap: 24px; max-width: 1240px; margin: 0 auto; padding: 24px 16px; }
+  @media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+
+  /* Formulario */
+  form { background: #fff; border-radius: 16px; padding: 20px; align-self: start; position: sticky; top: 16px; box-shadow: 0 12px 32px -12px rgba(11,18,32,.16); }
+  @media (max-width: 900px) { form { position: static; } }
+  form h1 { font-size: 18px; color: var(--ink); margin: 0 0 4px; }
+  form p.ayuda { font-size: 13px; color: var(--muted); margin: 0 0 16px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin: 12px 0 4px; }
+  input, select, textarea { width: 100%; font: inherit; font-size: 15px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+  textarea { min-height: 72px; resize: vertical; }
+  .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .check { display: flex; gap: 8px; align-items: center; font-weight: 500; }
+  .check input { width: auto; }
+  button { margin-top: 18px; width: 100%; font: inherit; font-weight: 700; font-size: 15px; padding: 12px; border: 0; border-radius: 12px; background: var(--brand); color: #fff; cursor: pointer; }
+  button:hover { background: var(--brand-ink); }
+
+  /* Propuesta (A4) */
+  .hoja { background: #fff; width: 100%; max-width: 794px; min-height: 1123px; margin: 0 auto; padding: 56px 60px; box-shadow: 0 12px 32px -12px rgba(11,18,32,.16); border-radius: 4px; }
+  @media (max-width: 600px) { .hoja { padding: 32px 22px; min-height: 0; } }
+  .cab { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid var(--brand); padding-bottom: 18px; }
+  .marca { font-size: 30px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
+  .marca span { color: var(--brand); }
+  .cab .meta { text-align: right; font-size: 13px; color: var(--muted); }
+  h2 { font-size: 26px; color: var(--ink); margin: 32px 0 4px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--brand-ink); margin: 28px 0 8px; }
+  ul { margin: 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  .precio { display: flex; justify-content: space-between; align-items: center; background: var(--brand-50); border-radius: 14px; padding: 18px 22px; margin-top: 8px; }
+  .precio .monto { font-size: 30px; font-weight: 800; color: var(--ink); }
+  .precio small { display: block; color: var(--muted); font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td { padding: 8px 0; border-bottom: 1px solid var(--line); }
+  td:last-child { text-align: right; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 600px) { .pasos { grid-template-columns: 1fr; } }
+  .paso { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  .paso b { display: block; color: var(--ink); }
+  .pie { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .oculto { display: none; }
+
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .app { display: block; padding: 0; max-width: none; }
+    form { display: none; }
+    .hoja { box-shadow: none; border-radius: 0; max-width: none; min-height: 0; padding: 36px 48px; font-size: 14px; }
+    h2 { margin-top: 22px; } h3 { margin: 18px 0 6px; } .sub { margin-bottom: 12px; } .pie { margin-top: 22px; }
+    .precio { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<form id="f" autocomplete="off">
+  <h1>Nueva propuesta</h1>
+  <p class="ayuda">Completá, revisá la vista previa y tocá «Guardar PDF». En el celular: Compartir → Imprimir → Guardar como PDF.</p>
+
+  <label for="negocio">Negocio</label>
+  <input id="negocio" value="Ferretería El Clavo">
+
+  <div class="fila">
+    <div><label for="contacto">Contacto</label><input id="contacto" value="Laura"></div>
+    <div><label for="ciudad">Ciudad</label><input id="ciudad" value="Minas"></div>
+  </div>
+
+  <label for="paquete">Paquete</label>
+  <select id="paquete">
+    <option value="esencial">Esencial · USD 250</option>
+    <option value="negocio" selected>Negocio · USD 300</option>
+    <option value="empresa">Empresa · USD 450</option>
+  </select>
+
+  <label for="objetivo">Qué busca el negocio (una o dos frases)</label>
+  <textarea id="objetivo">Que los clientes la encuentren en Google, vean el catálogo con precios y hagan el pedido por WhatsApp sin tener que llamar.</textarea>
+
+  <label for="extras">Extras (uno por línea: «Descripción | precio»)</label>
+  <textarea id="extras" placeholder="Fotos de 20 productos | 40"></textarea>
+
+  <div class="fila">
+    <div><label for="precio">Precio base (USD)</label><input id="precio" type="number" min="0" step="10" value="300"></div>
+    <div><label for="dias">Plazo (días hábiles)</label><input id="dias" type="number" min="1" value="10"></div>
+  </div>
+
+  <label class="check"><input id="mant" type="checkbox" checked> Ofrecer mantenimiento</label>
+  <div class="fila">
+    <div><label for="mantPrecio">Mantenimiento USD/mes</label><input id="mantPrecio" type="number" min="0" value="20"></div>
+    <div><label for="validez">Válida (días)</label><input id="validez" type="number" min="1" value="15"></div>
+  </div>
+
+  <button type="button" id="imprimir">Guardar PDF</button>
+</form>
+
+<main class="hoja" id="hoja">
+  <div class="cab">
+    <div class="marca">bweb<span>.</span></div>
+    <div class="meta">Propuesta n.º <span id="pNum"></span><br><span id="pFecha"></span><br>bweb.uy · 099 788 934</div>
+  </div>
+
+  <h2>Una web para <span id="pNegocio"></span></h2>
+  <p class="sub">Propuesta para <span id="pContacto"></span> · <span id="pCiudad"></span></p>
+
+  <h3>Lo que buscás</h3>
+  <p id="pObjetivo"></p>
+
+  <h3>Qué incluye · Paquete <span id="pPaquete"></span></h3>
+  <ul id="pIncluye"></ul>
+
+  <div id="bloqueExtras">
+    <h3>Extras</h3>
+    <table id="pExtras"></table>
+  </div>
+
+  <h3>Inversión</h3>
+  <div class="precio">
+    <div><span class="monto">USD <span id="pPrecio"></span></span><small id="pDetalle">Pago único · 50 % para arrancar y 50 % al publicar</small></div>
+    <div style="text-align:right"><b style="color:var(--ink)"><span id="pDias"></span> días hábiles</b><small>desde que tenemos tus textos y fotos</small></div>
+  </div>
+
+  <div id="bloqueMant">
+    <h3>Mantenimiento (opcional)</h3>
+    <p><b style="color:var(--ink)">USD <span id="pMant"></span> por mes.</b> Hosting y dominio al día, copias de seguridad, hasta 1 hora de cambios por mes (precios, fotos, horarios, textos) y un informe corto de visitas. Se puede dar de baja cuando quieras.</p>
+  </div>
+
+  <h3>Cómo seguimos</h3>
+  <div class="pasos">
+    <div class="paso"><b>1. Confirmás</b>Por WhatsApp, y transferís el 50 %.</div>
+    <div class="paso"><b>2. Armamos</b>Te mostramos avances y ajustamos con vos.</div>
+    <div class="paso"><b>3. Publicamos</b>Pagás el resto y la web sale en línea.</div>
+  </div>
+
+  <div class="pie">
+    <span>Propuesta válida por <span id="pValidez"></span> días. El dominio (.com o .uy) se paga aparte, a nombre del negocio.</span>
+    <span>Ver trabajos: bweb.uy/proyectos</span>
+  </div>
+</main>
+</div>
+
+<script>
+  const PAQUETES = {
+    esencial: { nombre: 'Esencial', precio: 250, dias: 7, incluye: [
+      'Web de una página, pensada primero para el celular',
+      'Qué hacés, fotos, horarios, ubicación con mapa y redes',
+      'Botón de WhatsApp con mensaje armado',
+      'Alta y ajuste del perfil de Google (Google Business Profile)',
+      'Configuración básica para aparecer en Google'
+    ]},
+    negocio: { nombre: 'Negocio', precio: 300, dias: 10, incluye: [
+      'Hasta 5 secciones (inicio, productos o servicios, nosotros, preguntas, contacto)',
+      'Catálogo con precios y pedido directo por WhatsApp',
+      'Diseño a medida, pensado primero para el celular',
+      'Perfil de Google (Google Business Profile) y SEO básico por página',
+      'Formulario de contacto y medición de visitas'
+    ]},
+    empresa: { nombre: 'Empresa', precio: 450, dias: 15, incluye: [
+      'Web a medida con las secciones que necesite la empresa',
+      'SEO por página, datos estructurados y alta en Google Search Console',
+      'Formularios por área y medición de conversiones (Google Analytics y píxel de Meta)',
+      'Versión en inglés opcional',
+      'Capacitación corta para que el equipo pueda hacer cambios simples'
+    ]}
+  };
+
+  const $ = id => document.getElementById(id);
+  const hoy = new Date();
+  $('pFecha').textContent = hoy.toLocaleDateString('es-UY', { day: 'numeric', month: 'long', year: 'numeric' });
+  $('pNum').textContent = hoy.toISOString().slice(2, 10).replaceAll('-', '');
+
+  function texto(el, v) { el.textContent = v; }
+
+  function render() {
+    const p = PAQUETES[$('paquete').value];
+    texto($('pNegocio'), $('negocio').value || 'tu negocio');
+    texto($('pContacto'), $('contacto').value || '—');
+    texto($('pCiudad'), $('ciudad').value || '—');
+    texto($('pObjetivo'), $('objetivo').value);
+    texto($('pPaquete'), p.nombre);
+    $('pIncluye').replaceChildren(...p.incluye.map(t => { const li = document.createElement('li'); li.textContent = t; return li; }));
+
+    const extras = $('extras').value.split('\n').map(l => l.split('|')).filter(x => x[0].trim());
+    $('bloqueExtras').classList.toggle('oculto', !extras.length);
+    $('pExtras').replaceChildren(...extras.map(([d, v]) => {
+      const tr = document.createElement('tr');
+      const a = document.createElement('td'); a.textContent = d.trim();
+      const b = document.createElement('td'); b.textContent = v && v.trim() ? 'USD ' + v.trim() : 'Incluido';
+      tr.append(a, b); return tr;
+    }));
+
+    const base = Number($('precio').value) || 0;
+    const sumaExtras = extras.reduce((t, x) => t + (Number((x[1] || '').trim()) || 0), 0);
+    texto($('pPrecio'), base + sumaExtras);
+    texto($('pDetalle'), (sumaExtras ? 'Paquete USD ' + base + ' + extras USD ' + sumaExtras + ' · ' : 'Pago único · ') + '50 % para arrancar y 50 % al publicar');
+    texto($('pDias'), $('dias').value);
+    texto($('pMant'), $('mantPrecio').value);
+    texto($('pValidez'), $('validez').value);
+    $('bloqueMant').classList.toggle('oculto', !$('mant').checked);
+    document.title = 'Propuesta Bweb · ' + ($('negocio').value || '');
+  }
+
+  $('paquete').addEventListener('change', () => {
+    const p = PAQUETES[$('paquete').value];
+    $('precio').value = p.precio; $('dias').value = p.dias; render();
+  });
+  $('f').addEventListener('input', render);
+  $('imprimir').addEventListener('click', () => window.print());
+  render();
+</script>
+</body>
+</html>

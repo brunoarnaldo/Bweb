@@ -93,17 +93,66 @@ Los clientes del cartel y de webs anteriores ya confían en vos: son los más f�
 - Público: «Clientes».
 - Texto: «Ya trabajamos juntos. Si tu negocio todavía no tiene web, o la que tiene no te trae consultas, te armamos una propuesta en 24 horas.»
 
-## Venta en persona
+## Mensajes para conseguir clientes (sin salir a la calle)
 
-Llevá el celular con los proyectos abiertos y mostrá uno del mismo rubro o de la misma ciudad.
+Copiá, cambiá lo que está entre {llaves} y mandá. Por WhatsApp si tenés el número; si no, por
+Instagram. Cada contacto va a la planilla (abajo) el mismo día.
 
-1. **Entrada:** «Hola, ¿cómo los encuentran los clientes nuevos? Te muestro algo en un minuto.»
-2. **Demo:** buscá el negocio en Google con ellos. Después mostrá La Barraquita o GRADIN en el celular: catálogo, precios y pedido por WhatsApp.
-3. **Por qué:** «Hoy el que te busca en Google no encuentra dónde ver lo que vendés. Con una web así te encuentran y te escriben directo.»
-4. **Oferta:** «Te armo una propuesta para tu negocio en 24 horas, sin compromiso.»
-5. **Cierre:** anotá el nombre del negocio y el WhatsApp, y mandá la propuesta por ahí.
+### 1 · Conocidos y clientes viejos (referidos)
 
-Rubros para empezar: comercios con catálogo (ferreterías, raciones, ropa, repuestos), servicios con turnos (peluquerías, consultorios, talleres) y negocios que hoy venden solo por Instagram.
+> ¡Hola {nombre}! ¿Cómo andás? Te cuento que este mes estoy tomando 2 webs para negocios antes de fin
+> de año. Si conocés a alguien con un negocio que todavía no tiene web (o tiene una que no le trae
+> consultas), ¿me pasarías el contacto o le reenviás esto? Te dejo algunas que hice: bweb.uy/proyectos
+> ¡Gracias! 🙌
+
+A clientes viejos sumales: «Y si a la tuya le querés cambiar algo, también te la actualizo».
+
+### 2 · Negocios sin web que encontrás en Google Maps
+
+Cómo encontrarlos: en Google Maps buscá «{rubro} en Minas» (o Maldonado, Lavalleja, Florida…). Los que
+no tienen el botón «Sitio web», o tienen solo un link a Instagram o Facebook, son candidatos. Antes de
+escribir, sacale una captura a cómo aparece hoy.
+
+> Hola, ¿qué tal? Soy Bruno, de Bweb (Minas). Estaba buscando {rubro} en {ciudad} en Google y vi que
+> {negocio} aparece sin web: el que los busca ve el mapa y nada más. Les armé una idea de cómo podría
+> ser: catálogo con precios y pedidos directo a este WhatsApp, como hice para {proyecto del rubro}:
+> bweb.uy/proyectos. Si les interesa, en 24 horas les mando una propuesta con precio, sin compromiso.
+
+Cuál proyecto mostrar: comercio con catálogo → La Barraquita; empresa o servicios → GRADIN; algo con
+mapa o directorio → Acá Cripto.
+
+### 3 · Negocios que venden solo por Instagram
+
+> ¡Hola! Me encantan sus {productos}. Una pregunta: ¿les pasa que les preguntan el precio de lo mismo
+> muchas veces por mensaje? Hago webs con catálogo y precios a la vista, y el pedido llega directo al
+> WhatsApp ya armado. Les dejo un ejemplo: bweb.uy/proyectos. Si quieren, les mando una propuesta en
+> 24 horas, sin compromiso.
+
+### 4 · Comercios del mapa de Acá Cripto sin web
+
+> ¡Hola {nombre}! Soy Bruno, el de Acá Cripto. Gracias de nuevo por estar en el mapa 🙌 Vi que
+> {negocio} no tiene web propia. Aparte del mapa tengo una agencia, Bweb, y hago webs para negocios:
+> con la ficha del mapa y una web propia los encuentran más fácil en Google. Si te interesa, te mando
+> una propuesta en 24 horas.
+
+### Seguimiento
+
+- **A los 2 días, sin respuesta al primer mensaje:** «¡Hola! ¿Pudiste ver el mensaje? Cualquier cosa me
+  decís, sin compromiso 😊». Si no contesta, no se insiste más.
+- **A los 2 días de mandar la propuesta:** «¡Hola {nombre}! ¿Pudiste mirar la propuesta? Si querés
+  cambiar algo (secciones, precio, plazo) lo ajustamos».
+- **A los 7 días de la propuesta:** «Te escribo porque estoy organizando las webs de {mes}. Si querés
+  la tuya, puedo arrancar el {día}. ¿Te la reservo?»
+
+### Si dicen «es caro» o «lo pienso»
+
+- **Caro:** «Te entiendo. Puedo arrancar con el paquete Esencial (USD 250): una página con todo lo
+  importante y WhatsApp, y después le sumamos el catálogo. ¿Te sirve así?»
+- **Lo pienso:** «Dale. ¿Qué es lo que te hace dudar? Así te paso la info que te falte».
+- **Ya tengo Instagram:** «Instagram está bárbaro para mostrar, pero en Google no aparece cuando te
+  buscan por rubro y ciudad. La web es para que te encuentren los que todavía no te siguen».
+
+Las propuestas se arman con `propuestas/index.html` (abrilo en el navegador, completá y guardá el PDF).
 
 ## Planilla semanal
 
